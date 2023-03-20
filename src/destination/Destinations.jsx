@@ -6,7 +6,6 @@ const Destinations = () => {
         <React.Fragment>
             <Nav/>
 
-
         </React.Fragment>
     );
 };

@@ -6,7 +6,9 @@ const MyComponent = () => {
     return (
         <div>
             <div
-                className="one_third gallery3 classic static filterable portfolio_type themeborder">
+                className="one_third gallery3 classic static filterable portfolio_type themeborder"
+                style={{boxShadow: '0px 5px 15px 3px rgba(0, 0, 0, 0.3)', borderRadius: "5px"}}
+            >
                 <a className="tour_image" href="#">
                     <img src={image7} alt=""/>
                     <div className="tour_price ">$5,000</div>
