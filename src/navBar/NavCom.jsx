@@ -1,7 +1,16 @@
 import React from 'react';
 import {Link} from "react-router-dom";
+import {useLocalState} from "../utils/UseLocalStorage";
 
-const NavCom = () => {
+const NavCom = (props) => {
+
+    const [jwt, setJwt] = useLocalState("", "jwt");
+    //   const [jwt, setJwt] = useState(false);
+
+    const logout = () => {
+        localStorage.removeItem('jwt');
+        window.location.reload();
+    }
 
     return (
         <React.Fragment>
@@ -65,38 +74,43 @@ const NavCom = () => {
                                 </Link>
 
                             </li>
+                            {jwt ? (
+                                <li className="menu-item menu-item-has-children arrow"
+                                    style={{display: "flex", alignItems: "center"}}>
 
-                            <li className="menu-item menu-item-has-children arrow"
-                                style={{display: "flex", alignItems: "center"}}>
+                                    <img src="assets/upload/avatar.jpg" height="40px" width="40px"
+                                         style={{borderRadius: "100%"}}/>
 
-                                <img src="assets/upload/avatar.jpg" height="40px" width="40px"
-                                     style={{borderRadius: "100%"}}/>
+                                    <a href="#">User</a>
 
-                                <a href="#">User</a>
+                                    <ul className="sub-menu" style={{marginTop: "150px"}}>
+                                        <li className="menu-item"><a
+                                            href="accordion-toggles.html">Settings </a>
+                                        </li>
+                                        <li className="menu-item">
+                                            <Link to={"/dashboard"}>Dashboard</Link>
 
-                                <ul className="sub-menu" style={{marginTop: "150px"}}>
-                                    <li className="menu-item"><a
-                                        href="accordion-toggles.html">Settings </a>
-                                    </li>
-                                    <li className="menu-item">
-                                        <Link to={"/dashboard"}>Dashboard</Link>
+                                        </li>
+                                        <li className="menu-item">
+                                            <button onClick={logout}>Log out</button>
+                                        </li>
 
-                                    </li>
-                                    <li className="menu-item"><a href="alert-boxes.html">
-                                        Log out</a></li>
+                                    </ul>
+                                </li>) : (
 
-                                </ul>
-                            </li>
+                                <li className="menu-item  " style={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center"
+                                }}>
 
-                            <li className="menu-item  " style={{
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center"
-                            }}>
-
-                                <button className="     nav-outline-secondary"> sign in</button>
-                                <button className="  nav-secondary"> sign up</button>
-                            </li>
+                                    <button className="     nav-outline-secondary"><Link style={{color: "white"}}
+                                                                                         to={"/sign/in"}> Sign in</Link>
+                                    </button>
+                                    <button className="  nav-secondary"><Link style={{color: "white"}}
+                                                                              to={"/sign/up"}> Sign up </Link></button>
+                                </li>
+                            )}
                         </ul>
                     </div>
                 </div>

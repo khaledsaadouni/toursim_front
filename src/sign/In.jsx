@@ -1,7 +1,46 @@
-import React from 'react';
+import React, {useState} from 'react';
+import {useLocalState} from "../utils/UseLocalStorage";
+import {Link, Navigate} from "react-router-dom";
+import {Switch} from "@mui/material";
 
+const REGISTER_URL = "/api/v1/auth/authenticate"
 const In = () => {
-    return (
+    const [error, setError] = useState("");
+    const [email, setEmail] = useState('');
+    const [pwd, setPwd] = useState('');
+    const [jwt, setJwt] = useLocalState("", "jwt");
+    const handle = async () => {
+
+        if (pwd === "" || email === "") {
+            setError("Please enter email and password")
+        }
+        const reqBody = {
+            'email': email,
+            'password': pwd
+        };
+        await fetch(REGISTER_URL, {
+            headers: {
+                "Content-Type": "application/json"
+            },
+            method: "POST",
+            body: JSON.stringify(reqBody)
+        }).then((response) => {
+            if (response.status === 200) {
+                return Promise.all([response.json(), response.headers])
+            } else {
+                return Promise.reject("")
+            }
+        })
+            .then(([data, header]) => {
+                console.log(data);
+                console.log(header);
+                console.log(data.token);
+                setJwt(data.token);
+            }).catch((message) => {
+                setError("Email or password is incorrect. Please try again!")
+            });
+    }
+    return jwt !== "" ? <Navigate to="/"/> : (
         <React.Fragment>
             <div className="container my-auto">
                 <div className="row">
@@ -17,11 +56,6 @@ const In = () => {
                                                 <i className="fa fa-facebook text-white text-lg"></i>
                                             </a>
                                         </div>
-                                        <div className="col-2 text-center px-1">
-                                            <a className="btn btn-link px-3" href="javascript:;">
-                                                <i className="fa fa-github text-white text-lg"></i>
-                                            </a>
-                                        </div>
                                         <div className="col-2 text-center me-auto">
                                             <a className="btn btn-link px-3" href="javascript:;">
                                                 <i className="fa fa-google text-white text-lg"></i>
@@ -30,33 +64,48 @@ const In = () => {
                                     </div>
                                 </div>
                             </div>
+
+
                             <div className="card-body">
-                                <form role="form" className="text-start">
-                                    <div className="input-group input-group-outline my-3">
-                                        <label className="form-label">Email</label>
-                                        <input type="email" className="form-control"/>
-                                    </div>
-                                    <div className="input-group input-group-outline mb-3">
-                                        <label className="form-label">Password</label>
-                                        <input type="password" className="form-control"/>
-                                    </div>
-                                    <div className="form-check form-switch d-flex align-items-center mb-3">
-                                        <input className="form-check-input" type="checkbox" id="rememberMe"
-                                               checked/>
-                                        <label className="form-check-label mb-0 ms-3" htmlFor="rememberMe">Remember
-                                            me</label>
-                                    </div>
-                                    <div className="text-center">
-                                        <button type="button"
-                                                className="btn bg-gradient-primary w-100 my-4 mb-2">Sign in
-                                        </button>
-                                    </div>
-                                    <p className="mt-4 text-sm text-center">
-                                        Don't have an account?
-                                        <a href="../pages/sign-up.html"
-                                           className="text-primary text-gradient font-weight-bold">Sign up</a>
-                                    </p>
-                                </form>
+                                <div className="input-group input-group-outline my-3">
+
+                                    <input onChange={(e) => setEmail(e.target.value)} placeholder="Email" type="email"
+                                           className="form-control"/>
+                                </div>
+                                <div className="input-group input-group-outline mb-3">
+                                    <input
+                                        placeholder="Password"
+                                        onChange={(e) => {
+                                            setPwd(e.target.value);
+                                        }}
+                                        type="password" className="form-control"/>
+                                </div>
+                                <div className="form-check form-switch d-flex align-items-center mb-3">
+
+                                    <Switch color="default"/>
+                                    <label className="form-check-label mb-0 ms-3" htmlFor="rememberMe">Remember
+                                        me</label>
+                                </div>
+
+                                <div className="text-center">
+                                    <button disabled={pwd === "" || email === ""} onClick={handle}
+                                            className="btn bg-gradient-primary w-100 my-4 mb-2">Sign in
+                                    </button>
+                                </div>
+                                <div className="input-group input-group-outline my-3"
+                                     hidden={error === ""}
+                                     style={{color: "#e55757", textAlign: "center"}}>
+                                    <label className="form-check-label mb-0 ms-3" htmlFor="rememberMe"
+                                           style={{color: "#e55757", textAlign: "center"}}>
+                                        {error}
+                                    </label>
+                                </div>
+                                <p className="mt-4 text-sm text-center">
+                                    Don't have an account? &nbsp;
+                                    <Link to="/sign/up"
+                                          className="text-primary text-gradient font-weight-bold"
+                                    >Sign up</Link>
+                                </p>
                             </div>
                         </div>
                     </div>
