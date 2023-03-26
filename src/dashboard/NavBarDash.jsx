@@ -1,15 +1,25 @@
 import React from 'react';
 import "./Nav.css"
+import {useLocalState} from "../utils/UseLocalStorage";
+import {Link} from "react-router-dom";
 
 const NavBarDash = (props) => {
+    const [jwt, setJwt] = useLocalState("", "jwt");
+
+    const [user, setUser] = useLocalState(null, "user");
+    const logout = () => {
+        localStorage.removeItem('jwt');
+        window.location.reload();
+    }
+
     const handleClick = () => {
         props.slideHandle();
     }
     return (
         <React.Fragment>
             <nav
-
-                className="navbar  navbar-expand-lg blur border-radius-xl top-0 z-index-3 shadow position-absolute my-3 py-2 start-0 end-0 mx-4">
+                // navbar  navbar-expand-lg blur border-radius-xl top-0 z-index-3 shadow position-absolute my-3 py-2 start-0 end-0 mx-4
+                className=" navbar navbar-main blur navbar-expand-lg px-0 mx-4 shadow border-radius-xl ">
                 <div className="container-fluid ps-2 pe-0 py-1 px-3">
                     <button className="btnn" onClick={handleClick}
                             style={{backgroundColor: "transparent", borderColor: "transparent"}}
@@ -43,28 +53,26 @@ const NavBarDash = (props) => {
                                     Services
                                 </a>
                             </li>
-                            <li className="nav-item">
-                                <a className="nav-link me-2" href="../pages/sign-up.html">
-                                    <i className="fas fa-user-circle opacity-6 text-dark me-1"></i>
-                                    Sign Up
-                                </a>
-                            </li>
-                            <li className="nav-item">
-                                <a className="nav-link me-2" href="../pages/sign-in.html">
-                                    <i className="fas fa-key opacity-6 text-dark me-1"></i>
-                                    Sign In
-                                </a>
-                            </li>
+
                         </ul>
                         <ul className="navbar-nav d-lg-flex d-none">
-                            <li className="nav-item d-flex align-items-center">
-                                <a className="btn btn-outline-primary btn-sm mb-0 me-2" target="_blank"
-                                   href="https://www.creative-tim.com/builder/material?ref=navbar-dashboard">Online
-                                    Builder</a>
+                            <li className="nav-item d-flex align-items-center" style={{marginTop: "0px"}}>
+                                <img src="assets/upload/avatar.jpg" height="40px" width="40px"
+                                     style={{borderRadius: "100%"}}/>
+
                             </li>
-                            <li className="nav-item">
-                                <a href="https://www.creative-tim.com/product/material-dashboard"
-                                   className="btn btn-sm mb-0 me-1 bg-gradient-dark">Free download</a>
+                            <li cl className="menu-item menu-item-has-children arrow"
+                                style={{marginLeft: "25px", marginTop: "10px"}}>
+                                <Link to={"/profile"}> {user.firstname}</Link>
+
+                            </li>
+                            <li cl className="menu-item menu-item-has-children arrow" style={{marginLeft: "25px"}}>
+
+                                <button className="btn btn-primary"
+                                        style={{height: "25px ", paddingTop: "5px", marginTop: "10px"}}
+                                        onClick={logout}> Logout
+                                </button>
+
                             </li>
                         </ul>
                     </div>

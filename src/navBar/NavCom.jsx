@@ -5,6 +5,8 @@ import {useLocalState} from "../utils/UseLocalStorage";
 const NavCom = (props) => {
 
     const [jwt, setJwt] = useLocalState("", "jwt");
+
+    const [user, setUser] = useLocalState(null, "user");
     //   const [jwt, setJwt] = useState(false);
 
     const logout = () => {
@@ -81,18 +83,25 @@ const NavCom = (props) => {
                                     <img src="assets/upload/avatar.jpg" height="40px" width="40px"
                                          style={{borderRadius: "100%"}}/>
 
-                                    <a href="#">User</a>
+                                    <span style={{color: "white", marginLeft: "10px"}}> {user.firstname}</span>
 
-                                    <ul className="sub-menu" style={{marginTop: "150px"}}>
-                                        <li className="menu-item"><a
-                                            href="accordion-toggles.html">Settings </a>
-                                        </li>
+                                    <ul className="sub-menu" style={{marginTop: "120px"}}>
                                         <li className="menu-item">
-                                            <Link to={"/dashboard"}>Dashboard</Link>
+                                            <Link to={"/profile"}>Profile </Link>
+                                        </li>
+                                        {user.role !== "Client" ?
+                                            (<li className="menu-item">
+                                                <Link to={"/dashboard"}>Dashboard</Link>
 
-                                        </li>
+                                            </li>) : null}
                                         <li className="menu-item">
-                                            <button onClick={logout}>Log out</button>
+                                            <button style={{
+                                                color: "#FF4A52",
+                                                marginLeft: "12px",
+                                                borderColor: "transparent",
+                                                backgroundColor: "transparent"
+                                            }} onClick={logout}>Log out
+                                            </button>
                                         </li>
 
                                     </ul>

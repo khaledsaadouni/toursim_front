@@ -30,13 +30,6 @@ const Up = () => {
     useEffect(() => {
         setErrMsg('');
     }, [pwd, matchPwd])
-    const validate_pwd = (input) => {
-        setPwd(input)
-        const regex = /^(?=.*[A-Z])(?=.*\d).{6,}$/;
-        if (!regex.test(pwd)) {
-            setError("erreura qad rassek")
-        }
-    };
 
     const [showForm, setShowForm] = useState(false);
     const client = () => {
@@ -47,26 +40,21 @@ const Up = () => {
     }
     const inputRef = useRef(null);
     const [error, setError] = useState("");
+    const [error2, setError2] = useState("");
     const [errorEmail, setErrorEmail] = useState("");
     const [jwt, setJwt] = useLocalState("", "jwt");
-    const handle1 = async () => {
 
-        if (pwd === "" || email === "") {
-            setError("Please enter email and password")
-        }
+    const [user, setUser] = useLocalState(null, "user");
+    const handle1 = async () => {
         const reqBody = {
             'email': email,
             'password': pwd,
             'lastname': lastname,
             'firstname': firstname,
             'role': 'Client',
-            'birthday': birthday.toString(),
+            'birthday': birthday,
             'phone': phone
         };
-        console.log(errorEmail)
-        console.log(error)
-        console.log("error")
-        console.log("2")
         await fetch(REGISTER_URL, {
             headers: {
                 "Content-Type": "application/json"
@@ -82,12 +70,13 @@ const Up = () => {
         })
             .then(([data, header]) => {
                 setJwt(data.token);
+                setUser(data.user);
             }).catch((message) => {
-                setError("Email already exist!")
+                setError2("Email already exist!")
             });
     }
 
-    return jwt ? <Navigate to="/"/> : (
+    return jwt ? <Navigate to={(user.role === "Partner" || user.role === "Admin") ? "/dashboard/main" : "/"}/> : (
         <React.Fragment>
             <div className="container my-auto">
                 <div className="row">
@@ -97,7 +86,7 @@ const Up = () => {
                                 <div className="bg-gradient-primary shadow-primary border-radius-lg py-3 pe-1">
                                     <h4 className="text-white font-weight-bolder text-center mt-2 mb-0">Sign
                                         up</h4>
-                                    <div className="row mt-3">
+                                    <div className="row mt-3" hidden={showForm}>
                                         <div className="col-2 text-center ms-auto">
                                             <a className="btn btn-link px-3" href="javascript:;">
                                                 <i className="fa fa-facebook text-white text-lg"></i>
@@ -233,9 +222,17 @@ const Up = () => {
                                             {errorEmail}
                                         </label>
                                     </div>
+                                    <div className="input-group input-group-outline my-3"
+                                         hidden={error2 === ""}
+                                         style={{color: "#e55757", textAlign: "center"}}>
+                                        <label className="form-check-label mb-0 ms-3" htmlFor="rememberMe"
+                                               style={{color: "#e55757", textAlign: "center"}}>
+                                            {error2}
+                                        </label>
+                                    </div>
                                     <div className="text-center">
                                         <button onClick={handle1}
-                                                disabled={email === "" || firstname === "" || lastname === "" || pwd === "" || phone === ""}
+                                                disabled={(!((validMatch && matchPwd) || matchPwd === "")) || email === "" || error !== "" || errorEmail !== "" || firstname === "" || lastname === "" || pwd === "" || phone === ""}
                                                 className="btn bg-gradient-primary w-100 my-4 mb-2">Sign Up
                                         </button>
                                     </div>

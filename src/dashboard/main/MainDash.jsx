@@ -1,4 +1,3 @@
-import NavBarDash from "../NavBarDash";
 import React from "react";
 
 
@@ -10,7 +9,7 @@ const MainDash = (props) => {
 
             <div
                 className="container-fluid py-4">
-                <div className="row" style={{marginTop: "100px"}}>
+                <div className="row" style={{marginTop: "25px"}}>
                     <div className="col-xl-3 col-sm-6 mb-xl-0 mb-4">
                         <div className="card">
                             <div className="card-header p-3 pt-2">

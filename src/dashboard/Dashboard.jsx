@@ -3,19 +3,20 @@ import {useParams} from 'react-router-dom';
 import MainDash from "./main/MainDash";
 import Offers from "./offers/Offers";
 import Programs from "./programs/Programs";
-import Profile from "./profile/Profile";
+
 import "./Dashboard.css"
 import NavBarDash from "./NavBarDash";
+import ProfileCard from "../profile/ProfileCard";
 
 const Dashboard = () => {
-        const {page} = useParams();
-        const [state, setState] = useState("show");
+    const {page} = useParams();
+    const [state, setState] = useState("show");
 
 
-        const handleClick = () => {
-            state === "show" ? setState("hidden") : setState("show");
-        }
-        const show = () => {
+    const handleClick = () => {
+        state === "show" ? setState("hidden") : setState("show");
+    }
+    const show = () => {
             switch (page) {
                 case "main":
                     return <MainDash/>;
@@ -24,7 +25,7 @@ const Dashboard = () => {
                 case "programs":
                     return <Programs/>;
                 case "profile":
-                    return <Profile/>;
+                    return <ProfileCard/>;
                 default:
                     return <MainDash/>;
 
@@ -92,30 +93,12 @@ const Dashboard = () => {
                                     </a>
                                 </li>
                                 <li className="nav-item">
-                                    <a className="nav-link text-white " href="../pages/profile.html">
+                                    <a className="nav-link text-white " href="../pages/virtual-reality.html">
                                         <div
                                             className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                                             <i className="material-icons opacity-10">person</i>
                                         </div>
-                                        <span className="nav-link-text ms-1">Profile</span>
-                                    </a>
-                                </li>
-                                <li className="nav-item">
-                                    <a className="nav-link text-white " href="../pages/sign-in.html">
-                                        <div
-                                            className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                                            <i className="material-icons opacity-10">login</i>
-                                        </div>
-                                        <span className="nav-link-text ms-1">Sign In</span>
-                                    </a>
-                                </li>
-                                <li className="nav-item">
-                                    <a className="nav-link text-white " href="../pages/sign-up.html">
-                                        <div
-                                            className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                                            <i className="material-icons opacity-10">assignment</i>
-                                        </div>
-                                        <span className="nav-link-text ms-1">Sign Up</span>
+                                        <span className="nav-link-text ms-1"> Profile</span>
                                     </a>
                                 </li>
                             </ul>
@@ -125,6 +108,8 @@ const Dashboard = () => {
                 <main className="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
 
                     <NavBarDash slideHandle={handleClick}/>
+
+
                     {show()}
                 </main>
             </div>
