@@ -4,33 +4,9 @@ import "./sign.css"
 import {useLocalState} from "../utils/UseLocalStorage";
 import {Navigate} from "react-router-dom";
 
-const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/
 const REGISTER_URL = "/api/v1/auth/register"
+const REGISTER_URL_P = "/api/v1/auth/registerPartner"
 const Up = () => {
-    const [firstname, setFirstname] = useState("");
-    const [lastname, setLastname] = useState("");
-    const [email, setEmail] = useState("");
-    const [phone, setPhone] = useState("");
-    const [birthday, setBirthday] = useState("");
-    const [pwd, setPwd] = useState("");
-    const [validPwd, setValidPwd] = useState(false);
-    const [pwdFocus, setPwdFocus] = useState(false);
-    const [matchPwd, setMatchPwd] = useState("");
-    const [validMatch, setValidMatch] = useState(false);
-    const [matchFocus, setMatchFocus] = useState(false);
-    const [errMsg, setErrMsg] = useState('');
-    const [success, setSuccess] = useState(false);
-
-
-    useEffect(() => {
-        setValidPwd(pwd);
-        setValidMatch(pwd === matchPwd);
-    }, [pwd, matchPwd])
-
-    useEffect(() => {
-        setErrMsg('');
-    }, [pwd, matchPwd])
-
     const [showForm, setShowForm] = useState(false);
     const client = () => {
         setShowForm(false);
@@ -38,12 +14,42 @@ const Up = () => {
     const partner = () => {
         setShowForm(true);
     }
+
+    const [firstname, setFirstname] = useState("");
+    const [lastname, setLastname] = useState("");
+    const [email, setEmail] = useState("");
+    const [phone, setPhone] = useState("");
+    const [birthday, setBirthday] = useState("");
+    const [pwd, setPwd] = useState("");
+    const [validPwd, setValidPwd] = useState(false);
+    const [matchPwd, setMatchPwd] = useState("");
+    const [validMatch, setValidMatch] = useState(false);
+    useEffect(() => {
+        setValidPwd(pwd);
+        setValidMatch(pwd === matchPwd);
+    }, [pwd, matchPwd])
+
+
     const inputRef = useRef(null);
     const [error, setError] = useState("");
     const [error2, setError2] = useState("");
     const [errorEmail, setErrorEmail] = useState("");
-    const [jwt, setJwt] = useLocalState("", "jwt");
 
+
+    const [firstname1, setFirstname1] = useState("");
+    const [lastname1, setLastname1] = useState("");
+    const [email1, setEmail1] = useState("");
+    const [phone1, setPhone1] = useState("");
+    const [birthday1, setBirthday1] = useState("");
+    const [pwd1, setPwd1] = useState("");
+    const [commercial, setCommercial] = useState("");
+    const [address, setAddress] = useState("");
+    const [validPwd1, setValidPwd1] = useState(false);
+    const [matchPwd1, setMatchPwd1] = useState("");
+    const [validMatch1, setValidMatch1] = useState(false);
+
+
+    const [jwt, setJwt] = useLocalState("", "jwt");
     const [user, setUser] = useLocalState(null, "user");
     const handle1 = async () => {
         const reqBody = {
@@ -61,6 +67,38 @@ const Up = () => {
             },
             method: "POST",
             body: JSON.stringify(reqBody)
+        }).then((response) => {
+            if (response.status === 200) {
+                return Promise.all([response.json(), response.headers])
+            } else {
+                return Promise.reject("")
+            }
+        })
+            .then(([data, header]) => {
+                setJwt(data.token);
+                setUser(data.user);
+            }).catch((message) => {
+                setError2("Email already exist!")
+            });
+    }
+    const handle2 = async () => {
+        const reqBody2 = {
+            'email': "email1",
+            'password': "pwd1",
+            'lastname': "lastname1",
+            'firstname': "firstname1",
+            'role': 'Partner',
+            // 'birthday': "birthday1",
+            'phone': "phone1",
+            'commercial_name': "commercial",
+            'address': "address"
+        };
+        await fetch(REGISTER_URL_P, {
+            headers: {
+                "Content-Type": "application/json"
+            },
+            method: "POST",
+            body: JSON.stringify(reqBody2)
         }).then((response) => {
             if (response.status === 200) {
                 return Promise.all([response.json(), response.headers])
@@ -173,8 +211,6 @@ const Up = () => {
                                                minLength="6"
                                                aria-invalid={validPwd ? "false" : "true"}
                                                aria-describedby="pwdnote"
-                                               onFocus={() => setPwdFocus(true)}
-                                               onBlur={() => setPwdFocus(false)}
                                                className="form-control"/>
                                     </div>
                                     <div className="input-group input-group-outline mb-3">
@@ -185,8 +221,6 @@ const Up = () => {
                                                style={{borderColor: (!((validMatch && matchPwd) || matchPwd === "")) && "red"}}
                                                aria-invalid={validMatch ? "false" : "true"}
                                                aria-describedby="confirmnote"
-                                               onFocus={() => setMatchFocus(true)}
-                                               onBlur={() => setMatchFocus(false)}
                                                type="password" className="form-control"/>
                                     </div>
                                     <div className="row">
@@ -239,32 +273,127 @@ const Up = () => {
 
                                 </div>
 
-
                                 <div role="form" className="text-start" hidden={!showForm}>
+
                                     <div className="input-group input-group-outline my-3">
-                                        <label className="form-label">Email</label>
-                                        <input type="email" className="form-control"/>
+                                        <input
+                                            onChange={(e) => setCommercial(e.target)} required
+                                            placeholder="Commercial Name"
+                                            type="text" className="form-control"/>
+                                    </div>
+                                    <div className="input-group input-group-outline my-3">
+                                        <input
+                                            onChange={(e) => setAddress(e.target)} required
+                                            placeholder="Address"
+                                            type="text" className="form-control"/>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col">
+                                            <div className="input-group input-group-outline my-3">
+                                                <input onChange={(e) => setLastname1(e.target.value)} required
+                                                       placeholder="Lastname" type="text" className="form-control"/>
+                                            </div>
+                                        </div>
+                                        <div className="col">
+                                            <div className="input-group input-group-outline my-3">
+                                                <input onChange={(e) => setFirstname1(e.target.value)} required
+                                                       placeholder="Firstname" type="text" className="form-control"
+                                                       maxLength="30"/>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div className="input-group input-group-outline my-3">
+                                        <input
+                                            //style={{borderColor: errorEmail && "red"}}
+                                            onChange={(e) => {
+                                                setEmail1(e.target.value);
+                                                //     const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{1,}$/;
+                                                //      if (!regex.test(email)) {
+                                                //          setErrorEmail("Please enter a valid email")
+                                                //      } else {
+                                                //          setErrorEmail("")
+                                                //      }
+                                            }} required placeholder="Email"
+                                            type="email" className="form-control"/>
                                     </div>
                                     <div className="input-group input-group-outline mb-3">
-                                        <label className="form-label">s</label>
-                                        <input type="password" className="form-control"/>
+                                        <input style={{borderColor: error && "red"}} placeholder="Password"
+                                               type="password"
+                                               onChange={(e) => {
+                                                   setPwd1(e.target.value);
+                                                   // const regex = /^(?=.*[A-Z])(?=.*\d).{5,}$/;
+                                                   // if (!regex.test(pwd)) {
+                                                   //     setError("Password must contain at least 6 characters, 1 uppercase and 1 number")
+                                                   // } else {
+                                                   //     setError("")
+                                                   // }
+                                               }}
+                                               required
+                                               minLength="6"
+                                               aria-invalid={validPwd ? "false" : "true"}
+                                               aria-describedby="pwdnote"
+                                               className="form-control"/>
+                                    </div>
+                                    <div className="input-group input-group-outline mb-3">
+                                        <input placeholder="Confirm Password"
+                                               onChange={(e) => setMatchPwd(e.target.value)}
+                                               value={matchPwd}
+                                               required
+                                               style={{borderColor: (!((validMatch && matchPwd) || matchPwd === "")) && "red"}}
+                                               aria-invalid={validMatch ? "false" : "true"}
+                                               aria-describedby="confirmnote"
+                                               type="password" className="form-control"/>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col">
+
+                                            <input onChange={(e) => setPhone1(e.target.value)} required
+                                                   placeholder="Phone"
+                                                   type="number" className="form-control"/>
+                                        </div>
+                                        <div className="col">
+                                            <input onChange={(e) => setBirthday1(e.target.value)} placeholder="Birthday"
+                                                   type="date" className="form-control"/>
+                                        </div>
                                     </div>
                                     <div className="form-check form-switch d-flex align-items-center mb-3">
-                                        <input className="form-check-input" type="checkbox" id="rememberMe"
-                                               checked/>
+                                        <Switch color="default"/>
                                         <label className="form-check-label mb-0 ms-3" htmlFor="rememberMe">Remember
                                             me</label>
                                     </div>
+                                    <div className="input-group input-group-outline my-3"
+                                         hidden={error === "" && errorEmail === ""}
+                                         style={{color: "#e55757", textAlign: "center"}}>
+                                        <label className="form-check-label mb-0 ms-3" htmlFor="rememberMe"
+                                               style={{color: "#e55757", textAlign: "center"}}>
+                                            {error}
+                                        </label>
+                                    </div>
+                                    <div className="input-group input-group-outline my-3"
+                                         hidden={errorEmail === ""}
+                                         style={{color: "#e55757", textAlign: "center"}}>
+                                        <label className="form-check-label mb-0 ms-3" htmlFor="rememberMe"
+                                               style={{color: "#e55757", textAlign: "center"}}>
+                                            {errorEmail}
+                                        </label>
+                                    </div>
+                                    <div className="input-group input-group-outline my-3"
+                                         hidden={error2 === ""}
+                                         style={{color: "#e55757", textAlign: "center"}}>
+                                        <label className="form-check-label mb-0 ms-3" htmlFor="rememberMe"
+                                               style={{color: "#e55757", textAlign: "center"}}>
+                                            {error2}
+                                        </label>
+                                    </div>
                                     <div className="text-center">
-                                        <button type="button"
-                                                className="btn bg-gradient-primary w-100 my-4 mb-2">Sign in
+                                        <button onClick={handle2}
+                                            // disabled={(!((validMatch && matchPwd) || matchPwd === "")) || address === "" || commercial === "" || email === "" || error !== "" || errorEmail !== "" || firstname === "" || lastname === "" || pwd === "" || phone === ""}
+                                                className="btn bg-gradient-primary w-100 my-4 mb-2"> Sign Up
                                         </button>
                                     </div>
-                                    <p className="mt-4 text-sm text-center">
-                                        Don't have an account?
-                                        <a href="../pages/sign-up.html"
-                                           className="text-primary text-gradient font-weight-bold">Sign up</a>
-                                    </p>
+
                                 </div>
                             </div>
                         </div>

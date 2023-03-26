@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {useParams} from 'react-router-dom';
+import {Navigate, useParams} from 'react-router-dom';
 import MainDash from "./main/MainDash";
 import Offers from "./offers/Offers";
 import Programs from "./programs/Programs";
@@ -7,6 +7,7 @@ import Programs from "./programs/Programs";
 import "./Dashboard.css"
 import NavBarDash from "./NavBarDash";
 import ProfileCard from "../profile/ProfileCard";
+import {useLocalState} from "../utils/UseLocalStorage";
 
 const Dashboard = () => {
     const {page} = useParams();
@@ -17,37 +18,38 @@ const Dashboard = () => {
         state === "show" ? setState("hidden") : setState("show");
     }
     const show = () => {
-            switch (page) {
-                case "main":
-                    return <MainDash/>;
-                case "offers":
-                    return <Offers/>;
-                case "programs":
-                    return <Programs/>;
-                case "profile":
-                    return <ProfileCard/>;
-                default:
+        switch (page) {
+            case "main":
+                return <MainDash/>;
+            case "offers":
+                return <Offers/>;
+            case "programs":
+                return <Programs/>;
+            case "profile":
+                return <ProfileCard/>;
+            default:
                     return <MainDash/>;
 
             }
         };
-        const classmethod = () => {
-            let classes = "bg-gray-200 g-sidenav-";
-            return classes += state === "show" ? "hidden" : "show";
-        }
+    const classmethod = () => {
+        let classes = "bg-gray-200 g-sidenav-";
+        return classes += state === "show" ? "hidden" : "show";
+    }
+    const [jwt, setJwt] = useLocalState("", "jwt");
 
 
-        return (
-            <div class={classmethod()}>
-                <aside
-                    className="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3   bg-gradient-dark"
-                    id="sidenav-main">
+    return jwt === "" ? <Navigate to="/"/> : (
+        <div class={classmethod()}>
+            <aside
+                className="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3   bg-gradient-dark"
+                id="sidenav-main">
 
-                    <div className="sidenav-header">
-                        <i className="fas fa-times p-3 cursor-pointer text-white opacity-5 position-absolute end-0 top-0 d-none d-xl-none"
-                           aria-hidden="true" id="iconSidenav"></i>
-                        <a className="navbar-brand m-0"
-                           href=" https://demos.creative-tim.com/material-dashboard/pages/dashboard " target="_blank">
+                <div className="sidenav-header">
+                    <i className="fas fa-times p-3 cursor-pointer text-white opacity-5 position-absolute end-0 top-0 d-none d-xl-none"
+                       aria-hidden="true" id="iconSidenav"></i>
+                    <a className="navbar-brand m-0"
+                       href=" https://demos.creative-tim.com/material-dashboard/pages/dashboard " target="_blank">
                             <span className="ms-1 font-weight-bold text-white">DASHBOARD</span>
                         </a>
                     </div>
