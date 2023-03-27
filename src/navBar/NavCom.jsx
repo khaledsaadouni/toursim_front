@@ -83,15 +83,16 @@ const NavCom = (props) => {
                                     <img src="assets/upload/avatar.jpg" height="40px" width="40px"
                                          style={{borderRadius: "100%"}}/>
 
-                                    <span style={{color: "white", marginLeft: "10px"}}> {user.firstname}</span>
+                                    <a> {user.firstname}</a>
 
                                     <ul className="sub-menu" style={{marginTop: "120px"}}>
                                         <li className="menu-item">
-                                            <Link to={"/profile"}>Profile </Link>
+                                            <Link
+                                                to={user.role === "Client" ? "/profile/main" : "/dashboard/profile"}>Profile </Link>
                                         </li>
                                         {user.role !== "Client" ?
                                             (<li className="menu-item">
-                                                <Link to={"/dashboard"}>Dashboard</Link>
+                                                <Link to={"/dashboard/main"}>Dashboard</Link>
 
                                             </li>) : null}
                                         <li className="menu-item">

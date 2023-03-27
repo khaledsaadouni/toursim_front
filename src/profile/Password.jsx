@@ -1,7 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {useLocalState} from "../utils/UseLocalStorage";
 import {Navigate} from "react-router-dom";
-import Nav from "../navBar/Nav";
 
 const Password = () => {
     const [pwd, setPwd] = useState("");
@@ -58,9 +57,7 @@ const Password = () => {
     }
     return jwt === "" || redirect === true ? <Navigate to="/"/> : (
         <React.Fragment>
-
-            <Nav></Nav>
-            <div id="page_content_wrapper bg-gray-200 " className="hasbg ">
+            <div id="  " className="hasbg " style={{marginTop: "100px"}}>
 
                 <div className="main-content position-relative max-height-vh-100 h-100"
                      style={{marginTop: "50px", marginLeft: "25%"}}>

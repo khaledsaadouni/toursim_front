@@ -11,8 +11,6 @@ import AboutUs from "./about/Aboutus";
 import Dashboard from "./dashboard/Dashboard";
 import Sign from "./sign/Sign";
 import Profile from "./profile/Profile";
-import Settings from "./profile/Settings";
-import Password from "./profile/Password";
 
 function App() {
     return (
@@ -30,9 +28,7 @@ function App() {
                 <Route path="/aboutUs" element={<AboutUs/>}/>
                 <Route path="/dashboard/:page" element={<Dashboard/>}/>
                 <Route path="/sign/:p" element={<Sign/>}/>
-                <Route path="/profile" element={<Profile/>}/>
-                <Route path="/settings" element={<Settings/>}/>
-                <Route path="/password" element={<Password/>}/>
+                <Route path="/profile/:page" element={<Profile/>}/>
             </Routes>
             {/*<Footer/>*/}
         </React.Fragment>

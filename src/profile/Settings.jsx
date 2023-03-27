@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import Nav from "../navBar/Nav";
 import {Link, Navigate} from "react-router-dom";
 import {useLocalState} from "../utils/UseLocalStorage";
 
@@ -42,26 +41,26 @@ const Settings = () => {
         })
             .then(([data, header]) => {
                 setUser(data);
-                setRedirect(true)
+                window.location.reload();
             }).catch((message) => {
                 setError("An error occured please try again!")
             });
     }
-    return jwt === "" || redirect === true ? <Navigate to={redirect ? "/profile" : ""}/> : (
-        <React.Fragment>
+    return jwt === "" || redirect === true ?
+        <Navigate to={redirect ? (user.role != "Client" ? "/dashboard/profile" : "/profile/main") : ""}/> : (
+            <React.Fragment>
 
-            <Nav></Nav>
-            <div id="page_content_wrapper bg-gray-200 " className="hasbg ">
+                <div id="page_content_wrapper  " className="hasbg " style={{marginTop: "70px"}}>
 
-                <div className="main-content position-relative max-height-vh-100 h-100"
-                     style={{marginTop: "50px", marginLeft: "25%"}}>
-                    <div className="container-fluid px-2 px-md-4">
+                    <div className="main-content position-relative max-height-vh-100 h-100"
+                         style={{marginTop: "50px", marginLeft: "25%"}}>
+                        <div className="container-fluid px-2 px-md-4">
 
-                        <div className="card card-body mx-3 mx-md-4 mt-n6"
-                             style={{
-                                 boxShadow: '0px 5px 15px 3px rgba(0, 0, 0, 0.3)',
-                                 borderRadius: "5px",
-                                 width: "800px"
+                            <div className="card card-body mx-3 mx-md-4 mt-n6"
+                                 style={{
+                                     boxShadow: '0px 5px 15px 3px rgba(0, 0, 0, 0.3)',
+                                     borderRadius: "5px",
+                                     width: "800px"
                              }}>
                             <div className="row gx-4 mb-2">
                                 <div className="col-auto">
@@ -83,7 +82,7 @@ const Settings = () => {
                                                      href="javascript:;" role="tab" aria-selected="false">
                                                     <i className="bi bi-key-fill"></i>
                                                     <span className="ms-1"><Link
-                                                        to={"/password"}>Change Password</Link></span>
+                                                        to={"/profile/password"}>Change Password</Link></span>
                                                 </div>
                                             </li>
                                         </ul>

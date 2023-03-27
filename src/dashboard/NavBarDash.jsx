@@ -66,7 +66,8 @@ const NavBarDash = (props) => {
                                 <Link to={"/profile"}> {user.firstname}</Link>
 
                             </li>
-                            <li cl className="menu-item menu-item-has-children arrow" style={{marginLeft: "25px"}}>
+                            <li cl className="menu-item menu-item-has-children arrow"
+                                style={{marginLeft: "25px", marginRight: "25px"}}>
 
                                 <button className="btn btn-primary"
                                         style={{height: "25px ", paddingTop: "5px", marginTop: "10px"}}

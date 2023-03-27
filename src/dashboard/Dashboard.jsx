@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Navigate, useParams} from 'react-router-dom';
+import {Link, Navigate, useParams} from 'react-router-dom';
 import MainDash from "./main/MainDash";
 import Offers from "./offers/Offers";
 import Programs from "./programs/Programs";
@@ -8,6 +8,8 @@ import "./Dashboard.css"
 import NavBarDash from "./NavBarDash";
 import ProfileCard from "../profile/ProfileCard";
 import {useLocalState} from "../utils/UseLocalStorage";
+import Settings from "../profile/Settings";
+import Password from "../profile/Password";
 
 const Dashboard = () => {
     const {page} = useParams();
@@ -27,13 +29,17 @@ const Dashboard = () => {
                 return <Programs/>;
             case "profile":
                 return <ProfileCard/>;
+            case "settings":
+                return <Settings/>;
+            case "password":
+                return <Password/>;
             default:
-                    return <MainDash/>;
+                return <MainDash/>;
 
-            }
-        };
+        }
+    };
     const classmethod = () => {
-        let classes = "bg-gray-200 g-sidenav-";
+        let classes = "  g-sidenav-";
         return classes += state === "show" ? "hidden" : "show";
     }
     const [jwt, setJwt] = useLocalState("", "jwt");
@@ -50,16 +56,16 @@ const Dashboard = () => {
                        aria-hidden="true" id="iconSidenav"></i>
                     <a className="navbar-brand m-0"
                        href=" https://demos.creative-tim.com/material-dashboard/pages/dashboard " target="_blank">
-                            <span className="ms-1 font-weight-bold text-white">DASHBOARD</span>
-                        </a>
-                    </div>
-                    <div className="horizontal light mt-0 mb-2">
-                        <div className=" " id="sidenav-collapse-main">
-                            <ul className="navbar-nav">
-                                <li className="nav-item">
-                                    <a className="nav-link text-white   bg-gradient-primary"
+                        <span className="ms-1 font-weight-bold text-white">DASHBOARD</span>
+                    </a>
+                </div>
+                <div className="horizontal light mt-0 mb-2">
+                    <div className=" " id="sidenav-collapse-main">
+                        <ul className="navbar-nav">
+                            <li className="nav-item">
+                                <a className="nav-link text-white   bg-gradient-primary"
 
-                                       href="  ">
+                                   href="  ">
                                         <div
                                             className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                                             <i className="material-icons opacity-10">dashboard</i>
@@ -85,25 +91,38 @@ const Dashboard = () => {
                                         <span className="nav-link-text ms-1">Billing</span>
                                     </a>
                                 </li>
-                                <li className="nav-item">
-                                    <a className="nav-link text-white " href="../pages/virtual-reality.html">
-                                        <div
-                                            className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                                            <i className="material-icons opacity-10">view_in_ar</i>
-                                        </div>
-                                        <span className="nav-link-text ms-1"> Programs</span>
-                                    </a>
-                                </li>
-                                <li className="nav-item">
-                                    <a className="nav-link text-white " href="../pages/virtual-reality.html">
+                            <li className="nav-item">
+                                <a className="nav-link text-white " href="../pages/virtual-reality.html">
+                                    <div
+                                        className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                        <i className="material-icons opacity-10">view_in_ar</i>
+                                    </div>
+                                    <span className="nav-link-text ms-1"> Programs</span>
+                                </a>
+                            </li>
+                            <li className="nav-item">
+                                <Link to={"/dashboard/profile"} style={{color: "white"}}>
+                                    <div className="nav-link text-white ">
                                         <div
                                             className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                                             <i className="material-icons opacity-10">person</i>
                                         </div>
-                                        <span className="nav-link-text ms-1"> Profile</span>
-                                    </a>
-                                </li>
-                            </ul>
+                                        <span className="nav-link-text ms-1"> Profile </span>
+                                    </div>
+                                </Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link to={"/dashboard/settings"} style={{color: "white"}}>
+                                    <div className="nav-link text-white ">
+                                        <div
+                                            className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                            <i className="material-icons opacity-10">settings</i>
+                                        </div>
+                                        <span className="nav-link-text ms-1"> Settings </span>
+                                    </div>
+                                </Link>
+                            </li>
+                        </ul>
                         </div>
                     </div>
                 </aside>

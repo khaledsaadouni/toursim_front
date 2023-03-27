@@ -9,7 +9,7 @@ const ProfileCard = () => {
     return jwt === "" ? <Navigate to="/"/> : (
         <React.Fragment>
 
-            <div id="page_content_wrapper bg-gray-200 " className="hasbg " style={{marginTop: "100px"}}>
+            <div id="page_content_wrapper " className="hasbg " style={{marginTop: "100px"}}>
 
                 <div className="main-content position-relative max-height-vh-100 h-100" style={{marginTop: "50px"}}>
                     <div className="container-fluid px-2 px-md-4">
@@ -151,8 +151,11 @@ const ProfileCard = () => {
                                                                     className="text-dark">Birthday:</strong> &nbsp; {user.birthday}
                                                             </li>) : null}
                                                         <li className="list-group-item border-0 ps-0 text-sm">
-                                                            <Link style={{color: "white"}} to={"/settings"}>
-                                                                <button className="btn btn-primary"> Edit Informations
+                                                            <Link style={{color: "white"}}
+                                                                  to={user.role !== "Client" ? "/dashboard/settings" : "/profile/settings"}>
+                                                                <button
+                                                                    className=" btn bg-gradient-primary w-100 my-4 mb-2"> Edit
+                                                                    Informations
                                                                 </button>
                                                             </Link>
                                                         </li>
