@@ -36,19 +36,8 @@ const Up = () => {
     const [errorEmail, setErrorEmail] = useState("");
 
 
-    const [firstname1, setFirstname1] = useState("");
-    const [lastname1, setLastname1] = useState("");
-    const [email1, setEmail1] = useState("");
-    const [phone1, setPhone1] = useState("");
-    const [birthday1, setBirthday1] = useState("");
-    const [pwd1, setPwd1] = useState("");
-    const [commercial, setCommercial] = useState("");
+    const [com, setCom] = useState("");
     const [address, setAddress] = useState("");
-    const [validPwd1, setValidPwd1] = useState(false);
-    const [matchPwd1, setMatchPwd1] = useState("");
-    const [validMatch1, setValidMatch1] = useState(false);
-
-
     const [jwt, setJwt] = useLocalState("", "jwt");
     const [user, setUser] = useLocalState(null, "user");
     const handle1 = async () => {
@@ -81,17 +70,17 @@ const Up = () => {
                 setError2("Email already exist!")
             });
     }
-    const handle2 = async () => {
+    const handle2partner = async () => {
         const reqBody2 = {
-            'email': "email1",
-            'password': "pwd1",
-            'lastname': "lastname1",
-            'firstname': "firstname1",
+            'email': email,
+            'password': pwd,
+            'lastname': lastname,
+            'firstname': firstname,
             'role': 'Partner',
-            // 'birthday': "birthday1",
-            'phone': "phone1",
-            'commercial_name': "commercial",
-            'address': "address"
+            'birthday': birthday,
+            'phone': phone,
+            'commercial_name': com,
+            'address': address
         };
         await fetch(REGISTER_URL_P, {
             headers: {
@@ -276,27 +265,25 @@ const Up = () => {
                                 <div role="form" className="text-start" hidden={!showForm}>
 
                                     <div className="input-group input-group-outline my-3">
-                                        <input
-                                            onChange={(e) => setCommercial(e.target)} required
-                                            placeholder="Commercial Name"
-                                            type="text" className="form-control"/>
+                                        <input onChange={(e) => setCom(e.target.value)} required
+                                               placeholder="Commercial Name" type="text" className="form-control"
+                                               maxLength="30"/>
                                     </div>
                                     <div className="input-group input-group-outline my-3">
-                                        <input
-                                            onChange={(e) => setAddress(e.target)} required
-                                            placeholder="Address"
-                                            type="text" className="form-control"/>
+                                        <input onChange={(e) => setAddress(e.target.value)} required
+                                               placeholder="Address" type="text" className="form-control"
+                                               maxLength="30"/>
                                     </div>
                                     <div className="row">
                                         <div className="col">
                                             <div className="input-group input-group-outline my-3">
-                                                <input onChange={(e) => setLastname1(e.target.value)} required
+                                                <input onChange={(e) => setLastname(e.target.value)} required
                                                        placeholder="Lastname" type="text" className="form-control"/>
                                             </div>
                                         </div>
                                         <div className="col">
                                             <div className="input-group input-group-outline my-3">
-                                                <input onChange={(e) => setFirstname1(e.target.value)} required
+                                                <input onChange={(e) => setFirstname(e.target.value)} required
                                                        placeholder="Firstname" type="text" className="form-control"
                                                        maxLength="30"/>
                                             </div>
@@ -308,7 +295,7 @@ const Up = () => {
                                         <input
                                             //style={{borderColor: errorEmail && "red"}}
                                             onChange={(e) => {
-                                                setEmail1(e.target.value);
+                                                setEmail(e.target.value);
                                                 //     const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{1,}$/;
                                                 //      if (!regex.test(email)) {
                                                 //          setErrorEmail("Please enter a valid email")
@@ -322,7 +309,7 @@ const Up = () => {
                                         <input style={{borderColor: error && "red"}} placeholder="Password"
                                                type="password"
                                                onChange={(e) => {
-                                                   setPwd1(e.target.value);
+                                                   setPwd(e.target.value);
                                                    // const regex = /^(?=.*[A-Z])(?=.*\d).{5,}$/;
                                                    // if (!regex.test(pwd)) {
                                                    //     setError("Password must contain at least 6 characters, 1 uppercase and 1 number")
@@ -349,12 +336,12 @@ const Up = () => {
                                     <div className="row">
                                         <div className="col">
 
-                                            <input onChange={(e) => setPhone1(e.target.value)} required
+                                            <input onChange={(e) => setPhone(e.target.value)} required
                                                    placeholder="Phone"
                                                    type="number" className="form-control"/>
                                         </div>
                                         <div className="col">
-                                            <input onChange={(e) => setBirthday1(e.target.value)} placeholder="Birthday"
+                                            <input onChange={(e) => setBirthday(e.target.value)} placeholder="Birthday"
                                                    type="date" className="form-control"/>
                                         </div>
                                     </div>
@@ -388,7 +375,7 @@ const Up = () => {
                                         </label>
                                     </div>
                                     <div className="text-center">
-                                        <button onClick={handle2}
+                                        <button onClick={handle2partner}
                                             // disabled={(!((validMatch && matchPwd) || matchPwd === "")) || address === "" || commercial === "" || email === "" || error !== "" || errorEmail !== "" || firstname === "" || lastname === "" || pwd === "" || phone === ""}
                                                 className="btn bg-gradient-primary w-100 my-4 mb-2"> Sign Up
                                         </button>

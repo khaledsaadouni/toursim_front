@@ -112,16 +112,21 @@ const NavCom = (props) => {
                                     justifyContent: "center",
                                     alignItems: "center"
                                 }}>
+                                    <button className="     nav-outline-secondary">
+                                        <Link
+                                            style={{color: "white"}}
+                                            to={"/sign/in"}>
+                                            Sign in
 
-                                    <Link
-                                        to={"/sign/in"}>
-                                        <button className="     nav-outline-secondary"> Sign in
-                                        </button>
-                                    </Link>
-                                    <Link
-                                        to={"/sign/up"}>
-                                        <button className="  nav-secondary">Sign up</button>
-                                    </Link>
+                                        </Link>
+                                    </button>
+                                    <button className="  nav-secondary">
+                                        <Link
+                                            style={{color: "white"}}
+                                            to={"/sign/up"}>
+                                            Sign up
+                                        </Link>
+                                    </button>
                                 </li>
                             )}
                         </ul>
