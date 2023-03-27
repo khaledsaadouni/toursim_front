@@ -1,17 +1,57 @@
-import React from 'react';
-import {Link} from "react-router-dom";
-import {useLocalState} from "../utils/UseLocalStorage";
+import React, { useEffect, useState } from 'react';
+import { Link } from "react-router-dom";
+import { useLocalState } from "../utils/UseLocalStorage";
+const GET_TOKEN_URL = "/api/v1/auth/oAuth2Token"
 
 const NavCom = (props) => {
 
     const [jwt, setJwt] = useLocalState("", "jwt");
-
     const [user, setUser] = useLocalState(null, "user");
-    //   const [jwt, setJwt] = useState(false);
-
-    const logout = () => {
+    const [error, setError] = useState("");
+    useEffect(() => {
+        const asyncFn = async () => {
+            try {
+                await fetch(GET_TOKEN_URL, {
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    method: "GET",
+                }).then((response) => {
+                    if (response.status === 200) {
+                        return Promise.all([response.json(), response.headers])
+                    } else {
+                        return Promise.reject("")
+                    }
+                })
+                    .then(([data, header]) => {
+                        console.log(data)
+                        setJwt(data.token);
+                        setUser(data.user);
+                    }).catch((message) => {
+                        setError("NO there is a problem")
+                    });
+            } catch (error) {
+                setError("NO there is a problem")
+            }
+        };
+        asyncFn();
+    }, []);
+    const logout = async () => {
         localStorage.removeItem('jwt');
         window.location.reload();
+        await fetch("/api/v1/auth/deleteoAuth2Token", {
+            headers: {
+                "Content-Type": "application/json"
+            },
+            method: "GET",
+        }).then((response) => {
+            if (response.status === 200) {
+                return Promise.all([response.json(), response.headers])
+                console.log("deleted from localstorage")
+            } else {
+                return Promise.reject("")
+            }
+        })
     }
 
     return (
@@ -78,14 +118,14 @@ const NavCom = (props) => {
                             </li>
                             {jwt ? (
                                 <li className="menu-item menu-item-has-children arrow"
-                                    style={{display: "flex", alignItems: "center"}}>
+                                    style={{ display: "flex", alignItems: "center" }}>
 
                                     <img src="assets/upload/avatar.jpg" height="40px" width="40px"
-                                         style={{borderRadius: "100%"}}/>
+                                        style={{ borderRadius: "100%" }} />
 
-                                    <span style={{color: "white", marginLeft: "10px"}}> {user.firstname}</span>
+                                    <span style={{ color: "white", marginLeft: "10px" }}> {user.firstname}</span>
 
-                                    <ul className="sub-menu" style={{marginTop: "120px"}}>
+                                    <ul className="sub-menu" style={{ marginTop: "120px" }}>
                                         <li className="menu-item">
                                             <Link to={"/profile"}>Profile </Link>
                                         </li>
@@ -113,11 +153,11 @@ const NavCom = (props) => {
                                     alignItems: "center"
                                 }}>
 
-                                    <button className="     nav-outline-secondary"><Link style={{color: "white"}}
-                                                                                         to={"/sign/in"}> Sign in</Link>
+                                    <button className="     nav-outline-secondary"><Link style={{ color: "white" }}
+                                        to={"/sign/in"}> Sign in</Link>
                                     </button>
-                                    <button className="  nav-secondary"><Link style={{color: "white"}}
-                                                                              to={"/sign/up"}> Sign up </Link></button>
+                                    <button className="  nav-secondary"><Link style={{ color: "white" }}
+                                        to={"/sign/up"}> Sign up </Link></button>
                                 </li>
                             )}
                         </ul>

@@ -1,15 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 
 const MainDash = (props) => {
-
+    useEffect(() => {
+        console.log("hello")
+    }, []);
     return (
         <React.Fragment>
 
 
             <div
                 className="container-fluid py-4">
-                <div className="row" style={{marginTop: "25px"}}>
+                <div className="row" style={{ marginTop: "25px" }}>
                     <div className="col-xl-3 col-sm-6 mb-xl-0 mb-4">
                         <div className="card">
                             <div className="card-header p-3 pt-2">
@@ -145,7 +147,7 @@ const MainDash = (props) => {
                                 <div className="bg-gradient-dark shadow-dark border-radius-lg py-3 pe-1">
                                     <div className="chart">
                                         <canvas id="chart-line-tasks" className="chart-canvas"
-                                                height="170"></canvas>
+                                            height="170"></canvas>
                                     </div>
                                 </div>
                             </div>
@@ -177,17 +179,17 @@ const MainDash = (props) => {
                                     <div className="col-lg-6 col-5 my-auto text-end">
                                         <div className="dropdown float-lg-end pe-4">
                                             <a className="cursor-pointer" id="dropdownTable"
-                                               data-bs-toggle="dropdown" aria-expanded="false">
+                                                data-bs-toggle="dropdown" aria-expanded="false">
                                                 <i className="fa fa-ellipsis-v text-secondary"></i>
                                             </a>
                                             <ul className="dropdown-menu px-2 py-3 ms-sm-n4 ms-n5"
                                                 aria-labelledby="dropdownTable">
                                                 <li><a className="dropdown-item border-radius-md"
-                                                       href="javascript:;">Action</a></li>
+                                                    href="javascript:;">Action</a></li>
                                                 <li><a className="dropdown-item border-radius-md"
-                                                       href="javascript:;">Another action</a></li>
+                                                    href="javascript:;">Another action</a></li>
                                                 <li><a className="dropdown-item border-radius-md"
-                                                       href="javascript:;">Something else here</a></li>
+                                                    href="javascript:;">Something else here</a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -197,308 +199,308 @@ const MainDash = (props) => {
                                 <div className="table-responsive">
                                     <table className="table align-items-center mb-0">
                                         <thead>
-                                        <tr>
-                                            <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Companies</th>
-                                            <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Members</th>
-                                            <th className="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Budget</th>
-                                            <th className="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Completion</th>
-                                        </tr>
+                                            <tr>
+                                                <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Companies</th>
+                                                <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Members</th>
+                                                <th className="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Budget</th>
+                                                <th className="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Completion</th>
+                                            </tr>
                                         </thead>
                                         <tbody>
-                                        <tr>
-                                            <td>
-                                                <div className="d-flex px-2 py-1">
-                                                    <div>
-                                                        <img src="../assets/img/small-logos/logo-xd.svg"
-                                                             className="avatar avatar-sm me-3" alt="xd"/>
-                                                    </div>
-                                                    <div className="d-flex flex-column justify-content-center">
-                                                        <h6 className="mb-0 text-sm">Material XD Version</h6>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div className="avatar-group mt-2">
-                                                    <a href="javascript:;"
-                                                       className="avatar avatar-xs rounded-circle"
-                                                       data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                       title="Ryan Tompson">
-                                                        <img src="../assets/img/team-1.jpg" alt="team1"/>
-                                                    </a>
-                                                    <a href="javascript:;"
-                                                       className="avatar avatar-xs rounded-circle"
-                                                       data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                       title="Romina Hadid">
-                                                        <img src="../assets/img/team-2.jpg" alt="team2"/>
-                                                    </a>
-                                                    <a href="javascript:;"
-                                                       className="avatar avatar-xs rounded-circle"
-                                                       data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                       title="Alexander Smith">
-                                                        <img src="../assets/img/team-3.jpg" alt="team3"/>
-                                                    </a>
-                                                    <a href="javascript:;"
-                                                       className="avatar avatar-xs rounded-circle"
-                                                       data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                       title="Jessica Doe">
-                                                        <img src="../assets/img/team-4.jpg" alt="team4"/>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                            <td className="align-middle text-center text-sm">
-                                                <span className="text-xs font-weight-bold"> $14,000 </span>
-                                            </td>
-                                            <td className="align-middle">
-                                                <div className="progress-wrapper w-75 mx-auto">
-                                                    <div className="progress-info">
-                                                        <div className="progress-percentage">
-                                                            <span className="text-xs font-weight-bold">60%</span>
+                                            <tr>
+                                                <td>
+                                                    <div className="d-flex px-2 py-1">
+                                                        <div>
+                                                            <img src="../assets/img/small-logos/logo-xd.svg"
+                                                                className="avatar avatar-sm me-3" alt="xd" />
+                                                        </div>
+                                                        <div className="d-flex flex-column justify-content-center">
+                                                            <h6 className="mb-0 text-sm">Material XD Version</h6>
                                                         </div>
                                                     </div>
-                                                    <div className="progress">
-                                                        <div className="progress-bar bg-gradient-info w-60"
-                                                             role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                                                             aria-valuemax="100"></div>
+                                                </td>
+                                                <td>
+                                                    <div className="avatar-group mt-2">
+                                                        <a href="javascript:;"
+                                                            className="avatar avatar-xs rounded-circle"
+                                                            data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                            title="Ryan Tompson">
+                                                            <img src="../assets/img/team-1.jpg" alt="team1" />
+                                                        </a>
+                                                        <a href="javascript:;"
+                                                            className="avatar avatar-xs rounded-circle"
+                                                            data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                            title="Romina Hadid">
+                                                            <img src="../assets/img/team-2.jpg" alt="team2" />
+                                                        </a>
+                                                        <a href="javascript:;"
+                                                            className="avatar avatar-xs rounded-circle"
+                                                            data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                            title="Alexander Smith">
+                                                            <img src="../assets/img/team-3.jpg" alt="team3" />
+                                                        </a>
+                                                        <a href="javascript:;"
+                                                            className="avatar avatar-xs rounded-circle"
+                                                            data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                            title="Jessica Doe">
+                                                            <img src="../assets/img/team-4.jpg" alt="team4" />
+                                                        </a>
                                                     </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div className="d-flex px-2 py-1">
-                                                    <div>
-                                                        <img src="../assets/img/small-logos/logo-atlassian.svg"
-                                                             className="avatar avatar-sm me-3" alt="atlassian"/>
-                                                    </div>
-                                                    <div className="d-flex flex-column justify-content-center">
-                                                        <h6 className="mb-0 text-sm">Add Progress Track</h6>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div className="avatar-group mt-2">
-                                                    <a href="javascript:;"
-                                                       className="avatar avatar-xs rounded-circle"
-                                                       data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                       title="Romina Hadid">
-                                                        <img src="../assets/img/team-2.jpg" alt="team5"/>
-                                                    </a>
-                                                    <a href="javascript:;"
-                                                       className="avatar avatar-xs rounded-circle"
-                                                       data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                       title="Jessica Doe">
-                                                        <img src="../assets/img/team-4.jpg" alt="team6"/>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                            <td className="align-middle text-center text-sm">
-                                                <span className="text-xs font-weight-bold"> $3,000 </span>
-                                            </td>
-                                            <td className="align-middle">
-                                                <div className="progress-wrapper w-75 mx-auto">
-                                                    <div className="progress-info">
-                                                        <div className="progress-percentage">
-                                                            <span className="text-xs font-weight-bold">10%</span>
+                                                </td>
+                                                <td className="align-middle text-center text-sm">
+                                                    <span className="text-xs font-weight-bold"> $14,000 </span>
+                                                </td>
+                                                <td className="align-middle">
+                                                    <div className="progress-wrapper w-75 mx-auto">
+                                                        <div className="progress-info">
+                                                            <div className="progress-percentage">
+                                                                <span className="text-xs font-weight-bold">60%</span>
+                                                            </div>
+                                                        </div>
+                                                        <div className="progress">
+                                                            <div className="progress-bar bg-gradient-info w-60"
+                                                                role="progressbar" aria-valuenow="60" aria-valuemin="0"
+                                                                aria-valuemax="100"></div>
                                                         </div>
                                                     </div>
-                                                    <div className="progress">
-                                                        <div className="progress-bar bg-gradient-info w-10"
-                                                             role="progressbar" aria-valuenow="10" aria-valuemin="0"
-                                                             aria-valuemax="100"></div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div className="d-flex px-2 py-1">
-                                                    <div>
-                                                        <img src="../assets/img/small-logos/logo-slack.svg"
-                                                             className="avatar avatar-sm me-3" alt="team7"/>
-                                                    </div>
-                                                    <div className="d-flex flex-column justify-content-center">
-                                                        <h6 className="mb-0 text-sm">Fix Platform Errors</h6>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div className="avatar-group mt-2">
-                                                    <a href="javascript:;"
-                                                       className="avatar avatar-xs rounded-circle"
-                                                       data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                       title="Romina Hadid">
-                                                        <img src="../assets/img/team-3.jpg" alt="team8"/>
-                                                    </a>
-                                                    <a href="javascript:;"
-                                                       className="avatar avatar-xs rounded-circle"
-                                                       data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                       title="Jessica Doe">
-                                                        <img src="../assets/img/team-1.jpg" alt="team9"/>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                            <td className="align-middle text-center text-sm">
-                                                <span className="text-xs font-weight-bold"> Not set </span>
-                                            </td>
-                                            <td className="align-middle">
-                                                <div className="progress-wrapper w-75 mx-auto">
-                                                    <div className="progress-info">
-                                                        <div className="progress-percentage">
-                                                            <span className="text-xs font-weight-bold">100%</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div className="d-flex px-2 py-1">
+                                                        <div>
+                                                            <img src="../assets/img/small-logos/logo-atlassian.svg"
+                                                                className="avatar avatar-sm me-3" alt="atlassian" />
+                                                        </div>
+                                                        <div className="d-flex flex-column justify-content-center">
+                                                            <h6 className="mb-0 text-sm">Add Progress Track</h6>
                                                         </div>
                                                     </div>
-                                                    <div className="progress">
-                                                        <div className="progress-bar bg-gradient-success w-100"
-                                                             role="progressbar" aria-valuenow="100"
-                                                             aria-valuemin="0" aria-valuemax="100"></div>
+                                                </td>
+                                                <td>
+                                                    <div className="avatar-group mt-2">
+                                                        <a href="javascript:;"
+                                                            className="avatar avatar-xs rounded-circle"
+                                                            data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                            title="Romina Hadid">
+                                                            <img src="../assets/img/team-2.jpg" alt="team5" />
+                                                        </a>
+                                                        <a href="javascript:;"
+                                                            className="avatar avatar-xs rounded-circle"
+                                                            data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                            title="Jessica Doe">
+                                                            <img src="../assets/img/team-4.jpg" alt="team6" />
+                                                        </a>
                                                     </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div className="d-flex px-2 py-1">
-                                                    <div>
-                                                        <img src="../assets/img/small-logos/logo-spotify.svg"
-                                                             className="avatar avatar-sm me-3" alt="spotify"/>
-                                                    </div>
-                                                    <div className="d-flex flex-column justify-content-center">
-                                                        <h6 className="mb-0 text-sm">Launch our Mobile App</h6>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div className="avatar-group mt-2">
-                                                    <a href="javascript:;"
-                                                       className="avatar avatar-xs rounded-circle"
-                                                       data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                       title="Ryan Tompson">
-                                                        <img src="../assets/img/team-4.jpg" alt="user1"/>
-                                                    </a>
-                                                    <a href="javascript:;"
-                                                       className="avatar avatar-xs rounded-circle"
-                                                       data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                       title="Romina Hadid">
-                                                        <img src="../assets/img/team-3.jpg" alt="user2"/>
-                                                    </a>
-                                                    <a href="javascript:;"
-                                                       className="avatar avatar-xs rounded-circle"
-                                                       data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                       title="Alexander Smith">
-                                                        <img src="../assets/img/team-4.jpg" alt="user3"/>
-                                                    </a>
-                                                    <a href="javascript:;"
-                                                       className="avatar avatar-xs rounded-circle"
-                                                       data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                       title="Jessica Doe">
-                                                        <img src="../assets/img/team-1.jpg" alt="user4"/>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                            <td className="align-middle text-center text-sm">
-                                                <span className="text-xs font-weight-bold"> $20,500 </span>
-                                            </td>
-                                            <td className="align-middle">
-                                                <div className="progress-wrapper w-75 mx-auto">
-                                                    <div className="progress-info">
-                                                        <div className="progress-percentage">
-                                                            <span className="text-xs font-weight-bold">100%</span>
+                                                </td>
+                                                <td className="align-middle text-center text-sm">
+                                                    <span className="text-xs font-weight-bold"> $3,000 </span>
+                                                </td>
+                                                <td className="align-middle">
+                                                    <div className="progress-wrapper w-75 mx-auto">
+                                                        <div className="progress-info">
+                                                            <div className="progress-percentage">
+                                                                <span className="text-xs font-weight-bold">10%</span>
+                                                            </div>
+                                                        </div>
+                                                        <div className="progress">
+                                                            <div className="progress-bar bg-gradient-info w-10"
+                                                                role="progressbar" aria-valuenow="10" aria-valuemin="0"
+                                                                aria-valuemax="100"></div>
                                                         </div>
                                                     </div>
-                                                    <div className="progress">
-                                                        <div className="progress-bar bg-gradient-success w-100"
-                                                             role="progressbar" aria-valuenow="100"
-                                                             aria-valuemin="0" aria-valuemax="100"></div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div className="d-flex px-2 py-1">
-                                                    <div>
-                                                        <img src="../assets/img/small-logos/logo-jira.svg"
-                                                             className="avatar avatar-sm me-3" alt="jira"/>
-                                                    </div>
-                                                    <div className="d-flex flex-column justify-content-center">
-                                                        <h6 className="mb-0 text-sm">Add the New Pricing Page</h6>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div className="avatar-group mt-2">
-                                                    <a href="javascript:;"
-                                                       className="avatar avatar-xs rounded-circle"
-                                                       data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                       title="Ryan Tompson">
-                                                        <img src="../assets/img/team-4.jpg" alt="user5"/>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                            <td className="align-middle text-center text-sm">
-                                                <span className="text-xs font-weight-bold"> $500 </span>
-                                            </td>
-                                            <td className="align-middle">
-                                                <div className="progress-wrapper w-75 mx-auto">
-                                                    <div className="progress-info">
-                                                        <div className="progress-percentage">
-                                                            <span className="text-xs font-weight-bold">25%</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div className="d-flex px-2 py-1">
+                                                        <div>
+                                                            <img src="../assets/img/small-logos/logo-slack.svg"
+                                                                className="avatar avatar-sm me-3" alt="team7" />
+                                                        </div>
+                                                        <div className="d-flex flex-column justify-content-center">
+                                                            <h6 className="mb-0 text-sm">Fix Platform Errors</h6>
                                                         </div>
                                                     </div>
-                                                    <div className="progress">
-                                                        <div className="progress-bar bg-gradient-info w-25"
-                                                             role="progressbar" aria-valuenow="25" aria-valuemin="0"
-                                                             aria-valuemax="25"></div>
+                                                </td>
+                                                <td>
+                                                    <div className="avatar-group mt-2">
+                                                        <a href="javascript:;"
+                                                            className="avatar avatar-xs rounded-circle"
+                                                            data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                            title="Romina Hadid">
+                                                            <img src="../assets/img/team-3.jpg" alt="team8" />
+                                                        </a>
+                                                        <a href="javascript:;"
+                                                            className="avatar avatar-xs rounded-circle"
+                                                            data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                            title="Jessica Doe">
+                                                            <img src="../assets/img/team-1.jpg" alt="team9" />
+                                                        </a>
                                                     </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div className="d-flex px-2 py-1">
-                                                    <div>
-                                                        <img src="../assets/img/small-logos/logo-invision.svg"
-                                                             className="avatar avatar-sm me-3" alt="invision"/>
-                                                    </div>
-                                                    <div className="d-flex flex-column justify-content-center">
-                                                        <h6 className="mb-0 text-sm">Redesign New Online Shop</h6>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div className="avatar-group mt-2">
-                                                    <a href="javascript:;"
-                                                       className="avatar avatar-xs rounded-circle"
-                                                       data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                       title="Ryan Tompson">
-                                                        <img src="../assets/img/team-1.jpg" alt="user6"/>
-                                                    </a>
-                                                    <a href="javascript:;"
-                                                       className="avatar avatar-xs rounded-circle"
-                                                       data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                       title="Jessica Doe">
-                                                        <img src="../assets/img/team-4.jpg" alt="user7"/>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                            <td className="align-middle text-center text-sm">
-                                                <span className="text-xs font-weight-bold"> $2,000 </span>
-                                            </td>
-                                            <td className="align-middle">
-                                                <div className="progress-wrapper w-75 mx-auto">
-                                                    <div className="progress-info">
-                                                        <div className="progress-percentage">
-                                                            <span className="text-xs font-weight-bold">40%</span>
+                                                </td>
+                                                <td className="align-middle text-center text-sm">
+                                                    <span className="text-xs font-weight-bold"> Not set </span>
+                                                </td>
+                                                <td className="align-middle">
+                                                    <div className="progress-wrapper w-75 mx-auto">
+                                                        <div className="progress-info">
+                                                            <div className="progress-percentage">
+                                                                <span className="text-xs font-weight-bold">100%</span>
+                                                            </div>
+                                                        </div>
+                                                        <div className="progress">
+                                                            <div className="progress-bar bg-gradient-success w-100"
+                                                                role="progressbar" aria-valuenow="100"
+                                                                aria-valuemin="0" aria-valuemax="100"></div>
                                                         </div>
                                                     </div>
-                                                    <div className="progress">
-                                                        <div className="progress-bar bg-gradient-info w-40"
-                                                             role="progressbar" aria-valuenow="40" aria-valuemin="0"
-                                                             aria-valuemax="40"></div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div className="d-flex px-2 py-1">
+                                                        <div>
+                                                            <img src="../assets/img/small-logos/logo-spotify.svg"
+                                                                className="avatar avatar-sm me-3" alt="spotify" />
+                                                        </div>
+                                                        <div className="d-flex flex-column justify-content-center">
+                                                            <h6 className="mb-0 text-sm">Launch our Mobile App</h6>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                                </td>
+                                                <td>
+                                                    <div className="avatar-group mt-2">
+                                                        <a href="javascript:;"
+                                                            className="avatar avatar-xs rounded-circle"
+                                                            data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                            title="Ryan Tompson">
+                                                            <img src="../assets/img/team-4.jpg" alt="user1" />
+                                                        </a>
+                                                        <a href="javascript:;"
+                                                            className="avatar avatar-xs rounded-circle"
+                                                            data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                            title="Romina Hadid">
+                                                            <img src="../assets/img/team-3.jpg" alt="user2" />
+                                                        </a>
+                                                        <a href="javascript:;"
+                                                            className="avatar avatar-xs rounded-circle"
+                                                            data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                            title="Alexander Smith">
+                                                            <img src="../assets/img/team-4.jpg" alt="user3" />
+                                                        </a>
+                                                        <a href="javascript:;"
+                                                            className="avatar avatar-xs rounded-circle"
+                                                            data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                            title="Jessica Doe">
+                                                            <img src="../assets/img/team-1.jpg" alt="user4" />
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                                <td className="align-middle text-center text-sm">
+                                                    <span className="text-xs font-weight-bold"> $20,500 </span>
+                                                </td>
+                                                <td className="align-middle">
+                                                    <div className="progress-wrapper w-75 mx-auto">
+                                                        <div className="progress-info">
+                                                            <div className="progress-percentage">
+                                                                <span className="text-xs font-weight-bold">100%</span>
+                                                            </div>
+                                                        </div>
+                                                        <div className="progress">
+                                                            <div className="progress-bar bg-gradient-success w-100"
+                                                                role="progressbar" aria-valuenow="100"
+                                                                aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div className="d-flex px-2 py-1">
+                                                        <div>
+                                                            <img src="../assets/img/small-logos/logo-jira.svg"
+                                                                className="avatar avatar-sm me-3" alt="jira" />
+                                                        </div>
+                                                        <div className="d-flex flex-column justify-content-center">
+                                                            <h6 className="mb-0 text-sm">Add the New Pricing Page</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div className="avatar-group mt-2">
+                                                        <a href="javascript:;"
+                                                            className="avatar avatar-xs rounded-circle"
+                                                            data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                            title="Ryan Tompson">
+                                                            <img src="../assets/img/team-4.jpg" alt="user5" />
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                                <td className="align-middle text-center text-sm">
+                                                    <span className="text-xs font-weight-bold"> $500 </span>
+                                                </td>
+                                                <td className="align-middle">
+                                                    <div className="progress-wrapper w-75 mx-auto">
+                                                        <div className="progress-info">
+                                                            <div className="progress-percentage">
+                                                                <span className="text-xs font-weight-bold">25%</span>
+                                                            </div>
+                                                        </div>
+                                                        <div className="progress">
+                                                            <div className="progress-bar bg-gradient-info w-25"
+                                                                role="progressbar" aria-valuenow="25" aria-valuemin="0"
+                                                                aria-valuemax="25"></div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div className="d-flex px-2 py-1">
+                                                        <div>
+                                                            <img src="../assets/img/small-logos/logo-invision.svg"
+                                                                className="avatar avatar-sm me-3" alt="invision" />
+                                                        </div>
+                                                        <div className="d-flex flex-column justify-content-center">
+                                                            <h6 className="mb-0 text-sm">Redesign New Online Shop</h6>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div className="avatar-group mt-2">
+                                                        <a href="javascript:;"
+                                                            className="avatar avatar-xs rounded-circle"
+                                                            data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                            title="Ryan Tompson">
+                                                            <img src="../assets/img/team-1.jpg" alt="user6" />
+                                                        </a>
+                                                        <a href="javascript:;"
+                                                            className="avatar avatar-xs rounded-circle"
+                                                            data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                            title="Jessica Doe">
+                                                            <img src="../assets/img/team-4.jpg" alt="user7" />
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                                <td className="align-middle text-center text-sm">
+                                                    <span className="text-xs font-weight-bold"> $2,000 </span>
+                                                </td>
+                                                <td className="align-middle">
+                                                    <div className="progress-wrapper w-75 mx-auto">
+                                                        <div className="progress-info">
+                                                            <div className="progress-percentage">
+                                                                <span className="text-xs font-weight-bold">40%</span>
+                                                            </div>
+                                                        </div>
+                                                        <div className="progress">
+                                                            <div className="progress-bar bg-gradient-info w-40"
+                                                                role="progressbar" aria-valuenow="40" aria-valuemin="0"
+                                                                aria-valuemax="40"></div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -517,9 +519,9 @@ const MainDash = (props) => {
                             <div className="card-body p-3">
                                 <div className="timeline timeline-one-side">
                                     <div className="timeline-block mb-3">
-                  <span className="timeline-step">
-                    <i className="material-icons text-success text-gradient">notifications</i>
-                  </span>
+                                        <span className="timeline-step">
+                                            <i className="material-icons text-success text-gradient">notifications</i>
+                                        </span>
                                         <div className="timeline-content">
                                             <h6 className="text-dark text-sm font-weight-bold mb-0">$2400, Design
                                                 changes</h6>
@@ -528,9 +530,9 @@ const MainDash = (props) => {
                                         </div>
                                     </div>
                                     <div className="timeline-block mb-3">
-                  <span className="timeline-step">
-                    <i className="material-icons text-danger text-gradient">code</i>
-                  </span>
+                                        <span className="timeline-step">
+                                            <i className="material-icons text-danger text-gradient">code</i>
+                                        </span>
                                         <div className="timeline-content">
                                             <h6 className="text-dark text-sm font-weight-bold mb-0">New order
                                                 #1832412</h6>
@@ -539,9 +541,9 @@ const MainDash = (props) => {
                                         </div>
                                     </div>
                                     <div className="timeline-block mb-3">
-                  <span className="timeline-step">
-                    <i className="material-icons text-info text-gradient">shopping_cart</i>
-                  </span>
+                                        <span className="timeline-step">
+                                            <i className="material-icons text-info text-gradient">shopping_cart</i>
+                                        </span>
                                         <div className="timeline-content">
                                             <h6 className="text-dark text-sm font-weight-bold mb-0">Server payments
                                                 for April</h6>
@@ -550,9 +552,9 @@ const MainDash = (props) => {
                                         </div>
                                     </div>
                                     <div className="timeline-block mb-3">
-                  <span className="timeline-step">
-                    <i className="material-icons text-warning text-gradient">credit_card</i>
-                  </span>
+                                        <span className="timeline-step">
+                                            <i className="material-icons text-warning text-gradient">credit_card</i>
+                                        </span>
                                         <div className="timeline-content">
                                             <h6 className="text-dark text-sm font-weight-bold mb-0">New card added
                                                 for order #4395133</h6>
@@ -561,9 +563,9 @@ const MainDash = (props) => {
                                         </div>
                                     </div>
                                     <div className="timeline-block mb-3">
-                  <span className="timeline-step">
-                    <i className="material-icons text-primary text-gradient">key</i>
-                  </span>
+                                        <span className="timeline-step">
+                                            <i className="material-icons text-primary text-gradient">key</i>
+                                        </span>
                                         <div className="timeline-content">
                                             <h6 className="text-dark text-sm font-weight-bold mb-0">Unlock packages
                                                 for development</h6>
@@ -572,9 +574,9 @@ const MainDash = (props) => {
                                         </div>
                                     </div>
                                     <div className="timeline-block">
-                  <span className="timeline-step">
-                    <i className="material-icons text-dark text-gradient">payments</i>
-                  </span>
+                                        <span className="timeline-step">
+                                            <i className="material-icons text-dark text-gradient">payments</i>
+                                        </span>
                                         <div className="timeline-content">
                                             <h6 className="text-dark text-sm font-weight-bold mb-0">New order
                                                 #9583120</h6>
