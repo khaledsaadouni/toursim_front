@@ -6,6 +6,18 @@ const ProfileCard = () => {
 
     const [jwt, setJwt] = useLocalState("", "jwt");
     const [user, setUser] = useLocalState(null, "user");
+    const handleDelete = async () => {
+        await fetch(`/api/v1/${user.role === "Partner" ? "partner" : "user"}/delete/${user.id}`, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${jwt}`
+            },
+            method: "DELETE",
+        });
+        localStorage.removeItem('jwt');
+        window.location.reload()
+
+    }
     return jwt === "" ? <Navigate to="/"/> : (
         <React.Fragment>
 
@@ -158,6 +170,14 @@ const ProfileCard = () => {
                                                                     Informations
                                                                 </button>
                                                             </Link>
+                                                        </li>
+                                                        <li className="list-group-item border-0 ps-0 text-sm">
+                                                            <button
+                                                                onClick={handleDelete}
+                                                                className=" btn btn-outline-danger w-100 my-4 mb-2">
+                                                                Delete Account
+                                                            </button>
+
                                                         </li>
 
                                                     </ul>
