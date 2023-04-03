@@ -2,6 +2,8 @@ import React from 'react';
 import {Link} from "react-router-dom";
 import {useLocalState} from "../utils/UseLocalStorage";
 
+import image from "../avatar.jpg";
+
 const NavCom = (props) => {
 
     const [jwt, setJwt] = useLocalState("", "jwt");
@@ -80,7 +82,7 @@ const NavCom = (props) => {
                                 <li className="menu-item menu-item-has-children arrow"
                                     style={{display: "flex", alignItems: "center"}}>
 
-                                    <img src="assets/upload/avatar.jpg" height="40px" width="40px"
+                                    <img src={user.photo === null ? image : user.photo} height="40px" width="40px"
                                          style={{borderRadius: "100%"}}/>
 
                                     <a> {user.firstname}</a>

@@ -2,6 +2,7 @@ import React from 'react';
 import "./Nav.css"
 import {useLocalState} from "../utils/UseLocalStorage";
 import {Link} from "react-router-dom";
+import image from "../avatar.jpg";
 
 const NavBarDash = (props) => {
     const [jwt, setJwt] = useLocalState("", "jwt");
@@ -57,7 +58,7 @@ const NavBarDash = (props) => {
                         </ul>
                         <ul className="navbar-nav d-lg-flex d-none">
                             <li className="nav-item d-flex align-items-center" style={{marginTop: "0px"}}>
-                                <img src="assets/upload/avatar.jpg" height="40px" width="40px"
+                                <img src={user.photo === null ? image : user.photo} height="40px" width="40px"
                                      style={{borderRadius: "100%"}}/>
 
                             </li>

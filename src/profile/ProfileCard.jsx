@@ -1,6 +1,7 @@
 import React from 'react';
 import {Link, Navigate} from "react-router-dom";
 import {useLocalState} from "../utils/UseLocalStorage";
+import image from "../avatar.jpg";
 
 const ProfileCard = () => {
 
@@ -31,7 +32,7 @@ const ProfileCard = () => {
                             <div className="row gx-4 mb-2">
                                 <div className="col-auto">
                                     <div className="avatar avatar-xl position-relative">
-                                        <img src="assets/img/bruce-mars.jpg" alt="profile_image"
+                                        <img src={user.photo === null ? image : user.photo} alt="profile_image"
                                              className="w-100 border-radius-lg shadow-sm"/>
                                     </div>
                                 </div>

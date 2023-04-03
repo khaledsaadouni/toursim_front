@@ -46,6 +46,39 @@ const Settings = () => {
                 setError("An error occured please try again!")
             });
     }
+    const [file, setFile] = useState(null);
+
+    const handleFileChange = (event) => {
+        setFile(event.target.files[0]);
+    };
+
+    const handleUpload = async () => {
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        await fetch(`/api/v1/photo/${user.id}/profilepicture${user.email}/profil`, {
+            headers: {
+                Authorization: `Bearer ${jwt}`
+            },
+            method: "POST",
+            body: formData
+        }).then((response) => {
+            if (response.status === 200) {
+                return Promise.all([response.json(), response.headers])
+            } else {
+                return Promise.reject("")
+            }
+        })
+            .then(([data, header]) => {
+                setUser(data);
+                setError("")
+                window.location.reload();
+            }).catch((message) => {
+                setError("File's size is too big , Please Try Again")
+            });
+    };
+
     return jwt === "" || redirect === true ?
         <Navigate to={redirect ? (user.role != "Client" ? "/dashboard/profile" : "/profile/main") : ""}/> : (
             <React.Fragment>
@@ -65,13 +98,28 @@ const Settings = () => {
                             <div className="row gx-4 mb-2">
                                 <div className="col-auto">
                                     <div className="avatar avatar-xl position-relative">
-                                        <img src="assets/img/bruce-mars.jpg" alt="profile_image"
+                                        <img src={user.photo} alt="profile_image"
                                              className="w-100 border-radius-lg shadow-sm"/>
                                     </div>
                                 </div>
                                 <div className="col-auto my-auto">
                                     <div className="h-100">
-                                        Change Profile Picture
+                                        <div className="row">
+                                            <div className="col">
+                                                <input type="file" className="form-control"
+                                                       style={{backgroundColor: "#eeeeee", color: "black"}}
+                                                       onChange={handleFileChange}/>
+                                            </div>
+                                            <div className="col">
+                                                <button type="submit" className="form-control"
+                                                        style={{backgroundColor: "#eeeeee", color: "black"}}
+                                                        onClick={handleUpload}>Upload
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="h-100" style={{color: "darkred"}} hidden={error === ""}>
+                                        {error}
                                     </div>
                                 </div>
                                 <div className="col-lg-4 col-md-6 my-sm-auto ms-sm-auto me-sm-0 mx-auto mt-3">
