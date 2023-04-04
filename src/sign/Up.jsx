@@ -70,6 +70,7 @@ const Up = () => {
                 setError2("Email already exist!")
             });
     }
+
     const handle2partner = async () => {
         const reqBody2 = {
             'email': email,
@@ -102,48 +103,57 @@ const Up = () => {
                 setError2("Email already exist!")
             });
     }
+    const handleLoginFacebook = async () => {
+        window.location.href = 'http://localhost:8080/oauth2/authorization/facebook?redirect_uri=http://localhost:3000/';
 
-    return jwt ? <Navigate to={(user.role === "Partner" || user.role === "Admin") ? "/dashboard/main" : "/"}/> : (
-        <React.Fragment>
-            <div className="container my-auto">
-                <div className="row">
-                    <div className="col-lg-4 col-md-8 col-12 mx-auto">
-                        <div className="card z-index-0 fadeIn3 fadeInBottom">
-                            <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                                <div className="bg-gradient-primary shadow-primary border-radius-lg py-3 pe-1">
-                                    <h4 className="text-white font-weight-bolder text-center mt-2 mb-0">Sign
-                                        up</h4>
-                                    <div className="row mt-3" hidden={showForm}>
-                                        <div className="col-2 text-center ms-auto">
-                                            <a className="btn btn-link px-3" href="javascript:;">
-                                                <i className="fa fa-facebook text-white text-lg"></i>
-                                            </a>
-                                        </div>
-                                        <div className="col-2 text-center me-auto">
-                                            <a className="btn btn-link px-3" href="javascript:;">
-                                                <i className="fa fa-google text-white text-lg"></i>
-                                            </a>
+    }
+    const handleLoginGoogle = async () => {
+        window.location.href = 'http://localhost:8080/oauth2/authorization/google?redirect_uri=http://localhost:3000/';
+
+    }
+
+    return jwt && user !== null ?
+        <Navigate to={(user.role === "Partner" || user.role === "Admin") ? "/dashboard/main" : "/"}/> : (
+            <React.Fragment>
+                <div className="container my-auto">
+                    <div className="row">
+                        <div className="col-lg-4 col-md-8 col-12 mx-auto">
+                            <div className="card z-index-0 fadeIn3 fadeInBottom">
+                                <div className="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                                    <div className="bg-gradient-primary shadow-primary border-radius-lg py-3 pe-1">
+                                        <h4 className="text-white font-weight-bolder text-center mt-2 mb-0">Sign
+                                            up</h4>
+                                        <div className="row mt-3" hidden={showForm}>
+                                            <div className="col-2 text-center ms-auto">
+                                                <a className="btn btn-link px-3" onClick={handleLoginFacebook}>
+                                                    <i className="fa fa-facebook text-white text-lg"></i>
+                                                </a>
+                                            </div>
+                                            <div className="col-2 text-center me-auto">
+                                                <a className="btn btn-link px-3" onClick={handleLoginGoogle}>
+                                                    <i className="fa fa-google text-white text-lg"></i>
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="card-body">
-                                <div style={{
-                                    display: "flex",
-                                    textAlign: "center",
-                                    justifyContent: "center",
-                                    alignItems: "center"
-                                }}>
-                                    <RadioGroup name="use-radio-group" defaultValue="client">
-                                        <div className="row">
-                                            <div className="col">
-                                                <FormControlLabel value="client" label="Client"
-                                                                  control={<Radio onChange={client}
-                                                                                  style={{color: "#A38182"}}/>}/>
-                                            </div>
-                                            <div className="col">
-                                                <FormControlLabel value="partner" label="Partner"
-                                                                  control={<Radio onChange={partner}
+                                <div className="card-body">
+                                    <div style={{
+                                        display: "flex",
+                                        textAlign: "center",
+                                        justifyContent: "center",
+                                        alignItems: "center"
+                                    }}>
+                                        <RadioGroup name="use-radio-group" defaultValue="client">
+                                            <div className="row">
+                                                <div className="col">
+                                                    <FormControlLabel value="client" label="Client"
+                                                                      control={<Radio onChange={client}
+                                                                                      style={{color: "#A38182"}}/>}/>
+                                                </div>
+                                                <div className="col">
+                                                    <FormControlLabel value="partner" label="Partner"
+                                                                      control={<Radio onChange={partner}
                                                                                   style={{color: "#A38182"}}/>}/>
                                             </div>
                                         </div>

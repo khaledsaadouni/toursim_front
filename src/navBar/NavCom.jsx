@@ -1,21 +1,60 @@
 import React from 'react';
 import {Link} from "react-router-dom";
 import {useLocalState} from "../utils/UseLocalStorage";
-
 import image from "../avatar.jpg";
+
+const GET_TOKEN_URL = "/api/v1/auth/oAuth2Token"
 
 const NavCom = (props) => {
 
     const [jwt, setJwt] = useLocalState("", "jwt");
 
     const [user, setUser] = useLocalState(null, "user");
-    //   const [jwt, setJwt] = useState(false);
+    // useEffect(() => {
+    //     const asyncFn = async () => {
+    //         try {
+    //             await fetch(GET_TOKEN_URL, {
+    //                 headers: {
+    //                     "Content-Type": "application/json"
+    //                 },
+    //                 method: "GET",
+    //             }).then((response) => {
+    //                 if (response.status === 200) {
+    //                     return Promise.all([response.json(), response.headers])
+    //                 } else {
+    //                     return Promise.reject("")
+    //                 }
+    //             })
+    //                 .then(([data, header]) => {
+    //                     console.log(data)
+    //                     setJwt(data.token);
+    //                     setUser(data.user);
+    //                 }).catch((message) => {
+    //                 });
+    //         } catch (error) {
+    //         }
+    //     };
+    //     asyncFn();
+    // }, []);
+    const logout = async () => {
 
-    const logout = () => {
         localStorage.removeItem('jwt');
+        localStorage.removeItem('user');
         window.location.reload();
-    }
 
+        // await fetch("/api/v1/auth/deleteoAuth2Token", {
+        //     headers: {
+        //         "Content-Type": "application/json"
+        //     },
+        //     method: "GET",
+        // }).then((response) => {
+        //     if (response.status === 200) {
+        //         return Promise.all([response.json(), response.headers])
+        //     } else {
+        //         return Promise.reject("")
+        //     }
+        // })
+    }
     return (
         <React.Fragment>
             <div className="nav_wrapper_inner">
@@ -67,11 +106,12 @@ const NavCom = (props) => {
                                     Destinations
                                 </a>
                             </li>
-                            <li className="menu-item   ">
-                                <a href="">
-                                    My Reservations
-                                </a>
-                            </li>
+                            {jwt && user !== null ? (
+                                <li className="menu-item   ">
+                                    <a href="">
+                                        My Reservations
+                                    </a>
+                                </li>) : null}
                             <li className="menu-item   ">
                                 <Link to={"/aboutUs"}>
                                     About Us
@@ -87,7 +127,7 @@ const NavCom = (props) => {
 
                                     <a> {user.firstname}</a>
 
-                                    <ul className="sub-menu" style={{marginTop: "120px"}}>
+                                    <ul className="sub-menu" style={{marginTop: "150px"}}>
                                         <li className="menu-item">
                                             <Link
                                                 to={user.role === "Client" ? "/profile/main" : "/dashboard/profile"}>Profile </Link>
@@ -115,21 +155,22 @@ const NavCom = (props) => {
                                     justifyContent: "center",
                                     alignItems: "center"
                                 }}>
-                                    <button className="     nav-outline-secondary">
-                                        <Link
-                                            style={{color: "white"}}
-                                            to={"/sign/in"}>
+                                    <Link
+                                        to={"/sign/in"}>
+                                        <button className="     nav-outline-secondary">
+
                                             Sign in
 
-                                        </Link>
-                                    </button>
+
+                                        </button>
+                                    </Link><Link
+                                    to={"/sign/up"}>
                                     <button className="  nav-secondary">
-                                        <Link
-                                            style={{color: "white"}}
-                                            to={"/sign/up"}>
-                                            Sign up
-                                        </Link>
+
+                                        Sign up
+
                                     </button>
+                                </Link>
                                 </li>
                             )}
                         </ul>

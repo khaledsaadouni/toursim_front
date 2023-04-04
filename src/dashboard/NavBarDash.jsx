@@ -44,10 +44,12 @@ const NavBarDash = (props) => {
                     <div className="collapse navbar-collapse" id="navigation">
                         <ul className="navbar-nav mx-auto">
                             <li className="nav-item">
-                                <a className="nav-link d-flex align-items-center me-2 active"
-                                   aria-current="page" href="../pages/dashboard.html">
-                                    Home
-                                </a>
+                                <Link to={"/"}>
+                                    <a className="nav-link d-flex align-items-center me-2 active"
+                                       aria-current="page" href="../pages/dashboard.html">
+                                        Home
+                                    </a>
+                                </Link>
                             </li>
                             <li className="nav-item">
                                 <a className="nav-link me-2" href="../pages/profile.html">

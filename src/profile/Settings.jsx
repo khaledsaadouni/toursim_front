@@ -23,7 +23,8 @@ const Settings = () => {
             'firstname': firstname,
             'role': user.role,
             'birthday': birthday,
-            'phone': phone
+            'phone': phone,
+            'photo': user.photo
         };
         await fetch("/api/v1/user/update", {
             headers: {

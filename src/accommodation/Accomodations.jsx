@@ -1,15 +1,42 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Nav from "../navBar/Nav";
 import Accomadation_Card from "./Accomodation_Card";
+import calculateAverageRate from "../utils/ReviewStarsCounter";
 
+const URL = "/api/v1/accomodation/all"
 const MyComponent = () => {
 
     const [filtre, setFilter] = useState(false);
-    const items = ['item1', 'item2', 'item3', 'item4', 'item1', 'item2', 'item3', 'item4', 'item1', 'item2', 'item3', 'item4'];
+    const [offers, setOffers] = useState(null)
+    useEffect(() => {
+        const asyncFn = async () => {
+            try {
+                await fetch(URL, {
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    method: "GET",
+                }).then((response) => {
+                    if (response.status === 200) {
+                        return Promise.all([response.json(), response.headers])
+                    } else {
+                        return Promise.reject("")
+                    }
+                })
+                    .then(([data, header]) => {
+                        setOffers(data)
+                    }).catch((message) => {
+                    });
+            } catch (error) {
+            }
+        };
+
+        asyncFn();
+    }, []);
     return (
         <React.Fragment>
             <Nav/>
-            <div id="page_content_wrapper" className="hasbg ">
+            <div id="page_content_wrapper" className="hasbg " style={{marginTop: "20px"}}>
 
                 <form id="tour_search_form" name="tour_search_form" method="get"
                       action="http://themes.themegoods.com/granddemo/tours/tour-2-columns-classic/">
@@ -109,9 +136,13 @@ const MyComponent = () => {
                                 <div id="portfolio_filter_wrapper"
                                      className="gallery classic four_cols portfolio-content section content clearfix"
                                      data-columns="4">
-                                    {items.map((item, index) => (
-                                        <Accomadation_Card/>
-                                    ))}
+                                    {offers !== null ? offers.map((item, index) => (
+                                        <Accomadation_Card photos={item.photo} countreview={item.reviews.length}
+                                                           reviews={calculateAverageRate(item.reviews)}
+                                                           capacity={item.capacity} name={item.name} price={item.price}
+                                                           destination={item.destination}
+                                                           emplacement={item.emplacement}/>
+                                    )) : null}
 
                                 </div>
                             </div>

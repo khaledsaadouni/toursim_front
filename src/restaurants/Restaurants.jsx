@@ -1,16 +1,48 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Nav from "../navBar/Nav";
 import Restaurant_list from "./Restaurant_list";
+import calculateAverageRate from "../utils/ReviewStarsCounter";
+
+const URL = "/api/v1/restoration/all"
 
 const Restaurants = () => {
 
 
     const [filtre, setFilter] = useState(false);
     const items = ['item1', 'item2', 'item3', 'item4', 'item1', 'item2', 'item3', 'item4', 'item1', 'item2', 'item3', 'item4'];
+
+    const [offers, setOffers] = useState(null)
+    useEffect(() => {
+        const asyncFn = async () => {
+            try {
+                await fetch(URL, {
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    method: "GET",
+                }).then((response) => {
+                    if (response.status === 200) {
+                        return Promise.all([response.json(), response.headers])
+                    } else {
+                        return Promise.reject("")
+                    }
+                })
+                    .then(([data, header]) => {
+                        setOffers(data)
+                    }).catch((message) => {
+                    });
+            } catch (error) {
+            }
+        };
+
+        asyncFn();
+    }, []);
+
+
     return (
         <React.Fragment>
             <Nav/>
-            <div id="page_content_wrapper" className="hasbg ">
+            <div id="page_content_wrapper" className="hasbg " style={{marginTop: "20px"}}>
 
                 <form id="tour_search_form" name="tour_search_form" method="get"
                       action="http://themes.themegoods.com/granddemo/tours/tour-2-columns-classic/">
@@ -103,7 +135,6 @@ const Restaurants = () => {
 
                     <div className="inner_wrapper nopadding">
 
-                        <div id="page_main_content" className="sidebar_content left_sidebar fixed_column">
 
                             <div className="standard_wrapper">
 
@@ -111,9 +142,11 @@ const Restaurants = () => {
                                      className="gallery classic two_cols portfolio-content section content clearfix"
                                      data-columns="3">
 
-                                    {items.map((item, index) => (
-                                        <Restaurant_list/>
-                                    ))}
+                                    {offers !== null ? offers.map((item, index) => (
+                                        <Restaurant_list countreview={item.reviews.length} photos={item.photo}
+                                                         name={item.name} description={item.description}
+                                                         reviews={calculateAverageRate(item.reviews)}/>
+                                    )) : null}
 
                                 </div>
                                 <br className="clear"/>
@@ -121,188 +154,7 @@ const Restaurants = () => {
                             </div>
                         </div>
 
-                        <div className="sidebar_wrapper left_sidebar">
-                            <div className="sidebar">
 
-                                <div className="content">
-
-                                    <ul className="sidebar_widget">
-                                        <li id="grandtour_cat_posts-5" className="widget Grandtour_Cat_Posts">
-                                            <h2 className="widgettitle"><span>Travel Tips</span></h2>
-                                            <ul className="posts blog withthumb ">
-                                                <li>
-                                                    <div className="post_circle_thumb">
-                                                        <a href="#"><img className="alignleft frame post_thumb"
-                                                                         src="upload/photo-1469920783271-4ee08a94d42d-150x150.jpg"
-                                                                         alt=""/></a>
-                                                    </div>
-                                                    <a href="#">Memorial Day to Someone Told Me to Travel</a>
-                                                    <div className="post_attribute">December 10, 2016</div>
-                                                </li>
-                                                <li>
-                                                    <div className="post_circle_thumb">
-                                                        <a href="#"><img className="alignleft frame post_thumb"
-                                                                         src="upload/pexels-photo-212388-150x150.jpeg"
-                                                                         alt=""/></a>
-                                                    </div>
-                                                    <a href="#">7 Tips For Nomads On A Budget Trips</a>
-                                                    <div className="post_attribute">December 10, 2016</div>
-                                                </li>
-                                                <li>
-                                                    <div className="post_circle_thumb">
-                                                        <a href="#"><img className="alignleft frame post_thumb"
-                                                                         src="assets/upload/pexels-photo-24484-150x150.jpg"
-                                                                         alt=""/></a>
-                                                    </div>
-                                                    <a href="#">Taking A Travel Blog Victory Lap</a>
-                                                    <div className="post_attribute">December 10, 2016</div>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                        <li id="grandtour_flickr-8" className="widget Grandtour_Flickr">
-                                            <h2 className="widgettitle">Recent Trips</h2>
-                                            <ul className="flickr">
-                                                <li>
-                                                    <a target="_blank" href="#"><img
-                                                        src="assets/upload/28760131762_e4a64b20c4_q.jpg"
-                                                        alt="Buddha Sunrise in Borobudur, Magelang, Central Java, Indonesia"
-                                                        width="75" height="75"/></a>
-                                                </li>
-                                                <li>
-                                                    <a target="_blank" href="#"><img
-                                                        src="assets/upload/27308262031_a6ebf0572e_q.jpg"
-                                                        alt="Gentoo Penguins, Falkland Islands (Islas Malvinas), British Overseas Territory"
-                                                        width="75" height="75"/></a>
-                                                </li>
-                                                <li>
-                                                    <a target="_blank" href="#"><img
-                                                        src="assets/upload/27287965356_60355f51d7_q.jpg"
-                                                        alt="Aerial View of Singapore CBD Skyline, Marina Bay Esplanade and Raffles Place, Singapore"
-                                                        width="75" height="75"/></a>
-                                                </li>
-                                                <li>
-                                                    <a target="_blank" href="#"><img
-                                                        src="assets/upload/27138570412_d25002a5c9_q.jpg"
-                                                        alt="View Of Sugarloaf Mountain, Botafogo And The City of Rio De Janeiro, Brazil, South America"
-                                                        width="75" height="75"/></a>
-                                                </li>
-                                                <li>
-                                                    <a target="_blank" href="#"><img
-                                                        src="assets/upload/26520497604_1df03a02bc_q.jpg"
-                                                        alt="Sacre Coeur (Basilica of the Sacred Heart of Paris), Paris, France :: HDR"
-                                                        width="75" height="75"/></a>
-                                                </li>
-                                                <li>
-                                                    <a target="_blank" href="#"><img
-                                                        src="assets/upload/27012097142_f1511b67bc_q.jpg"
-                                                        alt="The Great Gate (Darwaza-i rauza) of Taj Mahal, Agra, Uttar Pradesh, India :: HDR"
-                                                        width="75" height="75"/></a>
-                                                </li>
-                                                <li>
-                                                    <a target="_blank" href="#"><img
-                                                        src="assets/upload/26484150103_b5f5f154ec_q.jpg"
-                                                        alt="Emerald Lake From South Klondike Highway, Southern Yukon, Canada :: HDR"
-                                                        width="75" height="75"/></a>
-                                                </li>
-                                                <li>
-                                                    <a target="_blank" href="#"><img
-                                                        src="assets/upload/26464425264_12199828d4_q.jpg"
-                                                        alt="View of The Elizabeth Tower (Big Ben), Palace of Westminster and London Eye, London, England, United Kingdom"
-                                                        width="75" height="75"/></a>
-                                                </li>
-                                                <li>
-                                                    <a target="_blank" href="#"><img
-                                                        src="assets/upload/26323295363_00eef6e96f_q.jpg"
-                                                        alt="View Of Iguazu Falls From Brazilian Side, Parana State, South America"
-                                                        width="75" height="75"/></a>
-                                                </li>
-                                            </ul>
-                                            <br className="clear"/>
-                                        </li>
-                                        <li id="grandtour_social_profiles_posts-5"
-                                            className="widget Grandtour_Social_Profiles_Posts">
-                                            <h2 className="widgettitle">Connect to Us</h2>
-                                            <div className="social_wrapper shortcode light small">
-                                                <ul>
-                                                    <li className="facebook"><a target="_blank" title="Facebook"
-                                                                                href="#"><i
-                                                        className="fa fa-facebook"></i></a></li>
-                                                    <li className="twitter"><a target="_blank" title="Twitter"
-                                                                               href="https://twitter.com/#"><i
-                                                        className="fa fa-twitter"></i></a></li>
-                                                    <li className="youtube"><a target="_blank" title="Youtube" href="#"><i
-                                                        className="fa fa-youtube"></i></a></li>
-                                                    <li className="pinterest"><a target="_blank" title="Pinterest"
-                                                                                 href="https://pinterest.com/#"><i
-                                                        className="fa fa-pinterest"></i></a></li>
-                                                    <li className="instagram"><a target="_blank" title="Instagram"
-                                                                                 href="https://instagram.com/theplanetd"><i
-                                                        className="fa fa-instagram"></i></a></li>
-                                                </ul>
-                                            </div>
-                                        </li>
-                                        <li id="grandtour_tour_posts-2" className="widget Grandtour_Tour_Posts">
-                                            <h2 className="widgettitle">Recent Tours</h2>
-                                            <div
-                                                className="one gallery1 grid static filterable portfolio_type themeborder"
-                                            >
-                                                <a className="tour_image" href="#"></a>
-                                                <div className="portfolio_info_wrapper">
-                                                    <div className="tour_price ">
-                                                        $6,000
-                                                    </div>
-                                                    <h5>Grand Switzerland</h5>
-                                                    <div className="tour_attribute_wrapper">
-                                                        <div className="tour_attribute_rating">
-                                                            <div className="br-theme-fontawesome-stars-o">
-                                                                <div className="br-widget">
-                                                                    <a href="javascript:;" className="br-selected"></a>
-                                                                    <a href="javascript:;" className="br-selected"></a>
-                                                                    <a href="javascript:;" className="br-selected"></a>
-                                                                    <a href="javascript:;" className="br-selected"></a>
-                                                                    <a href="javascript:;"></a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <br className="clear"/>
-                                            <div
-                                                className="one gallery1 grid static filterable portfolio_type themeborder">
-                                                <a className="tour_image" href="#"></a>
-                                                <div className="portfolio_info_wrapper">
-                                                    <div className="tour_price ">
-                                                        $5,900
-                                                    </div>
-                                                    <h5>Seoul Your Soul</h5>
-                                                    <div className="tour_attribute_wrapper">
-                                                        <div className="tour_attribute_rating">
-                                                            <div className="br-theme-fontawesome-stars-o">
-                                                                <div className="br-widget">
-                                                                    <a href="javascript:;" className="br-selected"></a>
-                                                                    <a href="javascript:;" className="br-selected"></a>
-                                                                    <a href="javascript:;" className="br-selected"></a>
-                                                                    <a href="javascript:;" className="br-selected"></a>
-                                                                    <a href="javascript:;"></a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <br className="clear"/>
-                                        </li>
-                                    </ul>
-
-                                </div>
-
-                            </div>
-                        </div>
-
-                    </div>
                 </div>
             </div>
         </React.Fragment>

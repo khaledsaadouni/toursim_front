@@ -10,6 +10,14 @@ const In = () => {
     const [pwd, setPwd] = useState('');
     const [jwt, setJwt] = useLocalState("", "jwt");
     const [user, setUser] = useLocalState(null, "user");
+
+    const handleLoginFacebook = async () => {
+        window.location.href = 'http://localhost:8080/oauth2/authorization/facebook?redirect_uri=http://localhost:3000/';
+
+    }
+    const handleLoginGoogle = async () => {
+        window.location.href = 'http://localhost:8080/oauth2/authorization/google?redirect_uri=http://localhost:3000/';
+    }
     const handle = async () => {
 
         if (pwd === "" || email === "") {
@@ -39,7 +47,8 @@ const In = () => {
                 setError("Email or password is incorrect. Please try again!")
             });
     }
-    return jwt !== "" ?
+
+    return jwt !== "" && user !== null ?
         <Navigate to={(user.role === "Partner" || user.role === "Admin") ? "/dashboard/main" : "/"}/> : (
             <React.Fragment>
                 <div className="container my-auto">
@@ -52,12 +61,12 @@ const In = () => {
                                             in</h4>
                                         <div className="row mt-3">
                                         <div className="col-2 text-center ms-auto">
-                                            <a className="btn btn-link px-3" href="javascript:;">
+                                            <a className="btn btn-link px-3" onClick={handleLoginFacebook}>
                                                 <i className="fa fa-facebook text-white text-lg"></i>
                                             </a>
                                         </div>
                                         <div className="col-2 text-center me-auto">
-                                            <a className="btn btn-link px-3" href="javascript:;">
+                                            <a className="btn btn-link px-3" onClick={handleLoginGoogle}>
                                                 <i className="fa fa-google text-white text-lg"></i>
                                             </a>
                                         </div>

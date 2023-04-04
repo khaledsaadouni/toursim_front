@@ -66,14 +66,15 @@ const Dashboard = () => {
                                 <a className="nav-link text-white   bg-gradient-primary"
 
                                    href="  ">
-                                        <div
-                                            className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                                            <i className="material-icons opacity-10">dashboard</i>
-                                        </div>
-                                        <span className="nav-link-text ms-1">Dashboard</span>
-                                    </a>
-                                </li>
-                                <li className="nav-item">
+                                    <div
+                                        className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                        <i className="material-icons opacity-10">dashboard</i>
+                                    </div>
+                                    <span className="nav-link-text ms-1">Dashboard</span>
+                                </a>
+                            </li>
+                            <li className="nav-item">
+                                <Link to={"/dashboard/offers"} style={{color: "white"}}>
                                     <a className="nav-link text-white " href="../pages/tables.html">
                                         <div
                                             className="text-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -81,16 +82,17 @@ const Dashboard = () => {
                                         </div>
                                         <span className="nav-link-text ms-1">  Offers</span>
                                     </a>
-                                </li>
-                                <li className="nav-item">
-                                    <a className="nav-link text-white " href="../pages/billing.html">
-                                        <div
-                                            className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                                            <i className="material-icons opacity-10">receipt_long</i>
-                                        </div>
-                                        <span className="nav-link-text ms-1">Billing</span>
-                                    </a>
-                                </li>
+                                </Link>
+                            </li>
+                            <li className="nav-item">
+                                <a className="nav-link text-white " href="../pages/billing.html">
+                                    <div
+                                        className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                        <i className="material-icons opacity-10">receipt_long</i>
+                                    </div>
+                                    <span className="nav-link-text ms-1">Billing</span>
+                                </a>
+                            </li>
                             <li className="nav-item">
                                 <a className="nav-link text-white " href="../pages/virtual-reality.html">
                                     <div

@@ -15,8 +15,6 @@ import Profile from "./profile/Profile";
 function App() {
     return (
         <React.Fragment>
-
-
             <Routes>
                 <Route path="/" element={<Home/>}/>
                 <Route path="/accomodations" element={<Accomodations/>}/>
@@ -30,7 +28,6 @@ function App() {
                 <Route path="/sign/:p" element={<Sign/>}/>
                 <Route path="/profile/:page" element={<Profile/>}/>
             </Routes>
-            {/*<Footer/>*/}
         </React.Fragment>
     );
 }
