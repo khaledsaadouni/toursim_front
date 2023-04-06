@@ -10,6 +10,10 @@ import ProfileCard from "../profile/ProfileCard";
 import {useLocalState} from "../utils/UseLocalStorage";
 import Settings from "../profile/Settings";
 import Password from "../profile/Password";
+import AddOffer from "./offers/AddOffer";
+import EditAccom from "./offers/EditAccom";
+import EditResto from "./offers/EditResto";
+import EditEvent from "./offers/EditEvent";
 
 const Dashboard = () => {
     const {page} = useParams();
@@ -31,6 +35,14 @@ const Dashboard = () => {
                 return <ProfileCard/>;
             case "settings":
                 return <Settings/>;
+            case "editAccom":
+                return <EditAccom/>;
+            case "editResto":
+                return <EditResto/>;
+            case "editEvent":
+                return <EditEvent/>;
+            case "addOffer":
+                return <AddOffer/>;
             case "password":
                 return <Password/>;
             default:

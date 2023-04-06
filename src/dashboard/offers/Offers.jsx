@@ -1,5 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useLocalState} from "../../utils/UseLocalStorage";
+import formatDate from "../../utils/DateFormat";
+import {Link, Navigate} from "react-router-dom";
 
 
 const Offers = () => {
@@ -33,7 +35,41 @@ const Offers = () => {
 
         asyncFn();
     }, []);
-    return (
+
+    const handleDelteOffer = async (id, type) => {
+        await fetch(`/api/v1/${type}/delete/${id}`, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${jwt}`
+            },
+            method: "DELETE",
+        }).then((response) => {
+            if (response.status === 200) {
+                return Promise.all([response.json(), response.headers])
+            } else {
+                return Promise.reject("")
+            }
+        })
+            .then(([data, header]) => {
+                window.location.reload()
+            }).catch((message) => {
+            });
+    }
+    const [redirect, setRedirect] = useState({'bool': false, 'id': -1, 'route': "editAccom"});
+
+
+    const handleEdit = (id, type) => {
+        if (type === "accomodation") {
+            setRedirect({'bool': true, 'id': id, 'route': "editAccom"})
+        } else if (type === "restoration") {
+            setRedirect({'bool': true, 'id': id, 'route': "editResto"})
+        } else if (type === "event") {
+            setRedirect({'bool': true, 'id': id, 'route': "editEvent"})
+        }
+    }
+
+
+    return redirect.bool ? <Navigate to={`/dashboard/${redirect.route}/${redirect.id}`}/> : (
         <React.Fragment>
             <main className="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
                 <div className="container-fluid py-4">
@@ -54,7 +90,10 @@ const Offers = () => {
                                                     color: "#bb3a41",
                                                     border: "0px solid",
                                                     boxShadow: "0px 3px 7px 3px rgba(0, 0, 0, 0.3)"
-                                                }}> Add Offer
+                                                }}>
+                                                    <Link to={"/dashboard/addOffer"}>
+                                                        Add Offer
+                                                    </Link>
                                                 </button>
                                             </div>
                                         </div>
@@ -88,24 +127,26 @@ const Offers = () => {
                                                         </div>
                                                     </td>
                                                     <td>
-                                                        <p className="text-xs font-weight-bold mb-0">{item.creationDate}</p>
+                                                        <p className="text-xs font-weight-bold mb-0">{formatDate(item.creationDate)}</p>
                                                     </td>
                                                     <td className="align-middle text-center text-sm">
 
                                                         <p className="text-xs font-weight-bold mb-0">{item.type}</p>
                                                     </td>
                                                     <td className="align-middle">
-                                                        <a href="javascript:;"
+                                                        <a href=""
+                                                           onClick={() => handleEdit(item.id, item.generic_Type)}
                                                            className="text-secondary font-weight-bold text-xs"
                                                            data-toggle="tooltip" data-original-title="Edit user">
                                                             <i className="bi bi-pen-fill"></i>
                                                         </a>
                                                     </td>
                                                     <td className="align-middle">
-                                                        <a href="javascript:;"
+                                                        <a href=""
+                                                           onClick={() => handleDelteOffer(item.id, item.generic_Type)}
                                                            className="text-secondary font-weight-bold text-xs"
                                                            data-toggle="tooltip" data-original-title="Edit user">
-                                                            <i className="bi bi-trash3-fill"></i>
+                                                            <i className="bi bi-trash3-fill" style={{color: "red"}}></i>
                                                         </a>
                                                     </td>
                                                 </tr>

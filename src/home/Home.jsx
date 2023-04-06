@@ -44,7 +44,7 @@ const MyComponent = () => {
                                             <Link to={"/accomodations"}>
                                                 <div className="icon-box" style={{fontSize: "70px", color: "white"}}>
                                                     <i className="ri-home-4-line"></i>
-                                                    <h4 style={{color: "white"}}>Accomodation</h4>
+                                                    <h5 style={{color: "white"}}>Accommodations</h5>
                                                 </div>
                                             </Link>
                                         </div>
@@ -53,7 +53,7 @@ const MyComponent = () => {
                                             <Link to={"/restaurants"}>
                                                 <div className="icon-box" style={{fontSize: "70px", color: "white"}}>
                                                     <i className="ri-restaurant-2-line"></i>
-                                                    <h4 style={{color: "white"}}>Restoration</h4>
+                                                    <h4 style={{color: "white"}}>Restaurants</h4>
                                                 </div>
                                             </Link>
                                         </div>
@@ -62,7 +62,7 @@ const MyComponent = () => {
                                             <Link to={"/events_activities"}>
                                                 <div className="icon-box" style={{fontSize: "70px", color: "white"}}>
                                                     <i className="ri-calendar-event-line"></i>
-                                                    <h4 style={{color: "white"}}>Event</h4>
+                                                    <h5 style={{color: "white"}}>Events & Activities</h5>
                                                 </div>
                                             </Link>
                                         </div>
@@ -71,7 +71,7 @@ const MyComponent = () => {
                                             <Link to={"/shops"}>
                                                 <div className="icon-box" style={{fontSize: "70px", color: "white"}}>
                                                     <i className="ri-store-2-line"></i>
-                                                    <h4 style={{color: "white"}}>Shop</h4>
+                                                    <h4 style={{color: "white"}}>Shops</h4>
                                                 </div>
                                             </Link>
                                         </div>
