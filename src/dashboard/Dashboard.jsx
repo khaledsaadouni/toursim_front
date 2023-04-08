@@ -14,6 +14,8 @@ import AddOffer from "./offers/AddOffer";
 import EditAccom from "./offers/EditAccom";
 import EditResto from "./offers/EditResto";
 import EditEvent from "./offers/EditEvent";
+import AddShop from "./offers/AddShop";
+import EditShop from "./offers/EditShop";
 
 const Dashboard = () => {
     const {page} = useParams();
@@ -41,8 +43,12 @@ const Dashboard = () => {
                 return <EditResto/>;
             case "editEvent":
                 return <EditEvent/>;
+            case "editShop":
+                return <EditShop/>;
             case "addOffer":
                 return <AddOffer/>;
+            case "addShop":
+                return <AddShop/>;
             case "password":
                 return <Password/>;
             default:
@@ -52,7 +58,8 @@ const Dashboard = () => {
     };
     const classmethod = () => {
         let classes = "  g-sidenav-";
-        return classes += state === "show" ? "hidden" : "show";
+        classes += state === "show" ? "hidden" : "show";
+        return classes
     }
     const [jwt, setJwt] = useLocalState("", "jwt");
 
@@ -66,34 +73,30 @@ const Dashboard = () => {
                 <div className="sidenav-header">
                     <i className="fas fa-times p-3 cursor-pointer text-white opacity-5 position-absolute end-0 top-0 d-none d-xl-none"
                        aria-hidden="true" id="iconSidenav"></i>
-                    <a className="navbar-brand m-0"
-                       href=" https://demos.creative-tim.com/material-dashboard/pages/dashboard " target="_blank">
-                        <span className="ms-1 font-weight-bold text-white">DASHBOARD</span>
-                    </a>
                 </div>
                 <div className="horizontal light mt-0 mb-2">
                     <div className=" " id="sidenav-collapse-main">
                         <ul className="navbar-nav">
                             <li className="nav-item">
-                                <a className="nav-link text-white   bg-gradient-primary"
+                                <Link className={`nav-link text-white   ${page === "main" && "bg-gradient-primary"}`}
+                                      to={"/dashboard/main"} style={{color: "white"}}>
 
-                                   href="  ">
                                     <div
                                         className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                                         <i className="material-icons opacity-10">dashboard</i>
                                     </div>
                                     <span className="nav-link-text ms-1">Dashboard</span>
-                                </a>
+
+                                </Link>
                             </li>
                             <li className="nav-item">
-                                <Link to={"/dashboard/offers"} style={{color: "white"}}>
-                                    <a className="nav-link text-white " href="../pages/tables.html">
-                                        <div
-                                            className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                                            <i className="material-icons opacity-10">table_view</i>
-                                        </div>
-                                        <span className="nav-link-text ms-1">  Offers</span>
-                                    </a>
+                                <Link className={`nav-link text-white   ${page === "offers" && "bg-gradient-primary"}`}
+                                      to={"/dashboard/offers"} style={{color: "white"}}>
+                                    <div
+                                        className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                        <i className="material-icons opacity-10">table_view</i>
+                                    </div>
+                                    <span className="nav-link-text ms-1">  Offers</span>
                                 </Link>
                             </li>
                             <li className="nav-item">

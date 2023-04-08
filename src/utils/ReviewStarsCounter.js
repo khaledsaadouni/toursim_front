@@ -8,8 +8,10 @@ function calculateAverageRate(reviews) {
         // loop through each review and calculate the total rate
         reviews.forEach((review) => {
             // calculate the average rate (rounding to nearest integer)
-            totalRate += Math.round(review.rate / 2);
-            count++;
+            if (review.rate !== -1) {
+                totalRate += Math.round(review.rate / 2);
+                count++;
+            }
         });
 
         // calculate the average rate (rounding to nearest integer)

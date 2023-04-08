@@ -1,12 +1,10 @@
 import React from 'react';
 import image from "../offer.png"
+import {Link} from "react-router-dom";
 
 const Accomadation_Card = (props) => {
     const n = props.reviews;
     const elements = Array.from({length: n}, (_, i) => i + 1);
-    if (props.reviews === NaN) {
-        alert("nan")
-    }
     const n1 = 5 - props.reviews;
     const restelemnts = Array.from({length: n1}, (_, i) => i + 1);
     return (
@@ -26,7 +24,7 @@ const Accomadation_Card = (props) => {
                     </a>
 
                     <div className="portfolio_info_wrapper">
-                        <a className="tour_link" href="#"><h4>{props.name}</h4></a>
+                        <Link to={`/accomodation/${props.id}`} className="tour_link"><h4>{props.name}</h4></Link>
                         <div className="tour_excerpt">
                             <p>{props.emplacement}, {props.destination}</p>
                         </div>

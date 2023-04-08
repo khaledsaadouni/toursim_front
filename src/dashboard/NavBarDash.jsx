@@ -44,19 +44,32 @@ const NavBarDash = (props) => {
                     <div className="collapse navbar-collapse" id="navigation">
                         <ul className="navbar-nav mx-auto">
                             <li className="nav-item">
-                                <Link to={"/"}>
-                                    <a className="nav-link d-flex align-items-center me-2 active"
-                                       aria-current="page" href="../pages/dashboard.html">
-                                        Home
-                                    </a>
+                                <Link className="nav-link d-flex align-items-center me-2 active" to={"/"}>
+                                    Home
+                                </Link>
+                            </li>
+                            <li className="nav-item ">
+                                <Link className="nav-link d-flex align-items-center me-2 active" to={"/accomodations"}>
+                                    Accomodations
                                 </Link>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link me-2" href="../pages/profile.html">
-                                    Services
-                                </a>
+                                <Link className="nav-link d-flex align-items-center me-2 active" to={"/restaurants"}>
+                                    Restaurants
+                                </Link>
                             </li>
+                            <li className="nav-item">
+                                <Link className="nav-link d-flex align-items-center me-2 active"
+                                      to={"/events_activities"}>
+                                    Activities & Events
+                                </Link>
 
+                            </li>
+                            <li className="nav-item">
+                                <Link className="nav-link d-flex align-items-center me-2 active" to={"/shops"}>
+                                    Shops
+                                </Link>
+                            </li>
                         </ul>
                         <ul className="navbar-nav d-lg-flex d-none">
                             <li className="nav-item d-flex align-items-center" style={{marginTop: "0px"}}>

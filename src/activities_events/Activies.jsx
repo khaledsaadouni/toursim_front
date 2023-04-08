@@ -139,7 +139,8 @@ const Activities = () => {
                                      data-columns="4">
 
                                     {offers !== null ? offers.map((item, index) => (
-                                        <Activity_card duration={item.duration} photos={item.photo}
+                                        <Activity_card id={item.id}
+                                                       duration={item.duration} photos={item.photo}
                                                        countreview={item.reviews.length}
                                                        reviews={calculateAverageRate(item.reviews)}
                                                        capacity={item.capacity} name={item.name} price={item.price}

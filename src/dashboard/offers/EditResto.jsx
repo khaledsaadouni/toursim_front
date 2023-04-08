@@ -20,6 +20,7 @@ const EditResto = () => {
     const [idAccom, setIdAccom] = useState(-1);
     const [inputs, setInputs] = useState([]);
     const [inputs2, setInputs2] = useState([]);
+    const [googlemap, setGooglemap] = useState("");
     const handleInputChange = (index, event) => {
         const newInputs = [...inputs];
         newInputs[index] = event.target.value;
@@ -69,6 +70,7 @@ const EditResto = () => {
                     setState(data.destination)
                     setInputs(data.socialMediaLink)
                     setInputs2(data.photo)
+                    setGooglemap(data.google_map)
                 }).catch(() => {
                 });
 
@@ -89,7 +91,8 @@ const EditResto = () => {
             'socialMediaLink': inputs,
             'opening': open.toString(),
             'closing': close.toString(),
-            'photo': inputs2
+            'photo': inputs2,
+            'google_map': googlemap
 
         };
         await fetch(`/api/v1/restoration/update`, {
@@ -272,6 +275,14 @@ const EditResto = () => {
                                                     <input type="text"
                                                            value={location}
                                                            onChange={(event) => setLocation(event.target.value)}
+                                                           className="form-control"/>
+                                                </div>
+                                                <div className="input-group input-group-outline my-3">
+                                                    <label> Google Map Link</label>
+                                                    <input type="text"
+
+                                                           value={googlemap}
+                                                           onChange={(event) => setGooglemap(event.target.value)}
                                                            className="form-control"/>
                                                 </div>
                                                 <div className="input-group input-group-outline my-3">

@@ -1,5 +1,6 @@
 import React from 'react';
 import image from "../offer.png";
+import {Link} from "react-router-dom";
 
 const MyComponent = (props) => {
     const n = props.reviews;
@@ -18,17 +19,17 @@ const MyComponent = (props) => {
                     data-id="post-4"
                     style={{backgroundImage: props.photos.length === 0 ? `url(${image})` : `url(${props.photos[0]})`}}
                 >
-                    <a className="tour_image" href="#">
-                    </a>
 
-                    <div className="tour_label">Sale</div>
+
+                    {/*<div className="tour_label">Sale</div>*/}
 
                     <div className="portfolio_info_wrapper">
                         <div className="tour_price has_discount">
-                                                <span className="normal_price">
-                            $3,000                      </span> {props.price}
+                            {/*                    <span className="normal_price">*/}
+                            {/*$3,000                      </span> */}
+                            {props.price} Dt
                         </div>
-                        <h4>{props.name}</h4>
+                        <Link to={`/event/${props.id}`}><h4>{props.name}</h4></Link>
                         <div className="tour_attribute_wrapper">
                             <div className="tour_attribute_rating">
                                 <div className="br-theme-fontawesome-stars-o">
@@ -43,7 +44,7 @@ const MyComponent = (props) => {
                             </div>
 
                             <div className="tour_attribute_days">
-                                <span className="ti-time"></span> {props.duration}
+                                <span className="ti-time"></span> {props.duration} Hr
                             </div>
                         </div>
                         <br className="clear"/>

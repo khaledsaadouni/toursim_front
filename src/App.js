@@ -11,6 +11,8 @@ import AboutUs from "./about/Aboutus";
 import Dashboard from "./dashboard/Dashboard";
 import Sign from "./sign/Sign";
 import Profile from "./profile/Profile";
+import EventDetail from "./activities_events/Acitvity_detail";
+import Restaurant_Detail from "./restaurants/Restaurant_detail";
 
 function App() {
     return (
@@ -18,7 +20,10 @@ function App() {
             <Routes>
                 <Route path="/" element={<Home/>}/>
                 <Route path="/accomodations" element={<Accomodations/>}/>
-                <Route path="/accomodation" element={<Accomodation_Detail/>}/>
+                <Route path="/accomodation/:id" element={<Accomodation_Detail/>}/>
+                <Route path="/event/:id" element={<EventDetail/>}/>
+                <Route path="/restaurant/:id" element={<Restaurant_Detail/>}/>
+                <Route path="/shop/:id" element={<Restaurant_Detail/>}/>
                 <Route path="/events_activities" element={<Activities/>}/>
                 <Route path="/restaurants" element={<Restaurants/>}/>
                 <Route path="/shops" element={<Shops/>}/>

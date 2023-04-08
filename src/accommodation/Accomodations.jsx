@@ -137,12 +137,15 @@ const MyComponent = () => {
                                      className="gallery classic four_cols portfolio-content section content clearfix"
                                      data-columns="4">
                                     {offers !== null ? offers.map((item, index) => (
-                                        <Accomadation_Card photos={item.photo} countreview={item.reviews.length}
-                                                           reviews={calculateAverageRate(item.reviews)}
-                                                           capacity={item.capacity} name={item.name} price={item.price}
-                                                           destination={item.destination}
-                                                           emplacement={item.emplacement}/>
-                                    )) : null}
+
+                                            <Accomadation_Card id={item.id} photos={item.photo}
+                                                               countreview={item.reviews.length}
+                                                               reviews={calculateAverageRate(item.reviews)}
+                                                               capacity={item.capacity} name={item.name} price={item.price}
+                                                               destination={item.destination}
+                                                               emplacement={item.emplacement}/>
+                                        ))
+                                        : null}
 
                                 </div>
                             </div>

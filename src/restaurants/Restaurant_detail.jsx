@@ -2,9 +2,9 @@ import React from 'react';
 
 const Restaurant_Detail = () => {
     return (
-        <div>
+        <React.Fragment>
 
-        </div>
+        </React.Fragment>
     );
 };
 

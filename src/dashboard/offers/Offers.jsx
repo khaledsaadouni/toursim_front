@@ -9,6 +9,7 @@ const Offers = () => {
     const [jwt, setJwt] = useLocalState("", "jwt");
     const [user, setUser] = useLocalState(null, "user");
     const [offers, setOffers] = useState(null)
+    const [shops, setShops] = useState(null)
     useEffect(() => {
         const asyncFn = async () => {
             try {
@@ -32,12 +33,54 @@ const Offers = () => {
             } catch (error) {
             }
         };
+        const asyncFn2 = async () => {
+            try {
+                await fetch(`/api/v1/artisan/all/${user.id}`, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${jwt}`
+                    },
+                    method: "GET",
+                }).then((response) => {
+                    if (response.status === 200) {
+                        return Promise.all([response.json(), response.headers])
+                    } else {
+                        return Promise.reject("")
+                    }
+                })
+                    .then(([data, header]) => {
+                        setShops(data)
+                    }).catch((message) => {
+                    });
+            } catch (error) {
+            }
+        };
 
         asyncFn();
+        asyncFn2();
     }, []);
 
     const handleDelteOffer = async (id, type) => {
         await fetch(`/api/v1/${type}/delete/${id}`, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${jwt}`
+            },
+            method: "DELETE",
+        }).then((response) => {
+            if (response.status === 200) {
+                return Promise.all([response.json(), response.headers])
+            } else {
+                return Promise.reject("")
+            }
+        })
+            .then(([data, header]) => {
+                window.location.reload()
+            }).catch((message) => {
+            });
+    }
+    const handleDelteShop = async (id) => {
+        await fetch(`/api/v1/artisan/delete/${id}`, {
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${jwt}`
@@ -65,6 +108,8 @@ const Offers = () => {
             setRedirect({'bool': true, 'id': id, 'route': "editResto"})
         } else if (type === "event") {
             setRedirect({'bool': true, 'id': id, 'route': "editEvent"})
+        } else if (type === "shop") {
+            setRedirect({'bool': true, 'id': id, 'route': "editShop"})
         }
     }
 
@@ -84,17 +129,19 @@ const Offers = () => {
                                                 <h6 className="text-white text-capitalize ps-3">offers</h6>
                                             </div>
                                             <div className="col" style={{marginLeft: "1100px"}}>
-                                                <button style={{
-                                                    backgroundColor: "white",
-                                                    borderRadius: "5rem",
-                                                    color: "#bb3a41",
-                                                    border: "0px solid",
-                                                    boxShadow: "0px 3px 7px 3px rgba(0, 0, 0, 0.3)"
-                                                }}>
-                                                    <Link to={"/dashboard/addOffer"}>
+                                                <Link to={"/dashboard/addOffer"}>
+                                                    <button style={{
+                                                        backgroundColor: "white",
+                                                        borderRadius: "5rem",
+                                                        color: "#bb3a41",
+                                                        border: "0px solid",
+                                                        boxShadow: "0px 3px 7px 3px rgba(0, 0, 0, 0.3)"
+                                                    }}>
+
                                                         Add Offer
-                                                    </Link>
-                                                </button>
+
+                                                    </button>
+                                                </Link>
                                             </div>
                                         </div>
 
@@ -169,14 +216,16 @@ const Offers = () => {
                                                 <h6 className="text-white text-capitalize ps-3">Shops</h6>
                                             </div>
                                             <div className="col" style={{marginLeft: "1100px"}}>
-                                                <button style={{
-                                                    backgroundColor: "white",
-                                                    borderRadius: "5rem",
-                                                    color: "#bb3a41",
-                                                    border: "0px solid",
-                                                    boxShadow: "0px 3px 7px 3px rgba(0, 0, 0, 0.3)"
-                                                }}> Add Shop
-                                                </button>
+                                                <Link to={"/dashboard/addShop"}>
+                                                    <button style={{
+                                                        backgroundColor: "white",
+                                                        borderRadius: "5rem",
+                                                        color: "#bb3a41",
+                                                        border: "0px solid",
+                                                        boxShadow: "0px 3px 7px 3px rgba(0, 0, 0, 0.3)"
+                                                    }}> Add Shop
+                                                    </button>
+                                                </Link>
                                             </div>
                                         </div>
                                     </div>
@@ -186,247 +235,56 @@ const Offers = () => {
                                         <table className="table align-items-center justify-content-center mb-0">
                                             <thead>
                                             <tr>
-                                                <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Project</th>
-                                                <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Budget</th>
-                                                <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Status</th>
-                                                <th className="text-uppercase text-secondary text-xxs font-weight-bolder text-center opacity-7 ps-2">Completion</th>
+                                                <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
+                                                <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Type</th>
+                                                <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Location</th>
+                                                <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Creation
+                                                    Date
+                                                </th>
+                                                <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"></th>
+                                                <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"></th>
                                                 <th></th>
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <tr>
-                                                <td>
-                                                    <div className="d-flex px-2">
-                                                        <div>
-                                                            <img src="assets/img/small-logos/logo-asana.svg"
-                                                                 className="avatar avatar-sm rounded-circle me-2"
-                                                                 alt="spotify"/>
-                                                        </div>
-                                                        <div className="my-auto">
-                                                            <h6 className="mb-0 text-sm">Asana</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <p className="text-sm font-weight-bold mb-0">$2,500</p>
-                                                </td>
-                                                <td>
-                                                    <span className="text-xs font-weight-bold">working</span>
-                                                </td>
-                                                <td className="align-middle text-center">
-                                                    <div className="d-flex align-items-center justify-content-center">
-                                                        <span className="me-2 text-xs font-weight-bold">60%</span>
-                                                        <div>
-                                                            <div className="progress">
-                                                                <div className="progress-bar bg-gradient-info"
-                                                                     role="progressbar" aria-valuenow="60"
-                                                                     aria-valuemin="0" aria-valuemax="100"
-                                                                     style={{width: "60% "}}></div>
+                                            {shops !== null ? shops.map((item, index) => (
+                                                <tr>
+                                                    <td>
+                                                        <div className="d-flex px-2">
+                                                            <div className="my-auto">
+                                                                <h6 className="mb-0 text-sm">{item.commercial_name}</h6>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </td>
-                                                <td className="align-middle">
-                                                    <button className="btn btn-link text-secondary mb-0">
-                                                        <i className="fa fa-ellipsis-v text-xs"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div className="d-flex px-2">
-                                                        <div>
-                                                            <img src="assets/img/small-logos/github.svg"
-                                                                 className="avatar avatar-sm rounded-circle me-2"
-                                                                 alt="invision"/>
-                                                        </div>
-                                                        <div className="my-auto">
-                                                            <h6 className="mb-0 text-sm">Github</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <p className="text-sm font-weight-bold mb-0">$5,000</p>
-                                                </td>
-                                                <td>
-                                                    <span className="text-xs font-weight-bold">done</span>
-                                                </td>
-                                                <td className="align-middle text-center">
-                                                    <div className="d-flex align-items-center justify-content-center">
-                                                        <span className="me-2 text-xs font-weight-bold">100%</span>
-                                                        <div>
-                                                            <div className="progress">
-                                                                <div className="progress-bar bg-gradient-success"
-                                                                     role="progressbar" aria-valuenow="100"
-                                                                     aria-valuemin="0" aria-valuemax="100"
-                                                                     style={{width: "100% "}}></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td className="align-middle">
-                                                    <button className="btn btn-link text-secondary mb-0"
-                                                            aria-haspopup="true" aria-expanded="false">
-                                                        <i className="fa fa-ellipsis-v text-xs"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div className="d-flex px-2">
-                                                        <div>
-                                                            <img src="assets/img/small-logos/logo-atlassian.svg"
-                                                                 className="avatar avatar-sm rounded-circle me-2"
-                                                                 alt="jira"/>
-                                                        </div>
-                                                        <div className="my-auto">
-                                                            <h6 className="mb-0 text-sm">Atlassian</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <p className="text-sm font-weight-bold mb-0">$3,400</p>
-                                                </td>
-                                                <td>
-                                                    <span className="text-xs font-weight-bold">canceled</span>
-                                                </td>
-                                                <td className="align-middle text-center">
-                                                    <div className="d-flex align-items-center justify-content-center">
-                                                        <span className="me-2 text-xs font-weight-bold">30%</span>
-                                                        <div>
-                                                            <div className="progress">
-                                                                <div className="progress-bar bg-gradient-danger"
-                                                                     role="progressbar" aria-valuenow="30"
-                                                                     aria-valuemin="0" aria-valuemax="30"
-                                                                     style={{width: "30%"}}></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td className="align-middle">
-                                                    <button className="btn btn-link text-secondary mb-0"
-                                                            aria-haspopup="true" aria-expanded="false">
-                                                        <i className="fa fa-ellipsis-v text-xs"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div className="d-flex px-2">
-                                                        <div>
-                                                            <img src="assets/img/small-logos/bootstrap.svg"
-                                                                 className="avatar avatar-sm rounded-circle me-2"
-                                                                 alt="webdev"/>
-                                                        </div>
-                                                        <div className="my-auto">
-                                                            <h6 className="mb-0 text-sm">Bootstrap</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <p className="text-sm font-weight-bold mb-0">$14,000</p>
-                                                </td>
-                                                <td>
-                                                    <span className="text-xs font-weight-bold">working</span>
-                                                </td>
-                                                <td className="align-middle text-center">
-                                                    <div className="d-flex align-items-center justify-content-center">
-                                                        <span className="me-2 text-xs font-weight-bold">80%</span>
-                                                        <div>
-                                                            <div className="progress">
-                                                                <div className="progress-bar bg-gradient-info"
-                                                                     role="progressbar" aria-valuenow="80"
-                                                                     aria-valuemin="0" aria-valuemax="80"
-                                                                     style={{width: " 80%"}}></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td className="align-middle">
-                                                    <button className="btn btn-link text-secondary mb-0"
-                                                            aria-haspopup="true" aria-expanded="false">
-                                                        <i className="fa fa-ellipsis-v text-xs"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div className="d-flex px-2">
-                                                        <div>
-                                                            <img src="assets/img/small-logos/logo-slack.svg"
-                                                                 className="avatar avatar-sm rounded-circle me-2"
-                                                                 alt="slack"/>
-                                                        </div>
-                                                        <div className="my-auto">
-                                                            <h6 className="mb-0 text-sm">Slack</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <p className="text-sm font-weight-bold mb-0">$1,000</p>
-                                                </td>
-                                                <td>
-                                                    <span className="text-xs font-weight-bold">canceled</span>
-                                                </td>
-                                                <td className="align-middle text-center">
-                                                    <div className="d-flex align-items-center justify-content-center">
-                                                        <span className="me-2 text-xs font-weight-bold">0%</span>
-                                                        <div>
-                                                            <div className="progress">
-                                                                <div className="progress-bar bg-gradient-success"
-                                                                     role="progressbar" aria-valuenow="0"
-                                                                     aria-valuemin="0" aria-valuemax="0"
-                                                                     style={{width: "0%"}}></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td className="align-middle">
-                                                    <button className="btn btn-link text-secondary mb-0"
-                                                            aria-haspopup="true" aria-expanded="false">
-                                                        <i className="fa fa-ellipsis-v text-xs"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div className="d-flex px-2">
-                                                        <div>
-                                                            <img src="assets/img/small-logos/devto.svg"
-                                                                 className="avatar avatar-sm rounded-circle me-2"
-                                                                 alt="xd"/>
-                                                        </div>
-                                                        <div className="my-auto">
-                                                            <h6 className="mb-0 text-sm">Devto</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <p className="text-sm font-weight-bold mb-0">$2,300</p>
-                                                </td>
-                                                <td>
-                                                    <span className="text-xs font-weight-bold">done</span>
-                                                </td>
-                                                <td className="align-middle text-center">
-                                                    <div className="d-flex align-items-center justify-content-center">
-                                                        <span className="me-2 text-xs font-weight-bold">100%</span>
-                                                        <div>
-                                                            <div className="progress">
-                                                                <div className="progress-bar bg-gradient-success"
-                                                                     role="progressbar" aria-valuenow="100"
-                                                                     aria-valuemin="0" aria-valuemax="100"
-                                                                     style={{width: "100%"}}></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td className="align-middle">
-                                                    <button className="btn btn-link text-secondary mb-0"
-                                                            aria-haspopup="true" aria-expanded="false">
-                                                        <i className="fa fa-ellipsis-v text-xs"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
+                                                    </td>
+                                                    <td>
+                                                        <span className="text-xs font-weight-bold">{item.type}</span>
+                                                    </td>
+                                                    <td>
+                                                        <span
+                                                            className="text-xs font-weight-bold">{item.emplacement},{item.destination}</span>
+                                                    </td>
+                                                    <td>
+                                                        <span
+                                                            className="text-xs font-weight-bold"> {item.creationDate}</span>
+                                                    </td>
+                                                    <td className="align-middle">
+                                                        <a href=""
+                                                           onClick={() => handleEdit(item.id, "shop")}
+                                                           className="text-secondary font-weight-bold text-xs"
+                                                           data-toggle="tooltip" data-original-title="Edit user">
+                                                            <i className="bi bi-pen-fill"></i>
+                                                        </a>
+                                                    </td>
+                                                    <td className="align-middle">
+                                                        <a href=""
+                                                           onClick={() => handleDelteShop(item.id)}
+                                                           className="text-secondary font-weight-bold text-xs"
+                                                           data-toggle="tooltip" data-original-title="Edit user">
+                                                            <i className="bi bi-trash3-fill" style={{color: "red"}}></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            )) : null}
                                             </tbody>
                                         </table>
                                     </div>
@@ -434,43 +292,6 @@ const Offers = () => {
                             </div>
                         </div>
                     </div>
-                    <footer className="footer py-4  ">
-                        <div className="container-fluid">
-                            <div className="row align-items-center justify-content-lg-between">
-                                <div className="col-lg-6 mb-lg-0 mb-4">
-                                    <div className="copyright text-center text-sm text-muted text-lg-start">
-                                        © <script>
-                                        document.write(new Date().getFullYear())
-                                    </script>,
-                                        made with <i className="fa fa-heart"></i> by
-                                        <a href="https://www.creative-tim.com" className="font-weight-bold"
-                                           target="_blank">Creative Tim</a>
-                                        for a better web.
-                                    </div>
-                                </div>
-                                <div className="col-lg-6">
-                                    <ul className="nav nav-footer justify-content-center justify-content-lg-end">
-                                        <li className="nav-item">
-                                            <a href="https://www.creative-tim.com" className="nav-link text-muted"
-                                               target="_blank">Creative Tim</a>
-                                        </li>
-                                        <li className="nav-item">
-                                            <a href="https://www.creative-tim.com/presentation"
-                                               className="nav-link text-muted" target="_blank">About Us</a>
-                                        </li>
-                                        <li className="nav-item">
-                                            <a href="https://www.creative-tim.com/blog" className="nav-link text-muted"
-                                               target="_blank">Blog</a>
-                                        </li>
-                                        <li className="nav-item">
-                                            <a href="https://www.creative-tim.com/license"
-                                               className="nav-link pe-0 text-muted" target="_blank">License</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </footer>
                 </div>
             </main>
         </React.Fragment>

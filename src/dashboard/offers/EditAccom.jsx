@@ -22,7 +22,7 @@ const EditAccom = () => {
     const [error, setError] = useState("");
     const [file, setFile] = useState(null);
     const [checkedValues, setCheckedValues] = useState([]);
-
+    const [googlemap, setGooglemap] = useState("");
     const handleCheckboxChange = (event) => {
         const value = event.target.value;
         const isChecked = event.target.checked;
@@ -106,6 +106,7 @@ const EditAccom = () => {
                     setCheckedValues(data.comodityList)
                     setInputs(data.socialMediaLink)
                     setInputs2(data.photo)
+                    setGooglemap(data.google_map)
                 }).catch(() => {
                 });
 
@@ -126,7 +127,8 @@ const EditAccom = () => {
             'regulations': regulations,
             'socialMediaLink': inputs,
             'comodityList': checkedValues,
-            'photo': inputs2
+            'photo': inputs2,
+            'google_map': googlemap
 
         };
         await fetch(`/api/v1/accomodation/update`, {
@@ -301,6 +303,14 @@ const EditAccom = () => {
                                                            className="form-control"/>
                                                 </div>
                                                 <div className="input-group input-group-outline my-3">
+                                                    <label> Google Map Link</label>
+                                                    <input type="text"
+
+                                                           value={googlemap}
+                                                           onChange={(event) => setGooglemap(event.target.value)}
+                                                           className="form-control"/>
+                                                </div>
+                                                <div className="input-group input-group-outline my-3">
                                                     <label> State </label>
                                                     <select id="size" name="State"
 
@@ -368,6 +378,33 @@ const EditAccom = () => {
                                                             onChange={handleCheckboxChange}
                                                         />
                                                         &nbsp; Pool
+                                                    </label>
+                                                    <label>
+                                                        <input
+                                                            type="checkbox"
+                                                            value="Parking"
+                                                            checked={checkedValues.includes("Parking")}
+                                                            onChange={handleCheckboxChange}
+                                                        />
+                                                        &nbsp; Parking
+                                                    </label>
+                                                    <label>
+                                                        <input
+                                                            type="checkbox"
+                                                            value="Tv"
+                                                            checked={checkedValues.includes("Tv")}
+                                                            onChange={handleCheckboxChange}
+                                                        />
+                                                        &nbsp; Tv
+                                                    </label>
+                                                    <label>
+                                                        <input
+                                                            type="checkbox"
+                                                            value="AC"
+                                                            checked={checkedValues.includes("AC")}
+                                                            onChange={handleCheckboxChange}
+                                                        />
+                                                        &nbsp; AC
                                                     </label>
                                                     <label>
                                                         <input

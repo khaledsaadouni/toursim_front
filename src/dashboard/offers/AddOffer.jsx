@@ -87,6 +87,7 @@ const AddOffer = () => {
     const [close, setClose] = useState("");
     const [duration, setDuration] = useState("");
     const [eventDate, setEventDate] = useState("");
+    const [googlemap, setGooglemap] = useState("");
     const handleAddAccom = async () => {
         const reqBody = {
             'name': name,
@@ -98,7 +99,8 @@ const AddOffer = () => {
             'destination': state,
             'regulations': inputs1,
             'socialMediaLink': inputs,
-            'comodityList': checkedValues
+            'comodityList': checkedValues,
+            'google_map': googlemap
 
         };
         await fetch(`/api/v1/accomodation/add/${user.id}`, {
@@ -132,7 +134,8 @@ const AddOffer = () => {
             'regulations': inputs1,
             'socialMediaLink': inputs,
             'duration': duration,
-            'eventDate': eventDate
+            'eventDate': eventDate,
+            'google_map': googlemap
 
         };
         await fetch(`/api/v1/event/add/${user.id}`, {
@@ -165,7 +168,8 @@ const AddOffer = () => {
             'destination': state,
             'socialMediaLink': inputs,
             'opening': open.toString(),
-            'closing': close.toString()
+            'closing': close.toString(),
+            'google_map': googlemap
 
         };
         await fetch(`/api/v1/restoration/add/${user.id}`, {
@@ -285,6 +289,14 @@ const AddOffer = () => {
                                                            className="form-control"/>
                                                 </div>
                                                 <div className="input-group input-group-outline my-3">
+                                                    <label> Google Map Link</label>
+                                                    <input type="text"
+
+                                                           value={googlemap}
+                                                           onChange={(event) => setGooglemap(event.target.value)}
+                                                           className="form-control"/>
+                                                </div>
+                                                <div className="input-group input-group-outline my-3">
                                                     <label> State </label>
                                                     <select id="size" name="State"
 
@@ -352,6 +364,33 @@ const AddOffer = () => {
                                                             onChange={handleCheckboxChange}
                                                         />
                                                         &nbsp; Pool
+                                                    </label>
+                                                    <label>
+                                                        <input
+                                                            type="checkbox"
+                                                            value="Parking"
+                                                            checked={checkedValues.includes("Parking")}
+                                                            onChange={handleCheckboxChange}
+                                                        />
+                                                        &nbsp; Parking
+                                                    </label>
+                                                    <label>
+                                                        <input
+                                                            type="checkbox"
+                                                            value="Tv"
+                                                            checked={checkedValues.includes("Tv")}
+                                                            onChange={handleCheckboxChange}
+                                                        />
+                                                        &nbsp; Tv
+                                                    </label>
+                                                    <label>
+                                                        <input
+                                                            type="checkbox"
+                                                            value="AC"
+                                                            checked={checkedValues.includes("AC")}
+                                                            onChange={handleCheckboxChange}
+                                                        />
+                                                        &nbsp; AC
                                                     </label>
                                                     <label>
                                                         <input
@@ -454,6 +493,14 @@ const AddOffer = () => {
                                                     <input type="text"
                                                            value={location}
                                                            onChange={(event) => setLocation(event.target.value)}
+                                                           className="form-control"/>
+                                                </div>
+                                                <div className="input-group input-group-outline my-3">
+                                                    <label> Google Map Link</label>
+                                                    <input type="text"
+
+                                                           value={googlemap}
+                                                           onChange={(event) => setGooglemap(event.target.value)}
                                                            className="form-control"/>
                                                 </div>
                                                 <div className="input-group input-group-outline my-3">
@@ -601,6 +648,14 @@ const AddOffer = () => {
                                                     <input type="text"
                                                            value={location}
                                                            onChange={(event) => setLocation(event.target.value)}
+                                                           className="form-control"/>
+                                                </div>
+                                                <div className="input-group input-group-outline my-3">
+                                                    <label> Google Map Link</label>
+                                                    <input type="text"
+
+                                                           value={googlemap}
+                                                           onChange={(event) => setGooglemap(event.target.value)}
                                                            className="form-control"/>
                                                 </div>
                                                 <div className="input-group input-group-outline my-3">
