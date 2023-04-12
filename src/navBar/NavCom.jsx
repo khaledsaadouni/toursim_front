@@ -101,16 +101,11 @@ const NavCom = (props) => {
                                     Programs
                                 </a>
                             </li>
-                            <li className="menu-item   ">
-                                <a href="">
-                                    Destinations
-                                </a>
-                            </li>
                             {jwt && user !== null ? (
                                 <li className="menu-item   ">
-                                    <a href="">
+                                    <Link to={"/reservations"}>
                                         My Reservations
-                                    </a>
+                                    </Link>
                                 </li>) : null}
                             <li className="menu-item   ">
                                 <Link to={"/aboutUs"}>

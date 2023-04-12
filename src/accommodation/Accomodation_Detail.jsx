@@ -4,7 +4,7 @@ import Nav from "../navBar/Nav";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import {useParams} from "react-router-dom";
+import {Navigate, useParams} from "react-router-dom";
 import image from "../avatar.jpg";
 import formatDate from "../utils/DateFormat";
 import {useLocalState} from "../utils/UseLocalStorage";
@@ -109,6 +109,38 @@ const Acommodation_Detail = () => {
             }).catch(() => {
             });
     }
+    const [date, setDate] = useState();
+    const [count_pep, setCount_pep] = useState();
+    const [count_d, setCount_d] = useState();
+    const [redirect, setRedirect] = useState(false);
+    const handleReserve = async () => {
+
+        const reqBody = {
+            "date": date,
+            "count_people": count_pep,
+            "count_days": count_d,
+            'price': count_d * offer.price
+        };
+        await fetch(`/api/v1/reservation/add/${user.id}/${offer !== null ? offer.id : -1}`, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${jwt}`
+            },
+            method: "POST",
+            body: JSON.stringify(reqBody)
+        }).then((response) => {
+            if (response.status === 200) {
+
+                return Promise.all([response.json(), response.headers])
+            } else {
+                return Promise.reject("")
+            }
+        })
+            .then(([data]) => {
+                setRedirect(true)
+            }).catch(() => {
+            });
+    }
     const settings = {
         dots: true,
         infinite: true,
@@ -116,7 +148,7 @@ const Acommodation_Detail = () => {
         slidesToShow: 1,
         slidesToScroll: 1
     };
-    return (
+    return redirect === true ? <Navigate to={"/reservations"}/> : (
         <React.Fragment>
             <Nav/>
 
@@ -127,31 +159,34 @@ const Acommodation_Detail = () => {
                         <div className="sidebar_wrapper">
 
                             <div className="sidebar_top"></div>
+                            {user !== null && jwt !== "" ? (
+                                <div className="sidebar">
 
-                            <div className="sidebar">
+                                    <div className="content"
+                                         style={{
+                                             boxShadow: '0px 0px 10px 5px rgba(0, 0, 0, 0.3)',
+                                             borderRadius: "5px"
+                                         }}>
 
-                                <div className="content"
-                                     style={{boxShadow: '0px 0px 10px 5px rgba(0, 0, 0, 0.3)', borderRadius: "5px"}}>
-
-                                    <div style={{
-                                        minHeight: "50px",
-                                        background: "black",
-                                        color: "white",
-                                        lineHeight: "50px",
+                                        <div style={{
+                                            minHeight: "50px",
+                                            background: "black",
+                                            color: "white",
+                                            lineHeight: "50px",
                                         padding: " 0 15px 0 15px",
                                         boxSizing: " border-box",
                                         borderTopLeftRadius: " 5px",
                                         borderTopRightRadius: " 5px"
                                     }}>
-                                        <div className="single_tour_price">
-                                            {/*<span className="normal_price">*/}
-                                            {/*  $6,700*/}
-                                            {/* </span>*/}
-                                            {offer != null ? offer.price : null} DT
-                                        </div>
-                                        <div className="single_tour_per_person">
-                                            Per Person
-                                        </div>
+                                            <div className="single_tour_price">
+                                                {/*<span className="normal_price">*/}
+                                                {/*  $6,700*/}
+                                                {/* </span>*/}
+                                                {offer != null ? offer.price : null} DT
+                                            </div>
+                                            <div className="single_tour_per_person">
+                                                Per Night
+                                            </div>
                                     </div>
 
                                     <div className="single_tour_booking_wrapper themeborder contact_form7">
@@ -169,8 +204,11 @@ const Acommodation_Detail = () => {
                                                     <label> Reservation Date </label>
                                                     <br/>
                                                     <span className="wpcf7-form-control-wrap text-237">
-                                                        <input type="date"
-                                                               className="form-control "/>
+                                                        <input
+                                                            value={date}
+                                                            type="date"
+                                                            onChange={(event) => setDate(event.target.value)}
+                                                            className="form-control "/>
                                                     </span>
                                                 </p>
                                                 <p>
@@ -178,21 +216,14 @@ const Acommodation_Detail = () => {
                                                     <br/>
                                                     <span className="wpcf7-form-control-wrap text-237">
                                                         <input type="number"
+                                                               value={count_d}
+                                                               onChange={(event) => setCount_d(event.target.value)}
                                                                className="form-control "
                                                                placeholder="Days"/>
                                                     </span>
                                                 </p>
                                                 <p>
-                                                    <label> Number of Persons </label>
-                                                    <br/>
-                                                    <span className="wpcf7-form-control-wrap text-237">
-                                                        <input type="number"
-                                                               className="form-control "
-                                                               placeholder="Persons"/>
-                                                    </span>
-                                                </p>
-                                                <p>
-                                                    <input type="submit" value="Book This Tour"
+                                                    <input type="submit" value="Book This Tour" onClick={handleReserve}
                                                            className="wpcf7-form-control wpcf7-submit"/>
                                                 </p>
                                                 <div className="wpcf7-response-output wpcf7-display-none">
@@ -224,9 +255,9 @@ const Acommodation_Detail = () => {
                                         </div>
                                     </div>
 
-                                </div>
+                                    </div>
 
-                            </div>
+                                </div>) : null}
                             <br className="clear"/>
 
                             <div className="sidebar_bottom"></div>
@@ -349,7 +380,7 @@ const Acommodation_Detail = () => {
 
 
                                                 <div className="right ">
-                                                    <h7>{item.user.firstname} {item.user.lastname}</h7>
+                                                    <h7>{item.user.firstname} {item.user.lastname} </h7>
                                                     {item.rate !== -1 ? (<span>{item.rate}/10</span>) : null}
                                                     {user !== null && item.user.id === user.id ? (
                                                         <a rel='nofollow' className='comment-reply-link btn-danger'

@@ -43,23 +43,109 @@ const ProfileCard = () => {
                                         </h5>
                                     </div>
                                 </div>
-                                <div className="col-lg-4 col-md-6 my-sm-auto ms-sm-auto me-sm-0 mx-auto mt-3">
-                                    <div className="nav-wrapper position-relative end-0">
-                                        <ul className="nav nav-pills nav-fill p-1" role="tablist">
-                                            <li className="nav-item">
-                                                <div className="nav-link mb-0 px-0 py-1 " data-bs-toggle="tab"
-                                                     href="javascript:;" role="tab" aria-selected="false">
-                                                    <i className="bi bi-heart-fill"></i>
-                                                    <span className="ms-1"><Link
-                                                        to={"/settings"}>Favorites</Link></span>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
                             </div>
                             <div className="row">
                                 <div className="row">
+                                    <div className="col-12 col-xl-4">
+                                        <div className="card card-plain h-100">
+                                            <div className="card-header pb-0 p-3">
+                                                <div className="row">
+                                                    <div className="col-md-8 d-flex align-items-center">
+                                                        <h6 className="mb-0">Profile Information</h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="card-body p-3">
+                                                <div className="horizontal gray-light my-4">
+                                                    <ul className="list-group">
+                                                        {user.role === "Partner" && user.commercial_name !== null ? (
+                                                            <li className="list-group-item border-0 ps-0 text-sm">
+                                                                <strong
+                                                                    className="text-dark">Commercial Name:
+                                                                </strong> &nbsp; {user.commercial_name}
+                                                            </li>) : null}
+                                                        {user.email !== null ? (
+                                                            <li className="list-group-item border-0 ps-0 text-sm">
+                                                                <strong
+                                                                    className="text-dark">Email:
+                                                                </strong> &nbsp; {user.email}
+                                                            </li>) : null}
+                                                        {user.phone !== 0 ? (
+                                                            <li className="list-group-item border-0 ps-0 text-sm">
+                                                                <strong
+                                                                    className="text-dark">Mobile:</strong> &nbsp; {user.phone}
+                                                            </li>) : null}
+                                                        {user.birthday !== null ? (
+                                                            <li className="list-group-item border-0 ps-0 text-sm">
+                                                                <strong
+                                                                    className="text-dark">Birthday:</strong> &nbsp; {user.birthday}
+                                                            </li>) : null}
+                                                        <li className="list-group-item border-0 ps-0 text-sm">
+                                                            <Link style={{color: "white"}}
+                                                                  to={user.role !== "Client" ? "/dashboard/settings" : "/profile/settings"}>
+                                                                <button
+                                                                    className=" btn bg-gradient-primary w-100 my-4 mb-2"> Edit
+                                                                    Informations
+                                                                </button>
+                                                            </Link>
+                                                        </li>
+                                                        <li className="list-group-item border-0 ps-0 text-sm">
+                                                            <button
+                                                                onClick={handleDelete}
+                                                                className=" btn btn-outline-danger w-100 my-4 mb-2">
+                                                                Delete Account
+                                                            </button>
+
+                                                        </li>
+
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {user.role === "Partner" ? (
+                                        <div className="col-12 col-xl-4">
+                                            <div className="card card-plain h-100">
+                                                <div className="card-header pb-0 p-3">
+                                                    <h6 className="mb-0">Payement Method</h6>
+                                                </div>
+                                                <div className="card-body p-3">
+
+                                                    <div className="row">
+                                                        <div className="col">
+                                                            <div className="row">
+                                                                <div className="col-xl-9 mb-xl-0 mb-4">
+                                                                    <div className="card bg-transparent shadow-xl">
+                                                                        <div
+                                                                            className="overflow-hidden position-relative border-radius-xl">
+                                                                            <img
+                                                                                src="../assets/img/illustrations/pattern-tree.svg"
+                                                                                className="position-absolute opacity-2 start-0 top-0 w-100 z-index-1 h-100"
+                                                                                alt="pattern-tree"/>
+                                                                            <span
+                                                                                className="mask bg-gradient-dark opacity-10"></span>
+                                                                            <div
+                                                                                className="card-body position-relative z-index-1 p-3">
+                                                                                <i className="material-icons text-white p-2">wifi</i>
+                                                                                <h5 className="text-white mt-4 mb-5 pb-2">{user.rib}</h5>
+                                                                                <div className="d-flex">
+                                                                                    <div
+                                                                                        className="ms-auto w-20 d-flex align-items-end justify-content-end">
+                                                                                        <img className="w-60 mt-2"
+                                                                                             src="/assets/img/logos/mastercard.png"
+                                                                                             alt="logo"/>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>) : null}
                                     <div className="col-12 col-xl-4">
                                         <div className="card card-plain h-100">
                                             <div className="card-header pb-0 p-3">
@@ -130,135 +216,6 @@ const ProfileCard = () => {
                                                                 htmlFor="flexSwitchCheckDefault5">Subscribe to
                                                                 newsletter</label>
                                                         </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-12 col-xl-4">
-                                        <div className="card card-plain h-100">
-                                            <div className="card-header pb-0 p-3">
-                                                <div className="row">
-                                                    <div className="col-md-8 d-flex align-items-center">
-                                                        <h6 className="mb-0">Profile Information</h6>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="card-body p-3">
-                                                <div className="horizontal gray-light my-4">
-                                                    <ul className="list-group">
-                                                        {user.email !== null ? (
-                                                            <li className="list-group-item border-0 ps-0 text-sm">
-                                                                <strong
-                                                                    className="text-dark">Email:
-                                                                </strong> &nbsp; {user.email}
-                                                            </li>) : null}
-                                                        {user.phone !== 0 ? (
-                                                            <li className="list-group-item border-0 ps-0 text-sm">
-                                                                <strong
-                                                                    className="text-dark">Mobile:</strong> &nbsp; {user.phone}
-                                                            </li>) : null}
-                                                        {user.birthday !== null ? (
-                                                            <li className="list-group-item border-0 ps-0 text-sm">
-                                                                <strong
-                                                                    className="text-dark">Birthday:</strong> &nbsp; {user.birthday}
-                                                            </li>) : null}
-                                                        <li className="list-group-item border-0 ps-0 text-sm">
-                                                            <Link style={{color: "white"}}
-                                                                  to={user.role !== "Client" ? "/dashboard/settings" : "/profile/settings"}>
-                                                                <button
-                                                                    className=" btn bg-gradient-primary w-100 my-4 mb-2"> Edit
-                                                                    Informations
-                                                                </button>
-                                                            </Link>
-                                                        </li>
-                                                        <li className="list-group-item border-0 ps-0 text-sm">
-                                                            <button
-                                                                onClick={handleDelete}
-                                                                className=" btn btn-outline-danger w-100 my-4 mb-2">
-                                                                Delete Account
-                                                            </button>
-
-                                                        </li>
-
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-12 col-xl-4">
-                                        <div className="card card-plain h-100">
-                                            <div className="card-header pb-0 p-3">
-                                                <h6 className="mb-0">My Recent Reservations</h6>
-                                            </div>
-                                            <div className="card-body p-3">
-                                                <ul className="list-group">
-                                                    <li className="list-group-item border-0 d-flex align-items-center px-0 mb-2 pt-0">
-                                                        <div className="avatar me-3">
-                                                            <img src=".assets/img/kal-visuals-square.jpg" alt="kal"
-                                                                 className="border-radius-lg shadow"/>
-                                                        </div>
-                                                        <div
-                                                            className="d-flex align-items-start flex-column justify-content-center">
-                                                            <h6 className="mb-0 text-sm">Sophie B.</h6>
-                                                            <p className="mb-0 text-xs">Hi! I need more
-                                                                information..</p>
-                                                        </div>
-                                                        <a className="btn btn-link pe-3 ps-0 mb-0 ms-auto w-25 w-md-auto"
-                                                           href="javascript:;">Reply</a>
-                                                    </li>
-                                                    <li className="list-group-item border-0 d-flex align-items-center px-0 mb-2">
-                                                        <div className="avatar me-3">
-                                                            <img src="assets/img/marie.jpg" alt="kal"
-                                                                 className="border-radius-lg shadow"/>
-                                                        </div>
-                                                        <div
-                                                            className="d-flex align-items-start flex-column justify-content-center">
-                                                            <h6 className="mb-0 text-sm">Anne Marie</h6>
-                                                            <p className="mb-0 text-xs">Awesome work, can you..</p>
-                                                        </div>
-                                                        <a className="btn btn-link pe-3 ps-0 mb-0 ms-auto w-25 w-md-auto"
-                                                           href="javascript:;">Reply</a>
-                                                    </li>
-                                                    <li className="list-group-item border-0 d-flex align-items-center px-0 mb-2">
-                                                        <div className="avatar me-3">
-                                                            <img src="assets/img/ivana-square.jpg" alt="kal"
-                                                                 className="border-radius-lg shadow"/>
-                                                        </div>
-                                                        <div
-                                                            className="d-flex align-items-start flex-column justify-content-center">
-                                                            <h6 className="mb-0 text-sm">Ivanna</h6>
-                                                            <p className="mb-0 text-xs">About files I can..</p>
-                                                        </div>
-                                                        <a className="btn btn-link pe-3 ps-0 mb-0 ms-auto w-25 w-md-auto"
-                                                           href="javascript:;">Reply</a>
-                                                    </li>
-                                                    <li className="list-group-item border-0 d-flex align-items-center px-0 mb-2">
-                                                        <div className="avatar me-3">
-                                                            <img src="assets/img/team-4.jpg" alt="kal"
-                                                                 className="border-radius-lg shadow"/>
-                                                        </div>
-                                                        <div
-                                                            className="d-flex align-items-start flex-column justify-content-center">
-                                                            <h6 className="mb-0 text-sm">Peterson</h6>
-                                                            <p className="mb-0 text-xs">Have a great afternoon..</p>
-                                                        </div>
-                                                        <a className="btn btn-link pe-3 ps-0 mb-0 ms-auto w-25 w-md-auto"
-                                                           href="javascript:;">Reply</a>
-                                                    </li>
-                                                    <li className="list-group-item border-0 d-flex align-items-center px-0">
-                                                        <div className="avatar me-3">
-                                                            <img src="assets/img/team-3.jpg" alt="kal"
-                                                                 className="border-radius-lg shadow"/>
-                                                        </div>
-                                                        <div
-                                                            className="d-flex align-items-start flex-column justify-content-center">
-                                                            <h6 className="mb-0 text-sm">Nick Daniel</h6>
-                                                            <p className="mb-0 text-xs">Hi! I need more
-                                                                information..</p>
-                                                        </div>
-                                                        <a className="btn btn-link pe-3 ps-0 mb-0 ms-auto w-25 w-md-auto"
-                                                           href="javascript:;">Reply</a>
                                                     </li>
                                                 </ul>
                                             </div>

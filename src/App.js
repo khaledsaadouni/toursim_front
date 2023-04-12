@@ -13,6 +13,7 @@ import Sign from "./sign/Sign";
 import Profile from "./profile/Profile";
 import EventDetail from "./activities_events/Acitvity_detail";
 import Restaurant_Detail from "./restaurants/Restaurant_detail";
+import MyReservation from "./reservations/MyReservation";
 
 function App() {
     return (
@@ -26,6 +27,7 @@ function App() {
                 <Route path="/shop/:id" element={<Restaurant_Detail/>}/>
                 <Route path="/events_activities" element={<Activities/>}/>
                 <Route path="/restaurants" element={<Restaurants/>}/>
+                <Route path="/reservations" element={<MyReservation/>}/>
                 <Route path="/shops" element={<Shops/>}/>
                 <Route path="/destinations" element={<Destinations/>}/>
                 <Route path="/aboutUs" element={<AboutUs/>}/>

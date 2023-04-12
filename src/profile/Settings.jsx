@@ -8,8 +8,10 @@ const Settings = () => {
     const [user, setUser] = useLocalState(null, "user");
     const [firstname, setFirstname] = useState(user.firstname);
     const [lastname, setLastname] = useState(user.lastname);
+    const [commercial_name, setCommercial_name] = useState(user.commercial_name);
     const [email, setEmail] = useState(user.email);
     const [phone, setPhone] = useState(user.phone);
+    const [rib, setRib] = useState(user.rib);
     const [birthday, setBirthday] = useState(user.birthday);
     const [error, setError] = useState("");
     const [redirect, setRedirect] = useState(false);
@@ -24,9 +26,11 @@ const Settings = () => {
             'role': user.role,
             'birthday': birthday,
             'phone': phone,
-            'photo': user.photo
+            'photo': user.photo,
+            'commercial_name': commercial_name,
+            'rib': rib
         };
-        await fetch("/api/v1/user/update", {
+        await fetch(`/api/v1/${user.role === "Partner" ? "partner" : "user"}/update`, {
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${jwt}`
@@ -177,6 +181,22 @@ const Settings = () => {
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        {user.role === "Partner" ? (
+                                                            <div className="input-group input-group-outline my-3">
+                                                                <label> commercial_name</label>
+                                                                <input value={commercial_name}
+                                                                       onChange={(e) => setCommercial_name(e.target.value)}
+                                                                       placeholder="Commercial Name" type="text"
+                                                                       className="form-control"/>
+                                                            </div>) : null}
+                                                        {user.role === "Partner" ? (
+                                                            <div className="input-group input-group-outline my-3">
+                                                                <label> RIB</label>
+                                                                <input value={rib}
+                                                                       onChange={(e) => setRib(e.target.value)}
+                                                                       placeholder="RIB" type="text"
+                                                                       className="form-control"/>
+                                                            </div>) : null}
                                                         <div className="input-group input-group-outline my-3">
                                                             <label> Email</label>
                                                             <input value={email}

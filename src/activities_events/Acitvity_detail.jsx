@@ -3,7 +3,7 @@ import image from "../avatar.jpg";
 import Slider from "react-slick";
 import calculateAverageRate from "../utils/ReviewStarsCounter";
 import formatDate from "../utils/DateFormat";
-import {useParams} from "react-router-dom";
+import {Navigate, useParams} from "react-router-dom";
 import {useLocalState} from "../utils/UseLocalStorage";
 import Nav from "../navBar/Nav";
 
@@ -106,6 +106,37 @@ const EventDetail = () => {
             }).catch(() => {
             });
     }
+    const [date, setDate] = useState();
+    const [count_pep, setCount_pep] = useState();
+    const [count_d, setCount_d] = useState();
+    const [redirect, setRedirect] = useState(false);
+    const handleReserve = async () => {
+
+        const reqBody = {
+            "date": offer.eventDate,
+            "count_people": count_pep,
+            'price': count_pep * offer.price
+        };
+        await fetch(`/api/v1/reservation/add/${user.id}/${offer !== null ? offer.id : -1}`, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${jwt}`
+            },
+            method: "POST",
+            body: JSON.stringify(reqBody)
+        }).then((response) => {
+            if (response.status === 200) {
+
+                return Promise.all([response.json(), response.headers])
+            } else {
+                return Promise.reject("")
+            }
+        })
+            .then(([data]) => {
+                setRedirect(true)
+            }).catch(() => {
+            });
+    }
     const settings = {
         dots: true,
         infinite: true,
@@ -113,7 +144,7 @@ const EventDetail = () => {
         slidesToShow: 1,
         slidesToScroll: 1
     };
-    return (
+    return redirect === true ? <Navigate to={"/reservations"}/> : (
         <React.Fragment>
             <Nav/>
             <div id="page_content_wrapper" className="hasbg " style={{paddingTop: "100px"}}>
@@ -161,24 +192,20 @@ const EventDetail = () => {
                                             <div action="#" method="post" className="wpcf7-form"
                                                  noValidate="novalidate">
                                                 <p>
-                                                    <label> Reservation Date </label>
-                                                    <br/>
-                                                    <span className="wpcf7-form-control-wrap text-237">
-                                                        <input type="date"
-                                                               className="form-control "/>
-                                                    </span>
-                                                </p>
-                                                <p>
-                                                    <label> Number of Days </label>
-                                                    <br/>
-                                                    <span className="wpcf7-form-control-wrap text-237">
+                                                    <p>
+                                                        <label> Number of Persons </label>
+                                                        <br/>
+                                                        <span className="wpcf7-form-control-wrap text-237">
                                                         <input type="number"
+                                                               value={count_pep}
+                                                               onChange={(event) => setCount_pep(event.target.value)}
                                                                className="form-control "
-                                                               placeholder="Days"/>
+                                                               placeholder="Persons"/>
                                                     </span>
+                                                    </p>
                                                 </p>
                                                 <p>
-                                                    <input type="submit" value="Book This Tour"
+                                                    <input type="submit" value="Book This Tour" onClick={handleReserve}
                                                            className="wpcf7-form-control wpcf7-submit"/>
                                                 </p>
                                                 <div className="wpcf7-response-output wpcf7-display-none">

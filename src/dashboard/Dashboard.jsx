@@ -16,6 +16,7 @@ import EditResto from "./offers/EditResto";
 import EditEvent from "./offers/EditEvent";
 import AddShop from "./offers/AddShop";
 import EditShop from "./offers/EditShop";
+import Reserve from "./reservation/Reserve";
 
 const Dashboard = () => {
     const {page} = useParams();
@@ -51,6 +52,8 @@ const Dashboard = () => {
                 return <AddShop/>;
             case "password":
                 return <Password/>;
+            case "reservations":
+                return <Reserve/>;
             default:
                 return <MainDash/>;
 
@@ -100,13 +103,15 @@ const Dashboard = () => {
                                 </Link>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link text-white " href="../pages/billing.html">
+                                <Link
+                                    className={`nav-link text-white   ${page === "reservations" && "bg-gradient-primary"}`}
+                                    to={"/dashboard/reservations"} style={{color: "white"}}>
                                     <div
                                         className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                                         <i className="material-icons opacity-10">receipt_long</i>
                                     </div>
-                                    <span className="nav-link-text ms-1">Billing</span>
-                                </a>
+                                    <span className="nav-link-text ms-1">Reservations</span>
+                                </Link>
                             </li>
                             <li className="nav-item">
                                 <a className="nav-link text-white " href="../pages/virtual-reality.html">
