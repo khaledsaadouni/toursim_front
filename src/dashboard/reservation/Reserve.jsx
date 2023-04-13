@@ -144,14 +144,14 @@ const Reserve = () => {
 
                                                 <h6 className="mb-3 text-sm">Total Price:&nbsp; {item.price} &nbsp; DT
                                                 </h6>
+                                                <span className="mb-2 text-xs">Date: <span
+                                                    className="text-dark font-weight-bold ms-sm-2">{item.date} </span></span>
                                                 {item.offer.generic_Type !== "accomodation" && item.count_people !== null ? (
                                                     <span className="mb-2 text-xs">Number of Persons: <span
                                                         className="text-dark font-weight-bold ms-sm-2">{item.count_people} </span></span>) : null}
                                                 {item.offer.generic_Type === "accomodation" ? (
                                                     <span className="mb-2 text-xs">Days Number: <span
-                                                        className="text-dark font-weight-bold ms-sm-2"> {item.count_days} </span></span>) : null}
-                                                <span className="mb-2 text-xs">Date: <span
-                                                    className="text-dark font-weight-bold ms-sm-2">{item.date} </span></span>
+                                                        className="text-dark font-weight-bold ms-sm-2"> {item.checkout} </span></span>) : null}
                                                 <span className="mb-2 text-xs">Client Fullname: <span
                                                     className="text-dark font-weight-bold ms-sm-2">{item.user.firstname} &nbsp;{item.user.lastname} </span></span>
                                                 <span className="mb-2 text-xs">Client Email: <span

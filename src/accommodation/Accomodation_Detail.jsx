@@ -125,7 +125,7 @@ const Acommodation_Detail = () => {
         const reqBody = {
             "date": date,
             "count_people": count_pep,
-            "count_days": count_d,
+            "checkout": count_d,
             'price': count_d * offer.price
         };
         await fetch(`/api/v1/reservation/add/${user.id}/${offer !== null ? offer.id : -1}`, {
@@ -139,10 +139,6 @@ const Acommodation_Detail = () => {
             if (response.status === 200) {
 
                 return Promise.all([response.json(), response.headers])
-            } else if (response.status === 401) {
-                localStorage.removeItem('jwt');
-                localStorage.removeItem('user');
-                window.location.reload();
             } else if (response.status === 401) {
                 localStorage.removeItem('jwt');
                 localStorage.removeItem('user');
@@ -227,14 +223,13 @@ const Acommodation_Detail = () => {
                                                     </span>
                                                 </p>
                                                 <p>
-                                                    <label> Number of Days </label>
+                                                    <label> Check Out Date </label>
                                                     <br/>
                                                     <span className="wpcf7-form-control-wrap text-237">
-                                                        <input type="number"
+                                                        <input type="date"
                                                                value={count_d}
                                                                onChange={(event) => setCount_d(event.target.value)}
-                                                               className="form-control "
-                                                               placeholder="Days"/>
+                                                               className="form-control "/>
                                                     </span>
                                                 </p>
                                                 <p>
@@ -282,7 +277,8 @@ const Acommodation_Detail = () => {
 
                             <h1>{offer != null ? offer.name : null}</h1>
                             <h5><i className="bi bi-geo-alt-fill"></i> {offer != null && offer.emplacement !== null ?
-                                <span>{offer.emplacement},</span> : null} {offer != null ? offer.destination : null}
+                                <span>{offer.emplacement !== "" ? (
+                                    <span>{offer.emplacement}, </span>) : null}</span> : null} {offer != null ? offer.destination : null}
                             </h5>
                             <div className="single_tour_attribute_wrapper themeborder ">
                                 <div className="one_fourth">
@@ -327,22 +323,25 @@ const Acommodation_Detail = () => {
 
 
                             </div>
-                            <div className="single_tour_content">
-                                <h4 className="p1">Regulations</h4>
-                                {offer !== null ? (
+                            {offer !== null && offer.regulations !== null ? (
+                                <div className="single_tour_content">
+                                    <h4 className="p1">Regulations</h4>
+
+
                                     <ul>
                                         {offer.regulations != null ? offer.regulations.map((item, index) => (
                                             <li>
+
                                                 <div class="single_tour_departure_title">{item}</div>
                                             </li>
                                         )) : null}
 
                                     </ul>
-                                ) : null}
-                            </div>
+
+                                </div>) : null}
                             <div className="single_tour_content">
                                 <h4 className="p1">Commodity List</h4>
-                                {offer !== null ? (
+                                {offer !== null && offer.comodityList != null ? (
                                     <div>
                                         {offer.comodityList != null ? offer.comodityList.map((item, index) => (
                                             <div className="row">

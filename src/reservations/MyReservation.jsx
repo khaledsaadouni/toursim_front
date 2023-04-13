@@ -142,11 +142,11 @@ const MyReservation = () => {
                                                 {item.offer.generic_Type !== "accomodation" && item.count_people !== null ? (
                                                     <span className="mb-2 text-xs">Number of Persons: <span
                                                         className="text-dark font-weight-bold ms-sm-2">{item.count_people} </span></span>) : null}
-                                                {item.offer.generic_Type === "accomodation" ? (
-                                                    <span className="mb-2 text-xs">Days Number: <span
-                                                        className="text-dark font-weight-bold ms-sm-2"> {item.count_days} </span></span>) : null}
                                                 <span className="mb-2 text-xs">Date: <span
                                                     className="text-dark font-weight-bold ms-sm-2">{item.date} </span></span>
+                                                {item.offer.generic_Type === "accomodation" ? (
+                                                    <span className="mb-2 text-xs">Days Number: <span
+                                                        className="text-dark font-weight-bold ms-sm-2"> {item.checkout} </span></span>) : null}
                                             </div>
                                             <div className="ms-auto text-end">
                                                 <button className="btn btn-link text-danger text-gradient px-3 mb-0"
