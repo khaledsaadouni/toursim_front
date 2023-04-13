@@ -1,59 +1,18 @@
 import React from 'react';
-import {Link} from "react-router-dom";
-import {useLocalState} from "../utils/UseLocalStorage";
+import { Link } from "react-router-dom";
+import { useLocalState } from "../utils/UseLocalStorage";
 import image from "../avatar.jpg";
 
-const GET_TOKEN_URL = "/api/v1/auth/oAuth2Token"
 
 const NavCom = (props) => {
 
     const [jwt, setJwt] = useLocalState("", "jwt");
-
     const [user, setUser] = useLocalState(null, "user");
-    // useEffect(() => {
-    //     const asyncFn = async () => {
-    //         try {
-    //             await fetch(GET_TOKEN_URL, {
-    //                 headers: {
-    //                     "Content-Type": "application/json"
-    //                 },
-    //                 method: "GET",
-    //             }).then((response) => {
-    //                 if (response.status === 200) {
-    //                     return Promise.all([response.json(), response.headers])
-    //                 } else {
-    //                     return Promise.reject("")
-    //                 }
-    //             })
-    //                 .then(([data, header]) => {
-    //                     console.log(data)
-    //                     setJwt(data.token);
-    //                     setUser(data.user);
-    //                 }).catch((message) => {
-    //                 });
-    //         } catch (error) {
-    //         }
-    //     };
-    //     asyncFn();
-    // }, []);
-    const logout = async () => {
 
+    const logout = async () => {
         localStorage.removeItem('jwt');
         localStorage.removeItem('user');
         window.location.reload();
-
-        // await fetch("/api/v1/auth/deleteoAuth2Token", {
-        //     headers: {
-        //         "Content-Type": "application/json"
-        //     },
-        //     method: "GET",
-        // }).then((response) => {
-        //     if (response.status === 200) {
-        //         return Promise.all([response.json(), response.headers])
-        //     } else {
-        //         return Promise.reject("")
-        //     }
-        // })
     }
     return (
         <React.Fragment>
@@ -120,14 +79,14 @@ const NavCom = (props) => {
                             </li>
                             {jwt ? (
                                 <li className="menu-item menu-item-has-children arrow"
-                                    style={{display: "flex", alignItems: "center"}}>
+                                    style={{ display: "flex", alignItems: "center" }}>
 
                                     <img src={user.photo === null ? image : user.photo} height="40px" width="40px"
-                                         style={{borderRadius: "100%"}}/>
+                                        style={{ borderRadius: "100%" }} />
 
                                     <a> {user.firstname}</a>
 
-                                    <ul className="sub-menu" style={{marginTop: "150px"}}>
+                                    <ul className="sub-menu" style={{ marginTop: "150px" }}>
                                         <li className="menu-item">
                                             <Link
                                                 to={user.role === "Client" ? "/profile/main" : "/dashboard/profile"}>Profile </Link>
@@ -164,13 +123,13 @@ const NavCom = (props) => {
 
                                         </button>
                                     </Link><Link
-                                    to={"/sign/up"}>
-                                    <button className="  nav-secondary">
+                                        to={"/sign/up"}>
+                                        <button className="  nav-secondary">
 
-                                        Sign up
+                                            Sign up
 
-                                    </button>
-                                </Link>
+                                        </button>
+                                    </Link>
                                 </li>
                             )}
                         </ul>

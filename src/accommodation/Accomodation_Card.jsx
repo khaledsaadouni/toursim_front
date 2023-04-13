@@ -1,12 +1,12 @@
 import React from 'react';
 import image from "../offer.png"
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Accomadation_Card = (props) => {
     const n = props.reviews;
-    const elements = Array.from({length: n}, (_, i) => i + 1);
+    const elements = Array.from({ length: n }, (_, i) => i + 1);
     const n1 = 5 - props.reviews;
-    const restelemnts = Array.from({length: n1}, (_, i) => i + 1);
+    const restelemnts = Array.from({ length: n1 }, (_, i) => i + 1);
     return (
         <React.Fragment>
             <div className="element grid classic4_cols animated2">
@@ -16,7 +16,7 @@ const Accomadation_Card = (props) => {
                     data-id="post-2">
 
                     <a className="tour_image">
-                        <img src={props.photos.length === 0 ? image : props.photos[0]} alt="French Autumn"/>
+                        <img src={props.photos.length === 0 ? image : props.photos[0]} alt="French Autumn" />
 
                         <div className="tour_price ">
                             {props.price} Dt
@@ -45,7 +45,7 @@ const Accomadation_Card = (props) => {
                                 <i className="bi bi-person-fill"></i> {props.capacity}
                             </div>
                         </div>
-                        <br className="clear"/>
+                        <br className="clear" />
                     </div>
                 </div>
             </div>
