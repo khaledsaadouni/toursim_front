@@ -13,9 +13,6 @@ import calculateAverageRate from "../utils/ReviewStarsCounter";
 const Acommodation_Detail = () => {
     const {id} = useParams();
     const [offer, setOffer] = useState(null);
-    const [n, setN] = useState(-1);
-    const [elements, setElements] = useState([]);
-    const [n1, setN1] = useState(-1);
     const [rate, setRate] = useState(-1);
     const [comment, setComment] = useState("");
 
@@ -33,11 +30,9 @@ const Acommodation_Detail = () => {
     };
     const renderDivs2 = (a) => {
         const divs = [];
-
         for (let i = 0; i < a; i++) {
             divs.push(<a href="javascript:;"></a>);
         }
-
         return divs;
     };
     useEffect(() => {
@@ -50,6 +45,10 @@ const Acommodation_Detail = () => {
             }).then((response) => {
                 if (response.status === 200) {
                     return Promise.all([response.json(), response.headers])
+                } else if (response.status === 401) {
+                    localStorage.removeItem('jwt');
+                    localStorage.removeItem('user');
+                    window.location.reload();
                 } else {
                     return Promise.reject("")
                 }
@@ -76,6 +75,10 @@ const Acommodation_Detail = () => {
         }).then((response) => {
             if (response.status === 200) {
                 return Promise.all([response.json(), response.headers])
+            } else if (response.status === 401) {
+                localStorage.removeItem('jwt');
+                localStorage.removeItem('user');
+                window.location.reload();
             } else {
                 return Promise.reject("")
             }
@@ -100,6 +103,10 @@ const Acommodation_Detail = () => {
         }).then((response) => {
             if (response.status === 200) {
                 return Promise.all([response.json(), response.headers])
+            } else if (response.status === 401) {
+                localStorage.removeItem('jwt');
+                localStorage.removeItem('user');
+                window.location.reload();
             } else {
                 return Promise.reject("")
             }
@@ -132,6 +139,14 @@ const Acommodation_Detail = () => {
             if (response.status === 200) {
 
                 return Promise.all([response.json(), response.headers])
+            } else if (response.status === 401) {
+                localStorage.removeItem('jwt');
+                localStorage.removeItem('user');
+                window.location.reload();
+            } else if (response.status === 401) {
+                localStorage.removeItem('jwt');
+                localStorage.removeItem('user');
+                window.location.reload();
             } else {
                 return Promise.reject("")
             }

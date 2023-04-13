@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import Nav from "../../navBar/Nav";
 import {countCanceleddReservations, countConfirmedReservations, countPendingReservations} from "../../utils/Count";
 import {useLocalState} from "../../utils/UseLocalStorage";
 import {Link, Navigate} from "react-router-dom";
@@ -20,6 +19,10 @@ const Reserve = () => {
                 }).then((response) => {
                     if (response.status === 200) {
                         return Promise.all([response.json(), response.headers])
+                    } else if (response.status === 401) {
+                        localStorage.removeItem('jwt');
+                        localStorage.removeItem('user');
+                        window.location.reload();
                     } else {
                         return Promise.reject("")
                     }
@@ -46,6 +49,10 @@ const Reserve = () => {
 
                 window.location.reload();
                 return Promise.all([response.json(), response.headers])
+            } else if (response.status === 401) {
+                localStorage.removeItem('jwt');
+                localStorage.removeItem('user');
+                window.location.reload();
             } else {
                 return Promise.reject("")
             }
@@ -67,6 +74,10 @@ const Reserve = () => {
 
                 window.location.reload();
                 return Promise.all([response.json(), response.headers])
+            } else if (response.status === 401) {
+                localStorage.removeItem('jwt');
+                localStorage.removeItem('user');
+                window.location.reload();
             } else {
                 return Promise.reject("")
             }
@@ -88,6 +99,10 @@ const Reserve = () => {
 
                 window.location.reload();
                 return Promise.all([response.json(), response.headers])
+            } else if (response.status === 401) {
+                localStorage.removeItem('jwt');
+                localStorage.removeItem('user');
+                window.location.reload();
             } else {
                 return Promise.reject("")
             }
@@ -100,7 +115,6 @@ const Reserve = () => {
     return jwt === "" && user === null ? <Navigate to={"/"}/> : (
 
         <React.Fragment>
-            <Nav/>
 
             <div className="container-fluid py-4">
                 <div className="row">

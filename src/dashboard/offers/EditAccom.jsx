@@ -89,6 +89,10 @@ const EditAccom = () => {
             }).then((response) => {
                 if (response.status === 200) {
                     return Promise.all([response.json(), response.headers])
+                } else if (response.status === 401) {
+                    localStorage.removeItem('jwt');
+                    localStorage.removeItem('user');
+                    window.location.reload();
                 } else {
                     return Promise.reject("")
                 }
@@ -141,6 +145,10 @@ const EditAccom = () => {
         }).then((response) => {
             if (response.status === 200) {
                 return Promise.all([response.json(), response.headers])
+            } else if (response.status === 401) {
+                localStorage.removeItem('jwt');
+                localStorage.removeItem('user');
+                window.location.reload();
             } else {
                 return Promise.reject("")
             }
@@ -168,6 +176,10 @@ const EditAccom = () => {
         }).then((response) => {
             if (response.status === 200) {
                 return Promise.all([response.json(), response.headers])
+            } else if (response.status === 401) {
+                localStorage.removeItem('jwt');
+                localStorage.removeItem('user');
+                window.location.reload();
             } else {
                 return Promise.reject("")
             }

@@ -16,6 +16,7 @@ const ProfileCard = () => {
             method: "DELETE",
         });
         localStorage.removeItem('jwt');
+        localStorage.removeItem('user');
         window.location.reload()
 
     }

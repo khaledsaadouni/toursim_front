@@ -114,34 +114,36 @@ const Dashboard = () => {
                                 </Link>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link text-white " href="../pages/virtual-reality.html">
+                                <Link
+                                    className={`nav-link text-white   ${page === "programs" && "bg-gradient-primary"}`}
+                                    to={"/dashboard/programs"} style={{color: "white"}}>
                                     <div
                                         className="text-white text-center me-2 d-flex align-items-center justify-content-center">
                                         <i className="material-icons opacity-10">view_in_ar</i>
                                     </div>
                                     <span className="nav-link-text ms-1"> Programs</span>
-                                </a>
-                            </li>
-                            <li className="nav-item">
-                                <Link to={"/dashboard/profile"} style={{color: "white"}}>
-                                    <div className="nav-link text-white ">
-                                        <div
-                                            className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                                            <i className="material-icons opacity-10">person</i>
-                                        </div>
-                                        <span className="nav-link-text ms-1"> Profile </span>
-                                    </div>
                                 </Link>
                             </li>
                             <li className="nav-item">
-                                <Link to={"/dashboard/settings"} style={{color: "white"}}>
-                                    <div className="nav-link text-white ">
-                                        <div
-                                            className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                                            <i className="material-icons opacity-10">settings</i>
-                                        </div>
-                                        <span className="nav-link-text ms-1"> Settings </span>
+                                <Link
+                                    className={`nav-link text-white   ${page === "profile" && "bg-gradient-primary"}`}
+                                    to={"/dashboard/profile"} style={{color: "white"}}>
+                                    <div
+                                        className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                        <i className="material-icons opacity-10">person</i>
                                     </div>
+                                    <span className="nav-link-text ms-1"> Profile</span>
+                                </Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link
+                                    className={`nav-link text-white   ${page === "settings" && "bg-gradient-primary"}`}
+                                    to={"/dashboard/settings"} style={{color: "white"}}>
+                                    <div
+                                        className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                        <i className="material-icons opacity-10">settings</i>
+                                    </div>
+                                    <span className="nav-link-text ms-1"> Settings</span>
                                 </Link>
                             </li>
                         </ul>
