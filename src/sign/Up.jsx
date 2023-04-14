@@ -1,8 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { FormControlLabel, Radio, RadioGroup, Switch } from "@mui/material";
+import React, {useEffect, useRef, useState} from 'react';
+import {FormControlLabel, Radio, RadioGroup, Switch} from "@mui/material";
 import "./sign.css"
-import { useLocalState } from "../utils/UseLocalStorage";
-import { Navigate } from "react-router-dom";
+import {useLocalState} from "../utils/UseLocalStorage";
+import {Navigate} from "react-router-dom";
+
 const GET_TOKEN_URL = "/api/v1/auth/oAuth2Token"
 const REGISTER_URL = "/api/v1/auth/register"
 const REGISTER_URL_P = "/api/v1/auth/registerPartner"
@@ -127,14 +128,15 @@ const Up = () => {
         }
     };
     const handleLoginFacebook = async () => {
-        const response = await fetch('http://localhost:8080/oauth2/authorization/facebook?redirect_uri=http://localhost:3000/'); const data = await response.json();
-        const { token, user } = data;
+        const response = await fetch('http://localhost:8080/oauth2/authorization/facebook?redirect_uri=http://localhost:3000/');
+        const data = await response.json();
+        const {token, user} = data;
         console.log(`Token: ${token}`);
         console.log(`User: ${JSON.stringify(user)}`);
     }
     const handleLoginGoogle = async () => {
         const response = await fetch('http://localhost:8080/oauth2/authorization/google?redirect_uri=http://localhost:3000/');
-        //window.location.href = 'http://localhost:8080/oauth2/authorization/google?redirect_uri=http://localhost:3000/';
+        window.location.href = 'http://localhost:8080/oauth2/authorization/google?redirect_uri=http://localhost:3000/';
         const data = await response.json();
         const { token, user } = data;
         console.log(`Token: ${token}`);

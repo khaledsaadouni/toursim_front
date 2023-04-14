@@ -9,7 +9,6 @@ const Restaurants = () => {
 
 
     const [filtre, setFilter] = useState(false);
-    const items = ['item1', 'item2', 'item3', 'item4', 'item1', 'item2', 'item3', 'item4', 'item1', 'item2', 'item3', 'item4'];
 
     const [offers, setOffers] = useState(null)
     useEffect(() => {
@@ -143,7 +142,8 @@ const Restaurants = () => {
                                      data-columns="3">
 
                                     {offers !== null ? offers.map((item, index) => (
-                                        <Restaurant_list countreview={item.reviews.length} photos={item.photo}
+                                        <Restaurant_list id={item.id} countreview={item.reviews.length}
+                                                         photos={item.photo}
                                                          name={item.name} description={item.description}
                                                          reviews={calculateAverageRate(item.reviews)}/>
                                     )) : null}

@@ -14,6 +14,7 @@ import Profile from "./profile/Profile";
 import EventDetail from "./activities_events/Acitvity_detail";
 import Restaurant_Detail from "./restaurants/Restaurant_detail";
 import MyReservation from "./reservations/MyReservation";
+import ShopDetail from "./shops/Shop_Detail";
 
 function App() {
     return (
@@ -24,7 +25,7 @@ function App() {
                 <Route path="/accomodation/:id" element={<Accomodation_Detail/>}/>
                 <Route path="/event/:id" element={<EventDetail/>}/>
                 <Route path="/restoration/:id" element={<Restaurant_Detail/>}/>
-                <Route path="/shop/:id" element={<Restaurant_Detail/>}/>
+                <Route path="/shop/:id" element={<ShopDetail/>}/>
                 <Route path="/events_activities" element={<Activities/>}/>
                 <Route path="/restaurants" element={<Restaurants/>}/>
                 <Route path="/reservations" element={<MyReservation/>}/>
@@ -32,7 +33,7 @@ function App() {
                 <Route path="/destinations" element={<Destinations/>}/>
                 <Route path="/aboutUs" element={<AboutUs/>}/>
                 <Route path="/dashboard/:page/:id?" element={<Dashboard/>}/>
-                <Route path="/sign/:p" element={<Sign/>}/>
+                <Route path="/sign/:p/:token?" element={<Sign/>}/>
                 <Route path="/profile/:page" element={<Profile/>}/>
             </Routes>
         </React.Fragment>

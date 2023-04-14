@@ -1,5 +1,6 @@
 import React from 'react';
 import image from "../offer.png"
+import {Link} from "react-router-dom";
 
 const Restaurant_list = (props) => {
     const n = props.reviews;
@@ -16,15 +17,16 @@ const Restaurant_list = (props) => {
                     <a className="tour_image" href="#">
                         <img src={props.photos.length === 0 ? image : props.photos[0]} alt="French Autumn"/>
 
-                        <div className="tour_price ">
-                            Promo
-                        </div>
+                        {/*<div className="tour_price ">*/}
+                        {/*    Promo*/}
+                        {/*</div>*/}
 
                     </a>
                 </div>
 
                 <div className="two_third last">
-                    <a className="tour_link" href="#"><h3>{props.name}</h3></a>
+                    <a className="tour_link" href="#"><h3><Link to={`/restoration/${props.id}`}>{props.name}</Link></h3>
+                    </a>
                     <div className="tour_list_excerpt">
                         {props.description}
                     </div>

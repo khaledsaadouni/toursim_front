@@ -9,6 +9,7 @@ import image from "../avatar.jpg";
 import formatDate from "../utils/DateFormat";
 import {useLocalState} from "../utils/UseLocalStorage";
 import calculateAverageRate from "../utils/ReviewStarsCounter";
+import daysCount from "../utils/DaysCount";
 
 const Acommodation_Detail = () => {
     const {id} = useParams();
@@ -121,12 +122,12 @@ const Acommodation_Detail = () => {
     const [count_d, setCount_d] = useState();
     const [redirect, setRedirect] = useState(false);
     const handleReserve = async () => {
-
+        const d = daysCount(date, count_d)
         const reqBody = {
             "date": date,
             "count_people": count_pep,
             "checkout": count_d,
-            'price': count_d * offer.price
+            'price': offer.price * d
         };
         await fetch(`/api/v1/reservation/add/${user.id}/${offer !== null ? offer.id : -1}`, {
             headers: {
@@ -233,7 +234,7 @@ const Acommodation_Detail = () => {
                                                     </span>
                                                 </p>
                                                 <p>
-                                                    <input type="submit" value="Book This Tour" onClick={handleReserve}
+                                                    <input type="submit" value="Book" onClick={handleReserve}
                                                            className="wpcf7-form-control wpcf7-submit"/>
                                                 </p>
                                                 <div className="wpcf7-response-output wpcf7-display-none">

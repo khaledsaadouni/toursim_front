@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import { useLocalState } from "../utils/UseLocalStorage";
-import { Link, Navigate } from "react-router-dom";
-import { Switch } from "@mui/material";
+import React, {useEffect, useState} from 'react';
+import {useLocalState} from "../utils/UseLocalStorage";
+import {Link, Navigate} from "react-router-dom";
+import {Switch} from "@mui/material";
+
 const REGISTER_URL = "/api/v1/auth/authenticate"
 const In = () => {
     const [error, setError] = useState("");
@@ -10,6 +11,30 @@ const In = () => {
     const [jwt, setJwt] = useLocalState("", "jwt");
     const [user, setUser] = useLocalState(null, "user");
 
+
+    useEffect(() => {
+        const queryParams = new URLSearchParams(window.location.search);
+        const token = queryParams.get('token');
+
+        const newuser = queryParams.get('user');
+
+        if (!jwt && !user && token && newuser) {
+            const userObj = {};
+            userObj.id = parseInt(newuser.substring(newuser.indexOf('id=') + 3, newuser.indexOf(',')), 10);
+            userObj.lastname = newuser.substring(newuser.indexOf('lastname=') + 9, newuser.indexOf(',', newuser.indexOf('lastname=')));
+            userObj.firstname = newuser.substring(newuser.indexOf('firstname=') + 10, newuser.indexOf(',', newuser.indexOf('firstname=')));
+            userObj.phone = parseInt(newuser.substring(newuser.indexOf('phone=') + 6, newuser.indexOf(',', newuser.indexOf('phone='))), 10);
+            userObj.photo = newuser.substring(newuser.indexOf('photo=') + 6, newuser.indexOf(',', newuser.indexOf('photo=')));
+            userObj.email = newuser.substring(newuser.indexOf('email=') + 6, newuser.indexOf(',', newuser.indexOf('email=')));
+            userObj.birthday = newuser.substring(newuser.indexOf('birthday=') + 9, newuser.indexOf(',', newuser.indexOf('birthday=')));
+            userObj.role = newuser.substring(newuser.indexOf('role=') + 5, newuser.indexOf(')', newuser.indexOf('role=')));
+            console.log("obj", userObj);
+            setJwt(token);
+            console.log(jwt)
+            setUser(userObj);
+            console.log(user)
+        }
+    }, []);
 
     const handleLoginFacebook = async () => {
         window.location.href = 'http://localhost:8080/oauth2/authorization/facebook?redirect_uri=http://localhost:3000/';

@@ -145,7 +145,7 @@ const MyReservation = () => {
                                                 <span className="mb-2 text-xs">Date: <span
                                                     className="text-dark font-weight-bold ms-sm-2">{item.date} </span></span>
                                                 {item.offer.generic_Type === "accomodation" ? (
-                                                    <span className="mb-2 text-xs">Days Number: <span
+                                                    <span className="mb-2 text-xs">Check Out Date: <span
                                                         className="text-dark font-weight-bold ms-sm-2"> {item.checkout} </span></span>) : null}
                                             </div>
                                             <div className="ms-auto text-end">

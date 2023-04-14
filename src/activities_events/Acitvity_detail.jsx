@@ -221,7 +221,7 @@ const EventDetail = () => {
                                                     </p>
                                                 </p>
                                                 <p>
-                                                    <input type="submit" value="Book This Tour" onClick={handleReserve}
+                                                    <input type="submit" value="Book" onClick={handleReserve}
                                                            className="wpcf7-form-control wpcf7-submit"/>
                                                 </p>
                                                 <div className="wpcf7-response-output wpcf7-display-none">
@@ -282,7 +282,7 @@ const EventDetail = () => {
                                 <div className="one_fourth" style={{fontSize: "30px"}}>
                                     <i className="bi bi-people-fill"></i>
                                     <div className="tour_attribute_content">
-                                        Availability  &nbsp; {offer != null ? offer.capacity : null}
+                                        &nbsp; {offer != null ? offer.capacity : null}
                                     </div>
                                 </div>
                                 <div className="one_fourth" style={{fontSize: "30px"}}>

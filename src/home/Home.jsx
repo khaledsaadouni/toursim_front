@@ -1,36 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import "./Home.css"
 import image7 from "./image7.jpg"
 import NavBar from "../navBar/NavBar";
 import image1 from "./Map-Marker-300x300.png"
 import image2 from "./Worldwide-Location-300x300.png"
 import image3 from "./Hot-Air-Balloon-300x300.png"
-import { Link } from "react-router-dom";
-import { useLocalState } from "../utils/UseLocalStorage";
+import {Link} from "react-router-dom";
+import {useLocalState} from "../utils/UseLocalStorage";
 
 const MyComponent = () => {
     const [jwt, setJwt] = useLocalState("", "jwt");
     const [user, setUser] = useLocalState(null, "user");
-    useEffect(() => {
 
-        const queryParams = new URLSearchParams(window.location.search);
-        const token = queryParams.get('token');
-        const newuser = queryParams.get('user');
-        if (!jwt && !user && token && newuser) {
-            const userObj = {};
-            userObj.id = parseInt(newuser.substring(newuser.indexOf('id=') + 3, newuser.indexOf(',')), 10);
-            userObj.lastname = newuser.substring(newuser.indexOf('lastname=') + 9, newuser.indexOf(',', newuser.indexOf('lastname=')));
-            userObj.firstname = newuser.substring(newuser.indexOf('firstname=') + 10, newuser.indexOf(',', newuser.indexOf('firstname=')));
-            userObj.phone = parseInt(newuser.substring(newuser.indexOf('phone=') + 6, newuser.indexOf(',', newuser.indexOf('phone='))), 10);
-            userObj.photo = newuser.substring(newuser.indexOf('photo=') + 6, newuser.indexOf(',', newuser.indexOf('photo=')));
-            userObj.email = newuser.substring(newuser.indexOf('email=') + 6, newuser.indexOf(',', newuser.indexOf('email=')));
-            userObj.birthday = newuser.substring(newuser.indexOf('birthday=') + 9, newuser.indexOf(',', newuser.indexOf('birthday=')));
-            userObj.role = newuser.substring(newuser.indexOf('role=') + 5, newuser.indexOf(')', newuser.indexOf('role=')));
-            console.log("obj", userObj);
-            setJwt(token);
-            setUser(userObj);
-        }
-    }, []);
 
     return (
         <React.Fragment>

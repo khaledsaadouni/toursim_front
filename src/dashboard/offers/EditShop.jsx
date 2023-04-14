@@ -68,7 +68,8 @@ const EditShop = () => {
             'destination': state,
             'closing_hour': close,
             'opening_hour': open,
-            'google_map': googlemap
+            'google_map': googlemap,
+            'photo': inputs2
 
 
         };
@@ -231,6 +232,20 @@ const EditShop = () => {
                                                             value={description}
                                                             onChange={(event) => setDescription(event.target.value)}
                                                             className="form-control"/>
+                                                    </div>
+                                                    <div className="input-group input-group-outline my-3">
+                                                        <label> Opening Hour </label>
+                                                        <input type="time"
+                                                               value={open}
+                                                               onChange={(event) => setOpen(event.target.value)}
+                                                               className="form-control"/>
+                                                    </div>
+                                                    <div className="input-group input-group-outline my-3">
+                                                        <label> Closing Hour </label>
+                                                        <input type="time"
+                                                               value={close}
+                                                               onChange={(event) => setClose(event.target.value)}
+                                                               className="form-control"/>
                                                     </div>
                                                     <div className="input-group input-group-outline my-3">
                                                         <label> Location </label>
