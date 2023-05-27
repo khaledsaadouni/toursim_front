@@ -1,6 +1,6 @@
 import React from 'react';
-import {Link} from "react-router-dom";
-import {useLocalState} from "../utils/UseLocalStorage";
+import { Link } from "react-router-dom";
+import { useLocalState } from "../utils/UseLocalStorage";
 import image from "../avatar.jpg";
 
 
@@ -74,16 +74,16 @@ const NavCom = (props) => {
                             </li>
                             {jwt ? (
                                 <li className="menu-item menu-item-has-children arrow"
-                                    style={{display: "flex", alignItems: "center"}}>
+                                    style={{ display: "flex", alignItems: "center" }}>
                                     {user.photo !== null ? (
-                                        <img src={user.photo} height="40px" width="40px"
-                                             style={{borderRadius: "100%"}}/>) : (
+                                        <img src={encodeURI(user.photo)} height="40px" width="40px"
+                                            style={{ borderRadius: "100%" }} />) : (
                                         <img src={image} height="40px" width="40px"
-                                             style={{borderRadius: "100%"}}/>)}
+                                            style={{ borderRadius: "100%" }} />)}
 
                                     <a> {user.firstname}</a>
 
-                                    <ul className="sub-menu" style={{marginTop: "150px"}}>
+                                    <ul className="sub-menu" style={{ marginTop: "150px" }}>
                                         <li className="menu-item">
                                             <Link
                                                 to={user.role === "Client" ? "/profile/main" : "/dashboard/profile"}>Profile </Link>

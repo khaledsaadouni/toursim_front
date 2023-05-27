@@ -1,21 +1,22 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import image from "../avatar.jpg";
 import Slider from "react-slick";
 import calculateAverageRate from "../utils/ReviewStarsCounter";
 import formatDate from "../utils/DateFormat";
-import {Navigate, useParams} from "react-router-dom";
-import {useLocalState} from "../utils/UseLocalStorage";
+import { Navigate, useParams } from "react-router-dom";
+import { useLocalState } from "../utils/UseLocalStorage";
 import Nav from "../navBar/Nav";
-
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import "../index.css"
 const EventDetail = () => {
-    const {id} = useParams();
+    const { id } = useParams();
     const [offer, setOffer] = useState(null);
     const [n, setN] = useState(-1);
     const [elements, setElements] = useState([]);
     const [n1, setN1] = useState(-1);
     const [rate, setRate] = useState(-1);
     const [comment, setComment] = useState("");
-
+    const [position, setPosition] = useState(null);
     const [jwt, setJwt] = useLocalState("", "jwt");
 
     const [user, setUser] = useLocalState(null, "user");
@@ -52,16 +53,34 @@ const EventDetail = () => {
                     localStorage.removeItem('user');
                     window.location.reload();
                 } else {
+
                     return Promise.reject("")
                 }
             })
                 .then(([data]) => {
                     setOffer(data);
+                    // extarction of the postion 
+                    if (data.google_map != null) {
+                        console.log("here")
+                        const link = data.google_map;
+                        const url = new URL(link);
+                        const regex = /@(-?\d+\.\d+),(-?\d+\.\d+)/;
+                        const match = url.href.match(regex);
+                        if (match) {
+                            const latitude = parseFloat(match[1]);
+                            const longitude = parseFloat(match[2]);
+                            setPosition([latitude, longitude]);
+                            console.log("hoo", latitude, longitude);
+                        } else {
+                            console.log("Unable to extract latitude and longitude from link.");
+                        }
+                    }
                 }).catch(() => {
                 });
         };
         asyncFn();
     }, []);
+
     const handlePostReview = async () => {
         const reqBody = {
             'rate': rate,
@@ -160,10 +179,12 @@ const EventDetail = () => {
         slidesToShow: 1,
         slidesToScroll: 1
     };
-    return redirect === true ? <Navigate to={"/reservations"}/> : (
+    const positionn = [51.505, -0.09]
+
+    return redirect === true ? <Navigate to={"/reservations"} /> : (
         <React.Fragment>
-            <Nav/>
-            <div id="page_content_wrapper" className="hasbg " style={{paddingTop: "100px"}}>
+            <Nav />
+            <div id="page_content_wrapper" className="hasbg " style={{ paddingTop: "100px" }}>
                 <div className="inner">
                     <div className="inner_wrapper">
                         <div className="sidebar_wrapper">
@@ -173,7 +194,7 @@ const EventDetail = () => {
                             <div className="sidebar">
 
                                 <div className="content"
-                                     style={{boxShadow: '0px 0px 10px 5px rgba(0, 0, 0, 0.3)', borderRadius: "5px"}}>
+                                    style={{ boxShadow: '0px 0px 10px 5px rgba(0, 0, 0, 0.3)', borderRadius: "5px" }}>
 
                                     <div style={{
                                         minHeight: "50px",
@@ -206,29 +227,29 @@ const EventDetail = () => {
                                             </div>
 
                                             <div action="#" method="post" className="wpcf7-form"
-                                                 noValidate="novalidate">
+                                                noValidate="novalidate">
                                                 <p>
                                                     <p>
                                                         <label> Number of Persons </label>
-                                                        <br/>
+                                                        <br />
                                                         <span className="wpcf7-form-control-wrap text-237">
-                                                        <input type="number"
-                                                               value={count_pep}
-                                                               onChange={(event) => setCount_pep(event.target.value)}
-                                                               className="form-control "
-                                                               placeholder="Persons"/>
-                                                    </span>
+                                                            <input type="number"
+                                                                value={count_pep}
+                                                                onChange={(event) => setCount_pep(event.target.value)}
+                                                                className="form-control "
+                                                                placeholder="Persons" />
+                                                        </span>
                                                     </p>
                                                 </p>
                                                 <p>
                                                     <input type="submit" value="Book" onClick={handleReserve}
-                                                           className="wpcf7-form-control wpcf7-submit"/>
+                                                        className="wpcf7-form-control wpcf7-submit" />
                                                 </p>
                                                 <div className="wpcf7-response-output wpcf7-display-none">
                                                     <div className="row">
                                                         <div className="col-3"><img
                                                             src={offer !== null && offer.partner.photo != null ? offer.partner.photo : image}
-                                                            style={{borderRadius: "100%"}}/></div>
+                                                            style={{ borderRadius: "100%" }} /></div>
                                                         <div className="col">
                                                             {offer !== null ? offer.partner.firstname : null} &nbsp; {offer !== null ? offer.partner.lastname : null}
                                                         </div>
@@ -256,7 +277,7 @@ const EventDetail = () => {
                                 </div>
 
                             </div>
-                            <br className="clear"/>
+                            <br className="clear" />
 
                             <div className="sidebar_bottom"></div>
                         </div>
@@ -266,26 +287,26 @@ const EventDetail = () => {
                             <h1>{offer != null ? offer.name : null}</h1>
                             <h5><i
                                 className="bi bi-geo-alt-fill"></i> &nbsp; {offer != null && offer.emplacement !== null ?
-                                <span>{offer.emplacement},</span> : null} {offer != null ? offer.destination : null}
+                                    <span>{offer.emplacement},</span> : null} {offer != null ? offer.destination : null}
                             </h5>
                             <h6>
                                 <i className="bi bi-calendar-date"></i> &nbsp;
                                 {offer != null ? offer.eventDate : null}</h6>
                             <div className="single_tour_attribute_wrapper themeborder ">
-                                <div className="one_fourth" style={{fontSize: "30px"}}>
+                                <div className="one_fourth" style={{ fontSize: "30px" }}>
                                     <i className="bi bi-lightning-charge"></i>
                                     <div className="tour_attribute_content">
                                         {offer != null ? offer.type : null}
                                     </div>
                                 </div>
 
-                                <div className="one_fourth" style={{fontSize: "30px"}}>
+                                <div className="one_fourth" style={{ fontSize: "30px" }}>
                                     <i className="bi bi-people-fill"></i>
                                     <div className="tour_attribute_content">
                                         &nbsp; {offer != null ? offer.capacity : null}
                                     </div>
                                 </div>
-                                <div className="one_fourth" style={{fontSize: "30px"}}>
+                                <div className="one_fourth" style={{ fontSize: "30px" }}>
                                     <i className="bi bi-hourglass-split"></i>
                                     <div className="tour_attribute_content">
                                         {offer != null ? offer.duration : null} &nbsp; Hours
@@ -294,10 +315,10 @@ const EventDetail = () => {
 
                             </div>
 
-                            <br className="clear"/>
+                            <br className="clear" />
                             {offer !== null ? (
                                 <Slider {...settings}
-                                        style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                                    style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                     {offer.photo != null ? offer.photo.map((item, index) => (
                                         <div>
                                             <div style={{
@@ -305,7 +326,7 @@ const EventDetail = () => {
                                                 justifyContent: 'center',
                                                 alignItems: 'center'
                                             }}>
-                                                <img style={{position: "relative"}} src={item} alt="image1"/>
+                                                <img style={{ position: "relative" }} src={item} alt="image1" />
                                             </div>
                                         </div>
                                     )) : null}
@@ -359,44 +380,55 @@ const EventDetail = () => {
                                             <div className="comment" id="comment-20">
                                                 <div className="gravatar">
                                                     <img src={item.user.photo != null ? item.user.photo : image}
-                                                         width="150" height="150"
-                                                         alt="Marie Argeris"
-                                                         className="avatar avatar-60 wp-user-avatar wp-user-avatar-60 alignnone photo"/>
-
+                                                        width="150" height="150"
+                                                        alt="Marie Argeris"
+                                                        className="avatar avatar-60 wp-user-avatar wp-user-avatar-60 alignnone photo" />
                                                 </div>
-
-
                                                 <div className="right ">
                                                     <h7>{item.user.firstname} {item.user.lastname}</h7>
                                                     {item.rate !== -1 ? (<span>{item.rate}/10</span>) : null}
                                                     {user !== null && item.user.id === user.id ? (
                                                         <a rel='nofollow' className='comment-reply-link btn-danger'
-                                                           href=""
-                                                           onClick={() => handleDeleteReview(item.id)}> Delete </a>) : null}
+                                                            href=""
+                                                            onClick={() => handleDeleteReview(item.id)}> Delete </a>) : null}
                                                     <div className="comment_date">{formatDate(item.creationDate)}</div>
-                                                    <div className="comment_text"/>
+                                                    <div className="comment_text" />
                                                     <p>
                                                         {item.comment}
                                                     </p>
 
                                                 </div>
                                             </div>
-                                            <br className="clear"/>
+                                            <br className="clear" />
                                         </div>
                                     )) : null}
                                 </div>) : null}
                         </div>
-
-
-                        <br className="clear"/>
-
-
+                        <br className="clear" />
                     </div>
-                    <br className="clear"/>
+                    <br className="clear" />
                 </div>
 
-
-                <div style={{height: "10px"}}></div>
+                <h5><i className="bi bi-geo-alt-fill"></i> &nbsp; {offer != null && offer.emplacement != null ?
+                    <span>
+                        <span>{offer.emplacement} , {offer != null ? offer.destination : null}</span>
+                        {offer.google_map != null ? <div >
+                            <MapContainer center={position} zoom={13} scrollWheelZoom={false}>
+                                <TileLayer
+                                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                />
+                                <Marker position={position}>
+                                    <Popup>
+                                        A pretty CSS3 popup. <br /> Easily customizable.
+                                    </Popup>
+                                </Marker>
+                            </MapContainer>,
+                        </div> : null}
+                    </span>
+                    : null}
+                </h5>
+                <div style={{ height: "10px" }}></div>
                 {jwt !== "" && user !== null ? (
                     <div id="respond" className="comment-respond">
                         <h3 id="reply-title" className="comment-reply-title">Write A Review </h3>
@@ -405,21 +437,21 @@ const EventDetail = () => {
                             <p className="comment-form-rating">
                                 <label htmlFor="accommodation_rating">Rate</label>
                                 <span className="commentratingbox">
-                        <select id="accomodation_rating" name="accomodation_rating"
-                                onChange={(event) => setRate(event.target.value)}>
-                            <option value="-1"></option>
-                            <option value="0">0</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                        </select>
+                                    <select id="accomodation_rating" name="accomodation_rating"
+                                        onChange={(event) => setRate(event.target.value)}>
+                                        <option value="-1"></option>
+                                        <option value="0">0</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                    </select>
                                     &nbsp; /10 </span>
                             </p>
 
@@ -427,12 +459,12 @@ const EventDetail = () => {
                             <p className="comment-form-comment">
                                 <label>Comment</label>
                                 <textarea id="comment" name="comment" cols="45" rows="8"
-                                          onChange={(event) => setComment(event.target.value)}
-                                          required="required"></textarea>
+                                    onChange={(event) => setComment(event.target.value)}
+                                    required="required"></textarea>
                             </p>
                             <p className="form-submit">
                                 <input name="submit" type="submit" id="submit" className="submit" value="Post Comment"
-                                       onClick={handlePostReview}/>
+                                    onClick={handlePostReview} />
                             </p>
                         </div>
                     </div>
