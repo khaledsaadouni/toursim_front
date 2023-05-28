@@ -37,9 +37,9 @@ const EditEvent = () => {
 
     };
 
-    const handleInputChange1 = (index, event) => {
+    const handleInputChange1 = (index, value) => {
         const newInputs = [...inputs1];
-        newInputs[index] = event.target.value;
+        newInputs[index] = value;
         setInputs1(newInputs);
     };
 
@@ -354,7 +354,7 @@ const EditEvent = () => {
                                                             <input
                                                                 className="form-control"
                                                                 value={value}
-                                                                onChange={(event) => handleInputChange1(index, event)}
+                                                                onChange={(event) => handleInputChange1(index, event.target.value)}
                                                             />
                                                             <button style={{
                                                                 backgroundColor: "white",

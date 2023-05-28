@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link } from "react-router-dom";
-import { useLocalState } from "../utils/UseLocalStorage";
+import {Link} from "react-router-dom";
+import {useLocalState} from "../utils/UseLocalStorage";
 import image from "../avatar.jpg";
 
 
@@ -77,9 +77,9 @@ const NavCom = (props) => {
                                     style={{ display: "flex", alignItems: "center" }}>
                                     {user.photo !== null ? (
                                         <img src={encodeURI(user.photo)} height="40px" width="40px"
-                                            style={{ borderRadius: "100%" }} />) : (
+                                             style={{borderRadius: "100%", objectFit: "contain"}}/>) : (
                                         <img src={image} height="40px" width="40px"
-                                            style={{ borderRadius: "100%" }} />)}
+                                             style={{borderRadius: "100%", objectFit: "contain"}}/>)}
 
                                     <a> {user.firstname}</a>
 

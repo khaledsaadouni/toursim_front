@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import image from "../avatar.jpg";
 import Slider from "react-slick";
 import calculateAverageRate from "../utils/ReviewStarsCounter";
 import formatDate from "../utils/DateFormat";
-import { Navigate, useParams } from "react-router-dom";
-import { useLocalState } from "../utils/UseLocalStorage";
+import {Navigate, useParams} from "react-router-dom";
+import {useLocalState} from "../utils/UseLocalStorage";
 import Nav from "../navBar/Nav";
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import {MapContainer, Marker, Popup, TileLayer} from 'react-leaflet';
 import "../index.css"
+
 const EventDetail = () => {
     const { id } = useParams();
     const [offer, setOffer] = useState(null);
@@ -399,31 +400,33 @@ const EventDetail = () => {
 
                                                 </div>
                                             </div>
-                                            <br className="clear" />
+                                            <br className="clear"/>
                                         </div>
                                     )) : null}
                                 </div>) : null}
                         </div>
-                        <br className="clear" />
+                        <br className="clear"/>
                     </div>
-                    <br className="clear" />
+                    <br className="clear"/>
                 </div>
 
-                <h5><i className="bi bi-geo-alt-fill"></i> &nbsp; {offer != null && offer.emplacement != null ?
+                <h5>
+
                     <span>
-                        <span>{offer.emplacement} , {offer != null ? offer.destination : null}</span>
-                        {offer.google_map != null ? <div >
-                            <MapContainer center={position} zoom={13} scrollWheelZoom={false}>
-                                <TileLayer
-                                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                />
-                                <Marker position={position}>
-                                    <Popup>
-                                        A pretty CSS3 popup. <br /> Easily customizable.
-                                    </Popup>
-                                </Marker>
-                            </MapContainer>,
+                        <span>Location</span>
+                        {offer.google_map != null ?
+                            <div>
+                                <MapContainer center={position} zoom={13} scrollWheelZoom={false}>
+                                    <TileLayer
+                                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                    />
+                                    <Marker position={position}>
+                                        <Popup>
+                                            A pretty CSS3 popup. <br/> Easily customizable.
+                                        </Popup>
+                                    </Marker>
+                                </MapContainer>
                         </div> : null}
                     </span>
                     : null}

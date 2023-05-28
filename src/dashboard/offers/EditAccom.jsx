@@ -55,22 +55,19 @@ const EditAccom = () => {
         setInputs(newInputs);
 
     };
-    const handleInputChange1 = (index, event) => {
+    const handleInputChange1 = (index, value) => {
         const newInputs = [...inputs1];
-        newInputs[index] = event.target.value;
+        newInputs[index] = value;
         setInputs1(newInputs);
-        setRegulations(inputs1);
     };
 
     const handleAddInput1 = () => {
         setInputs1([...inputs1, ""]);
-        setRegulations(inputs1);
     };
     const handleDeleteInput1 = (index) => {
         const newInputs = [...inputs1];
         newInputs.splice(index, 1);
         setInputs1(newInputs);
-        setRegulations(inputs1);
     };
 
     const handleDeleteInput2 = (index) => {
@@ -128,7 +125,7 @@ const EditAccom = () => {
             'description': description,
             'emplacement': location,
             'destination': state,
-            'regulations': regulations,
+            'regulations': inputs1,
             'socialMediaLink': inputs,
             'comodityList': checkedValues,
             'photo': inputs2,
@@ -364,7 +361,7 @@ const EditAccom = () => {
                                                             <input
                                                                 className="form-control"
                                                                 value={value}
-                                                                onChange={(event) => handleInputChange1(index, event)}
+                                                                onChange={(event) => handleInputChange1(index, event.target.value)}
                                                             />
                                                             <button style={{
                                                                 backgroundColor: "white",

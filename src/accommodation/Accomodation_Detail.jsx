@@ -10,6 +10,7 @@ import formatDate from "../utils/DateFormat";
 import {useLocalState} from "../utils/UseLocalStorage";
 import calculateAverageRate from "../utils/ReviewStarsCounter";
 import daysCount from "../utils/DaysCount";
+import {MapContainer, Marker, Popup, TileLayer} from "react-leaflet";
 
 const Acommodation_Detail = () => {
     const {id} = useParams();
@@ -17,6 +18,7 @@ const Acommodation_Detail = () => {
     const [rate, setRate] = useState(-1);
     const [comment, setComment] = useState("");
 
+    const [position, setPosition] = useState(null);
     const [jwt, setJwt] = useLocalState("", "jwt");
 
     const [user, setUser] = useLocalState(null, "user");
@@ -56,6 +58,21 @@ const Acommodation_Detail = () => {
             })
                 .then(([data]) => {
                     setOffer(data);
+                    if (data != null && data.google_map != null) {
+                        console.log("here")
+                        const link = data.google_map;
+                        const url = new URL(link);
+                        const regex = /@(-?\d+\.\d+),(-?\d+\.\d+)/;
+                        const match = url.href.match(regex);
+                        if (match) {
+                            const latitude = parseFloat(match[1]);
+                            const longitude = parseFloat(match[2]);
+                            setPosition([latitude, longitude]);
+                            console.log("hoo", latitude, longitude);
+                        } else {
+                            console.log("Unable to extract latitude and longitude from link.");
+                        }
+                    }
                 }).catch(() => {
                 });
         };
@@ -185,11 +202,11 @@ const Acommodation_Detail = () => {
                                             background: "black",
                                             color: "white",
                                             lineHeight: "50px",
-                                        padding: " 0 15px 0 15px",
-                                        boxSizing: " border-box",
-                                        borderTopLeftRadius: " 5px",
-                                        borderTopRightRadius: " 5px"
-                                    }}>
+                                            padding: " 0 15px 0 15px",
+                                            boxSizing: " border-box",
+                                            borderTopLeftRadius: " 5px",
+                                            borderTopRightRadius: " 5px"
+                                        }}>
                                             <div className="single_tour_price">
                                                 {/*<span className="normal_price">*/}
                                                 {/*  $6,700*/}
@@ -199,72 +216,79 @@ const Acommodation_Detail = () => {
                                             <div className="single_tour_per_person">
                                                 Per Night
                                             </div>
-                                    </div>
+                                        </div>
 
-                                    <div className="single_tour_booking_wrapper themeborder contact_form7">
+                                        <div className="single_tour_booking_wrapper themeborder contact_form7">
 
-                                        <div role="form" className="wpcf7" id="wpcf7-f142-o1" lang="en-US" dir="ltr">
+                                            <div role="form" className="wpcf7" id="wpcf7-f142-o1" lang="en-US"
+                                                 dir="ltr">
 
 
-                                            <div className="screen-reader-response">
+                                                <div className="screen-reader-response">
 
-                                            </div>
+                                                </div>
 
-                                            <div action="#" method="post" className="wpcf7-form"
-                                                 noValidate="novalidate">
-                                                <p>
-                                                    <label> Reservation Date </label>
-                                                    <br/>
-                                                    <span className="wpcf7-form-control-wrap text-237">
+                                                <div action="#" method="post" className="wpcf7-form"
+                                                     noValidate="novalidate">
+                                                    <p>
+                                                        <label> Reservation Date </label>
+                                                        <br/>
+                                                        <span className="wpcf7-form-control-wrap text-237">
                                                         <input
                                                             value={date}
                                                             type="date"
                                                             onChange={(event) => setDate(event.target.value)}
                                                             className="form-control "/>
                                                     </span>
-                                                </p>
-                                                <p>
-                                                    <label> Check Out Date </label>
-                                                    <br/>
-                                                    <span className="wpcf7-form-control-wrap text-237">
+                                                    </p>
+                                                    <p>
+                                                        <label> Check Out Date </label>
+                                                        <br/>
+                                                        <span className="wpcf7-form-control-wrap text-237">
                                                         <input type="date"
                                                                value={count_d}
                                                                onChange={(event) => setCount_d(event.target.value)}
                                                                className="form-control "/>
                                                     </span>
-                                                </p>
-                                                <p>
-                                                    <input type="submit" value="Book" onClick={handleReserve}
-                                                           className="wpcf7-form-control wpcf7-submit"/>
-                                                </p>
-                                                <div className="wpcf7-response-output wpcf7-display-none">
-                                                    <div className="row">
-                                                        <div className="col-3"><img
-                                                            src={offer !== null && offer.partner.photo != null ? offer.partner.photo : image}
-                                                            style={{borderRadius: "100%"}}/></div>
-                                                        <div className="col">
-                                                            {offer !== null ? offer.partner.firstname : null} &nbsp; {offer !== null ? offer.partner.lastname : null}
+                                                    </p>
+                                                    <p>
+                                                        <input type="submit" value="Book" onClick={handleReserve}
+                                                               className="wpcf7-form-control wpcf7-submit"/>
+                                                    </p>
+                                                    <div className="wpcf7-response-output wpcf7-display-none">
+                                                        <div className="row">
+                                                            <div className="col">
+                                                                <img
+                                                                    src={offer !== null && offer.partner.photo != null ? offer.partner.photo : image}
+                                                                    height="40px" width="40px"
+                                                                    style={{
+                                                                        borderRadius: "100%",
+                                                                        objectFit: "contain"
+                                                                    }}/>
+                                                            </div>
+                                                            <div className="col">
+                                                                {offer !== null ? offer.partner.firstname : null} &nbsp; {offer !== null ? offer.partner.lastname : null}
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div className="row">
-                                                        <div className="col-3"></div>
-                                                        <div className="col"><i
-                                                            className="bi bi-envelope"></i> &nbsp;  {offer !== null ? offer.partner.email : null}
-                                                        </div>
-                                                    </div>
-                                                    {offer !== null && offer.partner.phone != 0 ? (
                                                         <div className="row">
                                                             <div className="col-3"></div>
                                                             <div className="col"><i
-                                                                className="bi bi-telephone"></i> &nbsp;  {offer.partner.phone}
+                                                                className="bi bi-envelope"></i> &nbsp;  {offer !== null ? offer.partner.email : null}
                                                             </div>
                                                         </div>
-                                                    ) : null}
-                                                </div>
+                                                        {offer !== null && offer.partner.phone != 0 ? (
+                                                            <div className="row">
+                                                                <div className="col-3"></div>
+                                                                <div className="col"><i
+                                                                    className="bi bi-telephone"></i> &nbsp;  {offer.partner.phone}
+                                                                </div>
+                                                            </div>
+                                                        ) : null}
+                                                    </div>
 
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
 
                                     </div>
 
@@ -324,6 +348,26 @@ const Acommodation_Detail = () => {
 
 
                             </div>
+                            <h5>
+
+                                <span>
+                                    <span>Location</span>
+                                    {offer != null && offer.google_map != null ? <div>
+                                        <MapContainer center={position} zoom={13} scrollWheelZoom={false}>
+                                            <TileLayer
+                                                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                            />
+                                            <Marker position={position}>
+                                                <Popup>
+                                                    A pretty CSS3 popup. <br/> Easily customizable.
+                                                </Popup>
+                                            </Marker>
+                                        </MapContainer>
+                                    </div> : null}
+                            </span>
+
+                            </h5>
                             {offer !== null && offer.regulations !== null ? (
                                 <div className="single_tour_content">
                                     <h4 className="p1">Regulations</h4>
