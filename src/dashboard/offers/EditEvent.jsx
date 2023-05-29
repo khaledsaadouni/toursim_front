@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useLocalState} from "../../utils/UseLocalStorage";
 import {Navigate, useParams} from "react-router-dom";
+import ClipLoader from 'react-spinners/ClipLoader';
 
 const EditEvent = () => {
 
@@ -8,6 +9,7 @@ const EditEvent = () => {
     const [jwt, setJwt] = useLocalState("", "jwt");
     const [user, setUser] = useLocalState(null, "user");
     const [redirect, setRedirect] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [name, setName] = useState("");
     const [type, setType] = useState("");
     const [price, setPrice] = useState("");
@@ -139,6 +141,7 @@ const EditEvent = () => {
     const [error, setError] = useState("");
     const [file, setFile] = useState(null);
     const handleFileChange = (event) => {
+        setError("")
         setFile(event.target.files[0]);
     };
 
@@ -146,30 +149,37 @@ const EditEvent = () => {
 
         const formData = new FormData();
         formData.append("file", file);
-
-        await fetch(`/api/v1/photo/${id}/restoration${user.email}/event`, {
-            headers: {
-                Authorization: `Bearer ${jwt}`
-            },
-            method: "POST",
-            body: formData
-        }).then((response) => {
-            if (response.status === 200) {
-                return Promise.all([response.json(), response.headers])
-            } else if (response.status === 401) {
+        if (file != null) {
+            setLoading(false)
+            await fetch(`/api/v1/photo/${id}/restoration${user.email}/event`, {
+                headers: {
+                    Authorization: `Bearer ${jwt}`
+                },
+                method: "POST",
+                body: formData
+            }).then((response) => {
+                if (response.status === 200) {
+                    return Promise.all([response.json(), response.headers])
+                } else if (response.status === 401) {
                 localStorage.removeItem('jwt');
                 localStorage.removeItem('user');
                 window.location.reload();
             } else {
                 return Promise.reject("")
-            }
-        })
-            .then(() => {
-                setError("")
-                window.location.reload();
-            }).catch(() => {
-                setError("File's size is too big , Please Try Again")
-            });
+                }
+            })
+                .then(() => {
+                    setError("")
+                    setLoading(true)
+                    window.location.reload();
+                }).catch(() => {
+
+                    setLoading(true)
+                    setError("File's size is too big , Please Try Again")
+                });
+        } else {
+            setError("Please select a file")
+        }
     };
 
     return redirect ? <Navigate to={"/dashboard/offers"}/> : (
@@ -215,13 +225,24 @@ const EditEvent = () => {
                                                                         onClick={handleUpload}>Upload
                                                                 </button>
                                                             </div>
+                                                            <div className="col">
+                                                                <div hidden={loading} style={{
+                                                                    width: '50px',
+                                                                    margin: 'auto',
+                                                                    display: 'block'
+                                                                }}>
+                                                                    <ClipLoader color="#bb3a41" size={30}/>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                         <div className="h-100" style={{color: "darkred"}}
                                                              hidden={error === ""}>
                                                             {error}
                                                         </div>
+
                                                     </div>
                                                 </div>
+
                                                 <div className="input-group input-group-outline my-3">
                                                     <label> Photos </label>
                                                     <div className="row">

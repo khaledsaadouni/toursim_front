@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useLocalState} from "../utils/UseLocalStorage";
 import {Link, Navigate} from "react-router-dom";
 import {Switch} from "@mui/material";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const REGISTER_URL = "/api/v1/auth/authenticate"
 const In = () => {
@@ -10,7 +11,7 @@ const In = () => {
     const [pwd, setPwd] = useState('');
     const [jwt, setJwt] = useLocalState("", "jwt");
     const [user, setUser] = useLocalState(null, "user");
-
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const queryParams = new URLSearchParams(window.location.search);
@@ -44,7 +45,7 @@ const In = () => {
         window.location.href = `http://localhost:8080/oauth2/authorization/google?redirect_uri=http://localhost:3000/`;
     }
     const handle = async () => {
-
+        setLoading(false)
         if (pwd === "" || email === "") {
             setError("Please enter email and password")
         }
@@ -66,10 +67,12 @@ const In = () => {
             }
         })
             .then(([data, header]) => {
+                setLoading(true)
                 setJwt(data.token);
                 setUser(data.user);
             }).catch((message) => {
                 setError("Email or password is incorrect. Please try again!")
+                setLoading(true)
             });
     }
 
@@ -123,21 +126,24 @@ const In = () => {
 
                                     <div className="text-center">
                                         <button disabled={pwd === "" || email === ""} onClick={handle}
-                                            className="btn bg-gradient-primary w-100 my-4 mb-2">Sign in
+                                                className="btn bg-gradient-primary w-100 my-4 mb-2">Sign in
                                         </button>
                                     </div>
                                     <div className="input-group input-group-outline my-3"
-                                        hidden={error === ""}
-                                        style={{ color: "#e55757", textAlign: "center" }}>
+                                         hidden={error === ""}
+                                         style={{color: "#e55757", textAlign: "center"}}>
                                         <label className="form-check-label mb-0 ms-3" htmlFor="rememberMe"
-                                            style={{ color: "#e55757", textAlign: "center" }}>
+                                               style={{color: "#e55757", textAlign: "center"}}>
                                             {error}
                                         </label>
+                                    </div>
+                                    <div hidden={loading} style={{width: '50px', margin: 'auto', display: 'block'}}>
+                                        <ClipLoader color="#bb3a41" size={30}/>
                                     </div>
                                     <p className="mt-4 text-sm text-center">
                                         Don't have an account? &nbsp;
                                         <Link to="/sign/up"
-                                            className="text-primary text-gradient font-weight-bold"
+                                              className="text-primary text-gradient font-weight-bold"
                                         >Sign up</Link>
                                     </p>
                                 </div>

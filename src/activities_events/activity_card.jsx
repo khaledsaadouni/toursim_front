@@ -1,6 +1,6 @@
 import React from 'react';
-import image from "../retau.jpg"
-import { Link } from "react-router-dom";
+import image from "../offer.png"
+import {Link} from "react-router-dom";
 
 const MyComponent = (props) => {
     const n = props.reviews;

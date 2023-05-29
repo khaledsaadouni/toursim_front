@@ -3,17 +3,18 @@ import image from "../avatar.jpg";
 import Slider from "react-slick";
 import calculateAverageRate from "../utils/ReviewStarsCounter";
 import formatDate from "../utils/DateFormat";
-import {Navigate, useParams} from "react-router-dom";
+import {Link, Navigate, useParams} from "react-router-dom";
 import {useLocalState} from "../utils/UseLocalStorage";
 import daysCount from "../utils/DaysCount";
 import Nav from "../navBar/Nav";
+import {MapContainer, Marker, Popup, TileLayer} from "react-leaflet";
 
 const Restaurant_Detail = () => {
     const {id} = useParams();
     const [offer, setOffer] = useState(null);
     const [rate, setRate] = useState(-1);
     const [comment, setComment] = useState("");
-
+    const [position, setPosition] = useState(null);
     const [jwt, setJwt] = useLocalState("", "jwt");
 
     const [user, setUser] = useLocalState(null, "user");
@@ -53,6 +54,21 @@ const Restaurant_Detail = () => {
             })
                 .then(([data]) => {
                     setOffer(data);
+                    if (data != null && data.google_map != null) {
+                        console.log("here")
+                        const link = data.google_map;
+                        const url = new URL(link);
+                        const regex = /@(-?\d+\.\d+),(-?\d+\.\d+)/;
+                        const match = url.href.match(regex);
+                        if (match) {
+                            const latitude = parseFloat(match[1]);
+                            const longitude = parseFloat(match[2]);
+                            setPosition([latitude, longitude]);
+                            console.log("hoo", latitude, longitude);
+                        } else {
+                            console.log("Unable to extract latitude and longitude from link.");
+                        }
+                    }
                 }).catch(() => {
                 });
         };
@@ -164,27 +180,28 @@ const Restaurant_Detail = () => {
                         <div className="sidebar_wrapper">
 
                             <div className="sidebar_top"></div>
-                            {user !== null && jwt !== "" ? (
-                                <div className="sidebar">
 
-                                    <div className="content"
-                                         style={{
-                                             boxShadow: '0px 0px 10px 5px rgba(0, 0, 0, 0.3)',
-                                             borderRadius: "5px"
-                                         }}>
+                            <div className="sidebar">
 
-                                        <div className="single_tour_booking_wrapper themeborder contact_form7">
+                                <div className="content"
+                                     style={{
+                                         boxShadow: '0px 0px 10px 5px rgba(0, 0, 0, 0.3)',
+                                         borderRadius: "5px"
+                                     }}>
 
-                                            <div role="form" className="wpcf7" id="wpcf7-f142-o1" lang="en-US"
-                                                 dir="ltr">
+                                    <div className="single_tour_booking_wrapper themeborder contact_form7">
+
+                                        <div role="form" className="wpcf7" id="wpcf7-f142-o1" lang="en-US"
+                                             dir="ltr">
 
 
-                                                <div className="screen-reader-response">
+                                            <div className="screen-reader-response">
 
-                                                </div>
+                                            </div>
 
-                                                <div action="#" method="post" className="wpcf7-form"
-                                                     noValidate="novalidate">
+                                            <div action="#" method="post" className="wpcf7-form"
+                                                 noValidate="novalidate">
+                                                <div hidden={jwt === "" && user === null}>
                                                     <p>
                                                         <label> Reservation Date </label>
                                                         <br/>
@@ -210,39 +227,69 @@ const Restaurant_Detail = () => {
                                                         <input type="submit" value="Book"
                                                                onClick={handleReserve}
                                                                className="wpcf7-form-control wpcf7-submit"/>
-                                                    </p>
-                                                    <div className="wpcf7-response-output wpcf7-display-none">
-                                                        <div className="row">
-                                                            <div className="col-3"><img
-                                                                src={offer !== null && offer.partner.photo != null ? offer.partner.photo : image}
-                                                                style={{borderRadius: "100%"}}/></div>
-                                                            <div className="col">
-                                                                {offer !== null ? offer.partner.firstname : null} &nbsp; {offer !== null ? offer.partner.lastname : null}
-                                                            </div>
-                                                        </div>
-                                                        <div className="row">
-                                                            <div className="col-3"></div>
-                                                            <div className="col"><i
-                                                                className="bi bi-envelope"></i> &nbsp;  {offer !== null ? offer.partner.email : null}
-                                                            </div>
-                                                        </div>
-                                                        {offer !== null && offer.partner.phone != 0 ? (
-                                                            <div className="row">
-                                                                <div className="col-3"></div>
-                                                                <div className="col"><i
-                                                                    className="bi bi-telephone"></i> &nbsp;  {offer.partner.phone}
-                                                                </div>
-                                                            </div>
-                                                        ) : null}
-                                                    </div>
+                                                    </p></div>
+                                                <div hidden={jwt !== "" && user !== null}>
+                                                    <p>
+                                                        <label> Register or sign in to make a reservation </label>
+                                                        <br/>
 
+                                                        <span className="wpcf7-form-control-wrap text-237"><div
+                                                            className="text-center">
+                                                              <Link
+                                                                  to={"/sign/in"}> <button
+                                                                  className="btn bg-gradient-primary w-100 my-4 mb-2">Sign in
+                                                               </button>     </Link>
+                                                           </div>
+                                                  <p className="mt-4 text-sm text-center">
+                                                      Don't have an account? &nbsp;
+                                                      <Link to="/sign/up"
+                                                            className="text-primary text-gradient font-weight-bold"
+                                                      >Sign up</Link>
+                                                     </p>
+                                                    </span>
+                                                    </p>
                                                 </div>
+                                                <div className="wpcf7-response-output wpcf7-display-none">
+                                                    <div className="row">
+                                                        <div className="col-3">
+                                                            <img
+                                                                src={offer !== null && offer.partner.photo != null ? offer.partner.photo : image}
+                                                                style={{borderRadius: "10%"}}/>
+
+
+                                                        </div>
+                                                        <div className="col">
+                                                            <div className="row">
+                                                             <span>
+                                                                 <i
+                                                                     className="bi bi-person"></i>
+                                                                 {offer !== null ? offer.partner.firstname : null} &nbsp; {offer !== null ? offer.partner.lastname : null}
+                                                            </span>
+                                                            </div>
+                                                            <div className="row">
+                                                               <span>
+                                                                   <i
+                                                                       className="bi bi-envelope"></i> {offer !== null ? offer.partner.email : null}
+                                                               </span>
+                                                            </div>
+                                                            {offer !== null && offer.partner.phone != 0 ? (
+                                                                <div className="row">
+                                                              <span>
+                                                                  <i
+                                                                      className="bi bi-telephone"></i> {offer.partner.phone}
+                                                            </span>
+                                                                </div>) : null}
+                                                        </div>
+                                                    </div>
+                                                </div>
+
                                             </div>
                                         </div>
-
                                     </div>
 
-                                </div>) : null}
+                                </div>
+
+                            </div>
                             <br className="clear"/>
 
                             <div className="sidebar_bottom"></div>
@@ -314,6 +361,26 @@ const Restaurant_Detail = () => {
                                     <p className="p1">{offer != null ? offer.menu : null}</p>
 
                                 </div>) : null}
+                            <h5>
+
+                                <span>
+                                    <span>Location</span>
+                                    {offer != null && offer.google_map != null ? <div>
+                                        <MapContainer center={position} zoom={13} scrollWheelZoom={false}>
+                                            <TileLayer
+                                                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                            />
+                                            <Marker position={position}>
+                                                <Popup>
+                                                    A pretty CSS3 popup. <br/> Easily customizable.
+                                                </Popup>
+                                            </Marker>
+                                        </MapContainer>
+                                    </div> : null}
+                            </span>
+
+                            </h5>
                             <div className="fullwidth_comment_wrapper sidebar">
 
                                 <h3 className="comment_title">Reviews</h3>

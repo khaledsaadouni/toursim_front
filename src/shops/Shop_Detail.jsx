@@ -4,6 +4,7 @@ import image from "../avatar.jpg";
 import Slider from "react-slick";
 import {useParams} from "react-router-dom";
 import {useLocalState} from "../utils/UseLocalStorage";
+import {MapContainer, Marker, Popup, TileLayer} from "react-leaflet";
 
 const ShopDetail = () => {
     const {id} = useParams();
@@ -12,7 +13,7 @@ const ShopDetail = () => {
     const [comment, setComment] = useState("");
 
     const [jwt, setJwt] = useLocalState("", "jwt");
-
+    const [position, setPosition] = useState(null);
     const [user, setUser] = useLocalState(null, "user");
     useEffect(() => {
         const asyncFn = async () => {
@@ -34,6 +35,21 @@ const ShopDetail = () => {
             })
                 .then(([data]) => {
                     setOffer(data);
+                    if (data != null && data.google_map != null) {
+                        console.log("here")
+                        const link = data.google_map;
+                        const url = new URL(link);
+                        const regex = /@(-?\d+\.\d+),(-?\d+\.\d+)/;
+                        const match = url.href.match(regex);
+                        if (match) {
+                            const latitude = parseFloat(match[1]);
+                            const longitude = parseFloat(match[2]);
+                            setPosition([latitude, longitude]);
+                            console.log("hoo", latitude, longitude);
+                        } else {
+                            console.log("Unable to extract latitude and longitude from link.");
+                        }
+                    }
                 }).catch(() => {
                 });
         };
@@ -77,28 +93,38 @@ const ShopDetail = () => {
                                             <div action="#" method="post" className="wpcf7-form"
                                                  noValidate="novalidate">
                                                 <div className="wpcf7-response-output wpcf7-display-none">
+
+
                                                     <div className="row">
-                                                        <div className="col-3"><img
-                                                            src={offer !== null && offer.partner.photo != null ? offer.partner.photo : image}
-                                                            style={{borderRadius: "100%"}}/></div>
+                                                        <div className="col-3">
+                                                            <img
+                                                                src={offer !== null && offer.partner.photo != null ? offer.partner.photo : image}
+                                                                style={{borderRadius: "10%"}}/>
+                                                        </div>
                                                         <div className="col">
-                                                            {offer !== null ? offer.partner.firstname : null} &nbsp; {offer !== null ? offer.partner.lastname : null}
-                                                        </div>
-                                                    </div>
-                                                    <div className="row">
-                                                        <div className="col-3"></div>
-                                                        <div className="col"><i
-                                                            className="bi bi-envelope"></i> &nbsp;  {offer !== null ? offer.partner.email : null}
-                                                        </div>
-                                                    </div>
-                                                    {offer !== null && offer.partner.phone != 0 ? (
-                                                        <div className="row">
-                                                            <div className="col-3"></div>
-                                                            <div className="col"><i
-                                                                className="bi bi-telephone"></i> &nbsp;  {offer.partner.phone}
+                                                            <div className="row">
+                                                             <span>
+                                                                 <i
+                                                                     className="bi bi-person"></i>
+                                                                 {offer !== null ? offer.partner.firstname : null} &nbsp; {offer !== null ? offer.partner.lastname : null}
+                                                            </span>
                                                             </div>
+                                                            <div className="row">
+                                                               <span>
+                                                                   <i
+                                                                       className="bi bi-envelope"></i> {offer !== null ? offer.partner.email : null}
+                                                               </span>
+                                                            </div>
+                                                            {offer !== null && offer.partner.phone != 0 ? (
+                                                                <div className="row">
+                                                              <span>
+                                                                  <i
+                                                                      className="bi bi-telephone"></i> {offer.partner.phone}
+                                                            </span>
+                                                                </div>) : null}
                                                         </div>
-                                                    ) : null}
+                                                    </div>
+
                                                 </div>
 
                                             </div>
@@ -163,10 +189,30 @@ const ShopDetail = () => {
 
 
                             </div>
-                            <div className="single_tour_content">
-                                <h4 className="p1">Articals</h4>
+                            <h5>
 
-                            </div>
+                                <span>
+                                    <span>Location</span>
+                                    {offer != null && offer.google_map != null ? <div>
+                                        <MapContainer center={position} zoom={13} scrollWheelZoom={false}>
+                                            <TileLayer
+                                                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                            />
+                                            <Marker position={position}>
+                                                <Popup>
+                                                    A pretty CSS3 popup. <br/> Easily customizable.
+                                                </Popup>
+                                            </Marker>
+                                        </MapContainer>
+                                    </div> : null}
+                            </span>
+
+                            </h5>
+                            {/*<div className="single_tour_content">*/}
+                            {/*    <h4 className="p1">Articals</h4>*/}
+
+                            {/*</div>*/}
                         </div>
 
 

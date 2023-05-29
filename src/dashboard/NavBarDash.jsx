@@ -73,7 +73,7 @@ const NavBarDash = (props) => {
                         </ul>
                         <ul className="navbar-nav d-lg-flex d-none">
                             <li className="nav-item d-flex align-items-center" style={{marginTop: "0px"}}>
-                                <img src={user.photo === null ? image : user.photo} height="40px" width="40px"
+                                <img src={user.photo === null ? image : user.photo} height="40px"
                                      style={{borderRadius: "100%", objectFit: "contain"}}/>
 
                             </li>

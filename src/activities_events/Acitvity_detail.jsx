@@ -3,14 +3,14 @@ import image from "../avatar.jpg";
 import Slider from "react-slick";
 import calculateAverageRate from "../utils/ReviewStarsCounter";
 import formatDate from "../utils/DateFormat";
-import {Navigate, useParams} from "react-router-dom";
+import {Link, Navigate, useParams} from "react-router-dom";
 import {useLocalState} from "../utils/UseLocalStorage";
 import Nav from "../navBar/Nav";
 import {MapContainer, Marker, Popup, TileLayer} from 'react-leaflet';
 import "../index.css"
 
 const EventDetail = () => {
-    const { id } = useParams();
+    const {id} = useParams();
     const [offer, setOffer] = useState(null);
     const [n, setN] = useState(-1);
     const [elements, setElements] = useState([]);
@@ -61,7 +61,7 @@ const EventDetail = () => {
                 .then(([data]) => {
                     setOffer(data);
                     // extarction of the postion 
-                    if (data.google_map != null) {
+                    if (data != null && data.google_map != null) {
                         console.log("here")
                         const link = data.google_map;
                         const url = new URL(link);
@@ -182,10 +182,10 @@ const EventDetail = () => {
     };
     const positionn = [51.505, -0.09]
 
-    return redirect === true ? <Navigate to={"/reservations"} /> : (
+    return redirect === true ? <Navigate to={"/reservations"}/> : (
         <React.Fragment>
-            <Nav />
-            <div id="page_content_wrapper" className="hasbg " style={{ paddingTop: "100px" }}>
+            <Nav/>
+            <div id="page_content_wrapper" className="hasbg " style={{paddingTop: "100px"}}>
                 <div className="inner">
                     <div className="inner_wrapper">
                         <div className="sidebar_wrapper">
@@ -195,7 +195,7 @@ const EventDetail = () => {
                             <div className="sidebar">
 
                                 <div className="content"
-                                    style={{ boxShadow: '0px 0px 10px 5px rgba(0, 0, 0, 0.3)', borderRadius: "5px" }}>
+                                     style={{boxShadow: '0px 0px 10px 5px rgba(0, 0, 0, 0.3)', borderRadius: "5px"}}>
 
                                     <div style={{
                                         minHeight: "50px",
@@ -228,47 +228,77 @@ const EventDetail = () => {
                                             </div>
 
                                             <div action="#" method="post" className="wpcf7-form"
-                                                noValidate="novalidate">
-                                                <p>
+                                                 noValidate="novalidate">
+                                                <div hidden={jwt === "" && user === null}>
                                                     <p>
-                                                        <label> Number of Persons </label>
-                                                        <br />
-                                                        <span className="wpcf7-form-control-wrap text-237">
+                                                        <p>
+                                                            <label> Number of Persons </label>
+                                                            <br/>
+                                                            <span className="wpcf7-form-control-wrap text-237">
                                                             <input type="number"
-                                                                value={count_pep}
-                                                                onChange={(event) => setCount_pep(event.target.value)}
-                                                                className="form-control "
-                                                                placeholder="Persons" />
+                                                                   value={count_pep}
+                                                                   onChange={(event) => setCount_pep(event.target.value)}
+                                                                   className="form-control "
+                                                                   placeholder="Persons"/>
                                                         </span>
+                                                        </p>
                                                     </p>
-                                                </p>
-                                                <p>
-                                                    <input type="submit" value="Book" onClick={handleReserve}
-                                                        className="wpcf7-form-control wpcf7-submit" />
-                                                </p>
+                                                    <p>
+                                                        <input type="submit" value="Book" onClick={handleReserve}
+                                                               className="wpcf7-form-control wpcf7-submit"/>
+                                                    </p>
+                                                </div>
+                                                <div hidden={jwt !== "" && user !== null}>
+                                                    <p>
+                                                        <label> Register or sign in to make a reservation </label>
+                                                        <br/>
+
+                                                        <span className="wpcf7-form-control-wrap text-237"><div
+                                                            className="text-center">
+                                                              <Link
+                                                                  to={"/sign/in"}> <button
+                                                                  className="btn bg-gradient-primary w-100 my-4 mb-2">Sign in
+                                                               </button>     </Link>
+                                                           </div>
+                                                  <p className="mt-4 text-sm text-center">
+                                                      Don't have an account? &nbsp;
+                                                      <Link to="/sign/up"
+                                                            className="text-primary text-gradient font-weight-bold"
+                                                      >Sign up</Link>
+                                                     </p>
+                                                    </span>
+                                                    </p>
+                                                </div>
                                                 <div className="wpcf7-response-output wpcf7-display-none">
                                                     <div className="row">
-                                                        <div className="col-3"><img
-                                                            src={offer !== null && offer.partner.photo != null ? offer.partner.photo : image}
-                                                            style={{ borderRadius: "100%" }} /></div>
+                                                        <div className="col-3">
+                                                            <img
+                                                                src={offer !== null && offer.partner.photo != null ? offer.partner.photo : image}
+                                                                style={{borderRadius: "10%"}}/>
+                                                        </div>
                                                         <div className="col">
-                                                            {offer !== null ? offer.partner.firstname : null} &nbsp; {offer !== null ? offer.partner.lastname : null}
-                                                        </div>
-                                                    </div>
-                                                    <div className="row">
-                                                        <div className="col-3"></div>
-                                                        <div className="col"><i
-                                                            className="bi bi-envelope"></i> &nbsp;  {offer !== null ? offer.partner.email : null}
-                                                        </div>
-                                                    </div>
-                                                    {offer !== null && offer.partner.phone != 0 ? (
-                                                        <div className="row">
-                                                            <div className="col-3"></div>
-                                                            <div className="col"><i
-                                                                className="bi bi-telephone"></i> &nbsp;  {offer.partner.phone}
+                                                            <div className="row">
+                                                             <span>
+                                                                 <i
+                                                                     className="bi bi-person"></i>
+                                                                 {offer !== null ? offer.partner.firstname : null} &nbsp; {offer !== null ? offer.partner.lastname : null}
+                                                            </span>
                                                             </div>
+                                                            <div className="row">
+                                                               <span>
+                                                                   <i
+                                                                       className="bi bi-envelope"></i> {offer !== null ? offer.partner.email : null}
+                                                               </span>
+                                                            </div>
+                                                            {offer !== null && offer.partner.phone != 0 ? (
+                                                                <div className="row">
+                                                              <span>
+                                                                  <i
+                                                                      className="bi bi-telephone"></i> {offer.partner.phone}
+                                                            </span>
+                                                                </div>) : null}
                                                         </div>
-                                                    ) : null}
+                                                    </div>
                                                 </div>
 
                                             </div>
@@ -278,7 +308,7 @@ const EventDetail = () => {
                                 </div>
 
                             </div>
-                            <br className="clear" />
+                            <br className="clear"/>
 
                             <div className="sidebar_bottom"></div>
                         </div>
@@ -288,26 +318,26 @@ const EventDetail = () => {
                             <h1>{offer != null ? offer.name : null}</h1>
                             <h5><i
                                 className="bi bi-geo-alt-fill"></i> &nbsp; {offer != null && offer.emplacement !== null ?
-                                    <span>{offer.emplacement},</span> : null} {offer != null ? offer.destination : null}
+                                <span>{offer.emplacement},</span> : null} {offer != null ? offer.destination : null}
                             </h5>
                             <h6>
                                 <i className="bi bi-calendar-date"></i> &nbsp;
                                 {offer != null ? offer.eventDate : null}</h6>
                             <div className="single_tour_attribute_wrapper themeborder ">
-                                <div className="one_fourth" style={{ fontSize: "30px" }}>
+                                <div className="one_fourth" style={{fontSize: "30px"}}>
                                     <i className="bi bi-lightning-charge"></i>
                                     <div className="tour_attribute_content">
                                         {offer != null ? offer.type : null}
                                     </div>
                                 </div>
 
-                                <div className="one_fourth" style={{ fontSize: "30px" }}>
+                                <div className="one_fourth" style={{fontSize: "30px"}}>
                                     <i className="bi bi-people-fill"></i>
                                     <div className="tour_attribute_content">
                                         &nbsp; {offer != null ? offer.capacity : null}
                                     </div>
                                 </div>
-                                <div className="one_fourth" style={{ fontSize: "30px" }}>
+                                <div className="one_fourth" style={{fontSize: "30px"}}>
                                     <i className="bi bi-hourglass-split"></i>
                                     <div className="tour_attribute_content">
                                         {offer != null ? offer.duration : null} &nbsp; Hours
@@ -316,10 +346,10 @@ const EventDetail = () => {
 
                             </div>
 
-                            <br className="clear" />
+                            <br className="clear"/>
                             {offer !== null ? (
                                 <Slider {...settings}
-                                    style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                        style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
                                     {offer.photo != null ? offer.photo.map((item, index) => (
                                         <div>
                                             <div style={{
@@ -327,7 +357,7 @@ const EventDetail = () => {
                                                 justifyContent: 'center',
                                                 alignItems: 'center'
                                             }}>
-                                                <img style={{ position: "relative" }} src={item} alt="image1" />
+                                                <img style={{position: "relative"}} src={item} alt="image1"/>
                                             </div>
                                         </div>
                                     )) : null}
@@ -355,6 +385,27 @@ const EventDetail = () => {
                                     </ul>
                                 ) : null}
                             </div>
+
+                            <h5>
+
+                    <span>
+                        <span>Location</span>
+                        {offer != null && offer.google_map != null ?
+                            <div>
+                                <MapContainer center={position} zoom={13} scrollWheelZoom={false}>
+                                    <TileLayer
+                                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                    />
+                                    <Marker position={position}>
+                                        <Popup>
+                                            A pretty CSS3 popup. <br/> Easily customizable.
+                                        </Popup>
+                                    </Marker>
+                                </MapContainer>
+                            </div> : null}
+                    </span>
+                            </h5>
                             <div className="fullwidth_comment_wrapper sidebar">
 
                                 <h3 className="comment_title">Reviews</h3>
@@ -374,6 +425,7 @@ const EventDetail = () => {
                                     </div>
                                 </div>
                             </div>
+
                             {offer !== null ? (
                                 <div>
                                     {offer.reviews != null ? offer.reviews.map((item, index) => (
@@ -381,19 +433,19 @@ const EventDetail = () => {
                                             <div className="comment" id="comment-20">
                                                 <div className="gravatar">
                                                     <img src={item.user.photo != null ? item.user.photo : image}
-                                                        width="150" height="150"
-                                                        alt="Marie Argeris"
-                                                        className="avatar avatar-60 wp-user-avatar wp-user-avatar-60 alignnone photo" />
+                                                         width="150" height="150"
+                                                         alt="Marie Argeris"
+                                                         className="avatar avatar-60 wp-user-avatar wp-user-avatar-60 alignnone photo"/>
                                                 </div>
                                                 <div className="right ">
                                                     <h7>{item.user.firstname} {item.user.lastname}</h7>
                                                     {item.rate !== -1 ? (<span>{item.rate}/10</span>) : null}
                                                     {user !== null && item.user.id === user.id ? (
                                                         <a rel='nofollow' className='comment-reply-link btn-danger'
-                                                            href=""
-                                                            onClick={() => handleDeleteReview(item.id)}> Delete </a>) : null}
+                                                           href=""
+                                                           onClick={() => handleDeleteReview(item.id)}> Delete </a>) : null}
                                                     <div className="comment_date">{formatDate(item.creationDate)}</div>
-                                                    <div className="comment_text" />
+                                                    <div className="comment_text"/>
                                                     <p>
                                                         {item.comment}
                                                     </p>
@@ -410,28 +462,7 @@ const EventDetail = () => {
                     <br className="clear"/>
                 </div>
 
-                <h5>
-
-                    <span>
-                        <span>Location</span>
-                        {offer.google_map != null ?
-                            <div>
-                                <MapContainer center={position} zoom={13} scrollWheelZoom={false}>
-                                    <TileLayer
-                                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                    />
-                                    <Marker position={position}>
-                                        <Popup>
-                                            A pretty CSS3 popup. <br/> Easily customizable.
-                                        </Popup>
-                                    </Marker>
-                                </MapContainer>
-                        </div> : null}
-                    </span>
-                    : null}
-                </h5>
-                <div style={{ height: "10px" }}></div>
+                <div style={{height: "10px"}}></div>
                 {jwt !== "" && user !== null ? (
                     <div id="respond" className="comment-respond">
                         <h3 id="reply-title" className="comment-reply-title">Write A Review </h3>
@@ -441,7 +472,7 @@ const EventDetail = () => {
                                 <label htmlFor="accommodation_rating">Rate</label>
                                 <span className="commentratingbox">
                                     <select id="accomodation_rating" name="accomodation_rating"
-                                        onChange={(event) => setRate(event.target.value)}>
+                                            onChange={(event) => setRate(event.target.value)}>
                                         <option value="-1"></option>
                                         <option value="0">0</option>
                                         <option value="1">1</option>
@@ -462,12 +493,12 @@ const EventDetail = () => {
                             <p className="comment-form-comment">
                                 <label>Comment</label>
                                 <textarea id="comment" name="comment" cols="45" rows="8"
-                                    onChange={(event) => setComment(event.target.value)}
-                                    required="required"></textarea>
+                                          onChange={(event) => setComment(event.target.value)}
+                                          required="required"></textarea>
                             </p>
                             <p className="form-submit">
                                 <input name="submit" type="submit" id="submit" className="submit" value="Post Comment"
-                                    onClick={handlePostReview} />
+                                       onClick={handlePostReview}/>
                             </p>
                         </div>
                     </div>

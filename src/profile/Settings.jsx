@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
-import { Link, Navigate } from "react-router-dom";
-import { useLocalState } from "../utils/UseLocalStorage";
+import React, {useState} from 'react';
+import {Link, Navigate} from "react-router-dom";
+import {useLocalState} from "../utils/UseLocalStorage";
+import image from "../avatar.jpg";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const Settings = () => {
 
     const [jwt, setJwt] = useLocalState("", "jwt");
+    const [loading, setLoading] = useState(true);
     const [user, setUser] = useLocalState(null, "user");
     const [firstname, setFirstname] = useState(user.firstname);
     const [lastname, setLastname] = useState(user.lastname);
@@ -60,6 +63,7 @@ const Settings = () => {
     const [file, setFile] = useState(null);
 
     const handleFileChange = (event) => {
+        setError("")
         setFile(event.target.files[0]);
     };
 
@@ -67,31 +71,37 @@ const Settings = () => {
 
         const formData = new FormData();
         formData.append("file", file);
-
-        await fetch(`/api/v1/photo/${user.id}/profilepicture${user.email}/profil`, {
-            headers: {
-                Authorization: `Bearer ${jwt}`
-            },
-            method: "POST",
-            body: formData
-        }).then((response) => {
-            if (response.status === 200) {
-                return Promise.all([response.json(), response.headers])
-            } else if (response.status === 401) {
+        if (file != null) {
+            setLoading(false)
+            await fetch(`/api/v1/photo/${user.id}/profilepicture${user.email}/profil`, {
+                headers: {
+                    Authorization: `Bearer ${jwt}`
+                },
+                method: "POST",
+                body: formData
+            }).then((response) => {
+                if (response.status === 200) {
+                    return Promise.all([response.json(), response.headers])
+                } else if (response.status === 401) {
                 localStorage.removeItem('jwt');
                 localStorage.removeItem('user');
                 window.location.reload();
             } else {
                 return Promise.reject("")
-            }
-        })
-            .then(([data, header]) => {
-                setUser(data);
-                setError("")
-                window.location.reload();
-            }).catch((message) => {
-                setError("File's size is too big , Please Try Again")
-            });
+                }
+            })
+                .then(([data, header]) => {
+                    setLoading(true)
+                    setUser(data);
+                    setError("")
+                    window.location.reload();
+                }).catch((message) => {
+                    setLoading(true)
+                    setError("File's size is too big , Please Try Again")
+                });
+        } else {
+            setError("Please select a file")
+        }
     };
 
     return jwt === "" || redirect === true ?
@@ -113,8 +123,9 @@ const Settings = () => {
                                 <div className="row gx-4 mb-2">
                                     <div className="col-auto">
                                         <div className="avatar avatar-xl position-relative">
-                                            <img src={user.photo} alt="profile_image"
-                                                className="w-100 border-radius-lg shadow-sm" />
+                                            <img src={user.photo === null ? image : user.photo} alt="profile_image"
+                                                 style={{maxHeight: "90px", borderRadius: "15%", objectFit: "contain"}}
+                                                 className="w-100 border-radius-lg shadow-sm"/>
                                         </div>
                                     </div>
                                     <div className="col-auto my-auto">
@@ -122,14 +133,20 @@ const Settings = () => {
                                             <div className="row">
                                                 <div className="col">
                                                     <input type="file" className="form-control"
-                                                        style={{ backgroundColor: "#eeeeee", color: "black" }}
-                                                        onChange={handleFileChange} />
+                                                           style={{backgroundColor: "#eeeeee", color: "black"}}
+                                                           onChange={handleFileChange}/>
                                                 </div>
                                                 <div className="col">
                                                     <button type="submit" className="form-control"
-                                                        style={{ backgroundColor: "#eeeeee", color: "black" }}
-                                                        onClick={handleUpload}>Upload
+                                                            style={{backgroundColor: "#eeeeee", color: "black"}}
+                                                            onClick={handleUpload}>Upload
                                                     </button>
+                                                </div>
+                                                <div className="col">
+                                                    <div hidden={loading}
+                                                         style={{width: '50px', margin: 'auto', display: 'block'}}>
+                                                        <ClipLoader color="#bb3a41" size={30}/>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

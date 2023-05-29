@@ -3,12 +3,15 @@ import {FormControlLabel, Radio, RadioGroup, Switch} from "@mui/material";
 import "./sign.css"
 import {useLocalState} from "../utils/UseLocalStorage";
 import {Navigate} from "react-router-dom";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const GET_TOKEN_URL = "/api/v1/auth/oAuth2Token"
 const REGISTER_URL = "/api/v1/auth/register"
 const REGISTER_URL_P = "/api/v1/auth/registerPartner"
 const Up = () => {
     const [showForm, setShowForm] = useState(false);
+    const [loading, setLoading] = useState(true);
+
     const client = () => {
         setShowForm(false);
     }
@@ -42,6 +45,7 @@ const Up = () => {
     const [jwt, setJwt] = useLocalState("", "jwt");
     const [user, setUser] = useLocalState(null, "user");
     const handle1 = async () => {
+        setLoading(false)
         const reqBody = {
             'email': email,
             'password': pwd,
@@ -65,14 +69,17 @@ const Up = () => {
             }
         })
             .then(([data, header]) => {
+                setLoading(true)
                 setJwt(data.token);
                 setUser(data.user);
             }).catch((message) => {
+                setLoading(true)
                 setError2("Email already exist!")
             });
     }
 
     const handle2partner = async () => {
+        setLoading(false)
         const reqBody2 = {
             'email': email,
             'password': pwd,
@@ -98,9 +105,11 @@ const Up = () => {
             }
         })
             .then(([data, header]) => {
+                setLoading(true)
                 setJwt(data.token);
                 setUser(data.user);
             }).catch((message) => {
+                setLoading(true)
                 setError2("Email already exist!")
             });
     }
@@ -290,17 +299,19 @@ const Up = () => {
                                             hidden={error2 === ""}
                                             style={{ color: "#e55757", textAlign: "center" }}>
                                             <label className="form-check-label mb-0 ms-3" htmlFor="rememberMe"
-                                                style={{ color: "#e55757", textAlign: "center" }}>
+                                                   style={{color: "#e55757", textAlign: "center"}}>
                                                 {error2}
                                             </label>
                                         </div>
                                         <div className="text-center">
                                             <button onClick={handle1}
-                                                disabled={(!((validMatch && matchPwd) || matchPwd === "")) || email === "" || error !== "" || errorEmail !== "" || firstname === "" || lastname === "" || pwd === "" || phone === ""}
-                                                className="btn bg-gradient-primary w-100 my-4 mb-2">Sign Up
+                                                    disabled={(!((validMatch && matchPwd) || matchPwd === "")) || email === "" || error !== "" || errorEmail !== "" || firstname === "" || lastname === "" || pwd === "" || phone === ""}
+                                                    className="btn bg-gradient-primary w-100 my-4 mb-2">Sign Up
                                             </button>
                                         </div>
-
+                                        <div hidden={loading} style={{width: '50px', margin: 'auto', display: 'block'}}>
+                                            <ClipLoader color="#bb3a41" size={30}/>
+                                        </div>
                                     </div>
 
                                     <div role="form" className="text-start" hidden={!showForm}>
@@ -418,10 +429,13 @@ const Up = () => {
                                         <div className="text-center">
                                             <button onClick={handle2partner}
                                                 // disabled={(!((validMatch && matchPwd) || matchPwd === "")) || address === "" || commercial === "" || email === "" || error !== "" || errorEmail !== "" || firstname === "" || lastname === "" || pwd === "" || phone === ""}
-                                                className="btn bg-gradient-primary w-100 my-4 mb-2"> Sign Up
+                                                    className="btn bg-gradient-primary w-100 my-4 mb-2"> Sign Up
                                             </button>
                                         </div>
 
+                                        <div hidden={loading} style={{width: '50px', margin: 'auto', display: 'block'}}>
+                                            <ClipLoader color="#bb3a41" size={30}/>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

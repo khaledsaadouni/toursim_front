@@ -3,12 +3,16 @@ import Nav from "../navBar/Nav";
 import Accomadation_Card from "./Accomodation_Card";
 import calculateAverageRate from "../utils/ReviewStarsCounter";
 
+import ClipLoader from 'react-spinners/ClipLoader';
+
 const URL = "/api/v1/accomodation/all"
 const MyComponent = () => {
 
     const [filtre, setFilter] = useState(false);
-    const [offers, setOffers] = useState(null)
+    const [offers, setOffers] = useState(null);
+    const [loading, setLoading] = useState(true);
     useEffect(() => {
+        setLoading(false)
         const asyncFn = async () => {
             try {
                 await fetch(URL, {
@@ -24,7 +28,9 @@ const MyComponent = () => {
                     }
                 })
                     .then(([data, header]) => {
+                        setLoading(true)
                         setOffers(data)
+
                     }).catch((message) => {
                     });
             } catch (error) {
@@ -77,7 +83,9 @@ const MyComponent = () => {
                             <span className="ti-exchange-vertical"></span>
                         </div>
                         <div className="one_fourth last themeborder">
-                            <input id="tour_search_btn" type="submit" className="button" value="Search"/>
+                            <button
+                                className="btn bg-gradient-primary w-100  ">Search
+                            </button>
                         </div>
 
                         <br className="clear"/>
@@ -147,6 +155,9 @@ const MyComponent = () => {
                                         ))
                                         : null}
 
+                                </div>
+                                <div hidden={loading} style={{width: '50px', margin: 'auto', display: 'block'}}>
+                                    <ClipLoader color="#bb3a41" size={150}/>
                                 </div>
                             </div>
                         </div>

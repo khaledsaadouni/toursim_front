@@ -4,7 +4,7 @@ import Nav from "../navBar/Nav";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import {Navigate, useParams} from "react-router-dom";
+import {Link, Navigate, useParams} from "react-router-dom";
 import image from "../avatar.jpg";
 import formatDate from "../utils/DateFormat";
 import {useLocalState} from "../utils/UseLocalStorage";
@@ -17,7 +17,6 @@ const Acommodation_Detail = () => {
     const [offer, setOffer] = useState(null);
     const [rate, setRate] = useState(-1);
     const [comment, setComment] = useState("");
-
     const [position, setPosition] = useState(null);
     const [jwt, setJwt] = useLocalState("", "jwt");
 
@@ -162,12 +161,16 @@ const Acommodation_Detail = () => {
                 localStorage.removeItem('user');
                 window.location.reload();
             } else {
-                return Promise.reject("")
+
+                return response.text().then(errorMessage => {
+                    console.log(errorMessage)
+                });
             }
         })
             .then(([data]) => {
                 setRedirect(true)
             }).catch(() => {
+
             });
     }
     const settings = {
@@ -188,7 +191,7 @@ const Acommodation_Detail = () => {
                         <div className="sidebar_wrapper">
 
                             <div className="sidebar_top"></div>
-                            {user !== null && jwt !== "" ? (
+
                                 <div className="sidebar">
 
                                     <div className="content"
@@ -230,60 +233,84 @@ const Acommodation_Detail = () => {
 
                                                 <div action="#" method="post" className="wpcf7-form"
                                                      noValidate="novalidate">
-                                                    <p>
-                                                        <label> Reservation Date </label>
-                                                        <br/>
-                                                        <span className="wpcf7-form-control-wrap text-237">
+                                                    <div hidden={jwt === "" && user === null}>
+                                                        <p>
+                                                            <label> Reservation Date </label>
+                                                            <br/>
+                                                            <span className="wpcf7-form-control-wrap text-237">
                                                         <input
                                                             value={date}
                                                             type="date"
                                                             onChange={(event) => setDate(event.target.value)}
                                                             className="form-control "/>
                                                     </span>
-                                                    </p>
-                                                    <p>
-                                                        <label> Check Out Date </label>
-                                                        <br/>
-                                                        <span className="wpcf7-form-control-wrap text-237">
+                                                        </p>
+                                                        <p>
+                                                            <label> Check Out Date </label>
+                                                            <br/>
+                                                            <span className="wpcf7-form-control-wrap text-237">
                                                         <input type="date"
                                                                value={count_d}
                                                                onChange={(event) => setCount_d(event.target.value)}
                                                                className="form-control "/>
                                                     </span>
-                                                    </p>
-                                                    <p>
-                                                        <input type="submit" value="Book" onClick={handleReserve}
-                                                               className="wpcf7-form-control wpcf7-submit"/>
-                                                    </p>
+                                                        </p>
+                                                        <p>
+                                                            <input type="submit" value="Book" onClick={handleReserve}
+                                                                   className="wpcf7-form-control wpcf7-submit"/>
+                                                        </p>
+                                                    </div>
+                                                    <div hidden={jwt !== "" && user !== null}>
+                                                        <p>
+                                                            <label> Register or sign in to make a reservation </label>
+                                                            <br/>
+
+                                                            <span className="wpcf7-form-control-wrap text-237"><div
+                                                                className="text-center">
+                                                              <Link
+                                                                  to={"/sign/in"}> <button
+                                                                  className="btn bg-gradient-primary w-100 my-4 mb-2">Sign in
+                                                               </button>     </Link>
+                                                           </div>
+                                                  <p className="mt-4 text-sm text-center">
+                                                      Don't have an account? &nbsp;
+                                                      <Link to="/sign/up"
+                                                            className="text-primary text-gradient font-weight-bold"
+                                                      >Sign up</Link>
+                                                     </p>
+                                                    </span>
+                                                        </p>
+                                                    </div>
                                                     <div className="wpcf7-response-output wpcf7-display-none">
                                                         <div className="row">
-                                                            <div className="col">
+                                                            <div className="col-3">
                                                                 <img
                                                                     src={offer !== null && offer.partner.photo != null ? offer.partner.photo : image}
-                                                                    height="40px" width="40px"
-                                                                    style={{
-                                                                        borderRadius: "100%",
-                                                                        objectFit: "contain"
-                                                                    }}/>
+                                                                    style={{borderRadius: "10%"}}/>
                                                             </div>
                                                             <div className="col">
-                                                                {offer !== null ? offer.partner.firstname : null} &nbsp; {offer !== null ? offer.partner.lastname : null}
-                                                            </div>
-                                                        </div>
-                                                        <div className="row">
-                                                            <div className="col-3"></div>
-                                                            <div className="col"><i
-                                                                className="bi bi-envelope"></i> &nbsp;  {offer !== null ? offer.partner.email : null}
-                                                            </div>
-                                                        </div>
-                                                        {offer !== null && offer.partner.phone != 0 ? (
-                                                            <div className="row">
-                                                                <div className="col-3"></div>
-                                                                <div className="col"><i
-                                                                    className="bi bi-telephone"></i> &nbsp;  {offer.partner.phone}
+                                                                <div className="row">
+                                                             <span>
+                                                                 <i
+                                                                     className="bi bi-person"></i>
+                                                                 {offer !== null ? offer.partner.firstname : null} &nbsp; {offer !== null ? offer.partner.lastname : null}
+                                                            </span>
                                                                 </div>
+                                                                <div className="row">
+                                                               <span>
+                                                                   <i
+                                                                       className="bi bi-envelope"></i> {offer !== null ? offer.partner.email : null}
+                                                               </span>
+                                                                </div>
+                                                                {offer !== null && offer.partner.phone != 0 ? (
+                                                                    <div className="row">
+                                                              <span>
+                                                                  <i
+                                                                      className="bi bi-telephone"></i> {offer.partner.phone}
+                                                            </span>
+                                                                    </div>) : null}
                                                             </div>
-                                                        ) : null}
+                                                        </div>
                                                     </div>
 
                                                 </div>
@@ -292,7 +319,7 @@ const Acommodation_Detail = () => {
 
                                     </div>
 
-                                </div>) : null}
+                                </div>
                             <br className="clear"/>
 
                             <div className="sidebar_bottom"></div>
@@ -432,8 +459,7 @@ const Acommodation_Detail = () => {
                                                 <div className="gravatar">
                                                     <img src={item.user.photo != null ? item.user.photo : image}
                                                          width="150" height="150"
-                                                         alt="Marie Argeris"
-                                                         className="avatar avatar-60 wp-user-avatar wp-user-avatar-60 alignnone photo"/>
+                                                    />
 
                                                 </div>
 

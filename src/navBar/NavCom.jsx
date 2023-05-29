@@ -55,11 +55,11 @@ const NavCom = (props) => {
                                     </li>
                                 </ul>
                             </li>
-                            <li className="menu-item   ">
-                                <a href="">
-                                    Programs
-                                </a>
-                            </li>
+                            {/*<li className="menu-item   ">*/}
+                            {/*    <a href="">*/}
+                            {/*        Programs*/}
+                            {/*    </a>*/}
+                            {/*</li>*/}
                             {jwt && user !== null ? (
                                 <li className="menu-item   ">
                                     <Link to={"/reservations"}>
@@ -76,13 +76,12 @@ const NavCom = (props) => {
                                 <li className="menu-item menu-item-has-children arrow"
                                     style={{ display: "flex", alignItems: "center" }}>
                                     {user.photo !== null ? (
-                                        <img src={encodeURI(user.photo)} height="40px" width="40px"
+                                        <img src={encodeURI(user.photo)} height="40px"
                                              style={{borderRadius: "100%", objectFit: "contain"}}/>) : (
-                                        <img src={image} height="40px" width="40px"
+                                        <img src={image} height="40px"
                                              style={{borderRadius: "100%", objectFit: "contain"}}/>)}
 
                                     <a> {user.firstname}</a>
-
                                     <ul className="sub-menu" style={{ marginTop: "150px" }}>
                                         <li className="menu-item">
                                             <Link

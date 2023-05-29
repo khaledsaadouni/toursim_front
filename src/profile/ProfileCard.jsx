@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link, Navigate } from "react-router-dom";
-import { useLocalState } from "../utils/UseLocalStorage";
+import {Link, Navigate} from "react-router-dom";
+import {useLocalState} from "../utils/UseLocalStorage";
 import image from "../avatar.jpg";
 
 const ProfileCard = () => {
@@ -34,7 +34,9 @@ const ProfileCard = () => {
                                 <div className="col-auto">
                                     <div className="avatar avatar-xl position-relative">
                                         <img src={user.photo === null ? image : user.photo} alt="profile_image"
-                                            className="w-100 border-radius-lg shadow-sm" />
+
+                                             style={{maxHeight: "90px", borderRadius: "25%", objectFit: "contain"}}
+                                             className="w-100 border-radius-lg shadow-sm"/>
                                     </div>
                                 </div>
                                 <div className="col-auto my-auto">

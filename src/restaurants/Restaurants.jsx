@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import Nav from "../navBar/Nav";
 import Restaurant_list from "./Restaurant_list";
 import calculateAverageRate from "../utils/ReviewStarsCounter";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const URL = "/api/v1/restoration/all"
 
@@ -9,9 +10,10 @@ const Restaurants = () => {
 
 
     const [filtre, setFilter] = useState(false);
-
+    const [loading, setLoading] = useState(true);
     const [offers, setOffers] = useState(null)
     useEffect(() => {
+        setLoading(false)
         const asyncFn = async () => {
             try {
                 await fetch(URL, {
@@ -27,7 +29,9 @@ const Restaurants = () => {
                     }
                 })
                     .then(([data, header]) => {
+                        setLoading(true)
                         setOffers(data)
+
                     }).catch((message) => {
                     });
             } catch (error) {
@@ -148,6 +152,9 @@ const Restaurants = () => {
                                                          reviews={calculateAverageRate(item.reviews)}/>
                                     )) : null}
 
+                                </div>
+                                <div hidden={loading} style={{width: '50px', margin: 'auto', display: 'block'}}>
+                                    <ClipLoader color="#bb3a41" size={150}/>
                                 </div>
                                 <br className="clear"/>
 

@@ -12,7 +12,7 @@
     line-height: 1.5;
     border-radius: 0.25rem;
     margin-left: 10px;
-    background-color: #FF4A52;
+    background-color: #D34057;
     color: white;
 }
 
@@ -20,16 +20,16 @@
     transform: scale(1.05); /* make button slightly bigger */
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* add shadow */
 
-    border: 1px solid #FF4A52;
+    border: 1px solid #D34057;
     background-color: transparent;
-    color: #FF4A52;
+    color: #D34057;
 }
 
 .nav-outline-secondary:hover {
     transform: scale(1.05); /* make button slightly bigger */
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* add shadow */
 
-    background-color: #FF4A52;
+    background-color: #D34057;
     color: white;
 }
 
@@ -41,12 +41,12 @@
     white-space: nowrap;
     vertical-align: middle;
     user-select: none;
-    border: 1px solid #FF4A52;
+    border: 1px solid #D34057;
     padding: 0.375rem 0.75rem;
     font-size: 1rem;
     line-height: 1.5;
     border-radius: 0.25rem;
     margin-left: 10px;
     background-color: transparent;
-    color: #FF4A52;
+    color: #D34057;
 }

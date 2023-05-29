@@ -1,12 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import Nav from "../navBar/Nav";
 import Shope_Line from "./Shop_line";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const URL = "/api/v1/artisan/all"
 const Shops = () => {
     const [filtre, setFilter] = useState(false);
-    const [offers, setOffers] = useState(null)
+    const [offers, setOffers] = useState(null);
+    const [loading, setLoading] = useState(true);
     useEffect(() => {
+        setLoading(false)
         const asyncFn = async () => {
             try {
                 await fetch(URL, {
@@ -22,6 +25,7 @@ const Shops = () => {
                     }
                 })
                     .then(([data, header]) => {
+                        setLoading(true)
                         setOffers(data)
                     }).catch((message) => {
                     });
@@ -142,6 +146,9 @@ const Shops = () => {
                                                 emplacemnt={item.emplacement} destination={item.destination}/>
                                 )) : null}
 
+                            </div>
+                            <div hidden={loading} style={{width: '50px', margin: 'auto', display: 'block'}}>
+                                <ClipLoader color="#bb3a41" size={150}/>
                             </div>
                             <br className="clear"/>
 

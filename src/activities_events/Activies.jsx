@@ -2,13 +2,16 @@ import React, {useEffect, useState} from 'react';
 import Nav from "../navBar/Nav";
 import Activity_card from "./activity_card";
 import calculateAverageRate from "../utils/ReviewStarsCounter";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const URL = "/api/v1/event/all"
 const Activities = () => {
 
     const [filtre, setFilter] = useState(false);
-    const [offers, setOffers] = useState(null)
+    const [offers, setOffers] = useState(null);
+    const [loading, setLoading] = useState(true);
     useEffect(() => {
+        setLoading(false)
         const asyncFn = async () => {
             try {
                 await fetch(URL, {
@@ -25,6 +28,7 @@ const Activities = () => {
                 })
                     .then(([data, header]) => {
                         setOffers(data)
+                        setLoading(true)
                     }).catch((message) => {
                     });
             } catch (error) {
@@ -147,6 +151,9 @@ const Activities = () => {
                                                        destination={item.destination} emplacement={item.emplacement}/>
                                     )) : null}
 
+                                </div>
+                                <div hidden={loading} style={{width: '50px', margin: 'auto', display: 'block'}}>
+                                    <ClipLoader color="#bb3a41" size={150}/>
                                 </div>
                                 <br className="clear"/>
 

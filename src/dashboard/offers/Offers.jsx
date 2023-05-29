@@ -258,7 +258,9 @@ const Offers = () => {
                                                     <td>
                                                         <div className="d-flex px-2">
                                                             <div className="my-auto">
-                                                                <h6 className="mb-0 text-sm">{item.commercial_name}</h6>
+                                                                <Link to={`/shop/${item.id}`}><h6
+                                                                    className="mb-0 text-sm">{item.commercial_name}</h6>
+                                                                </Link>
                                                             </div>
                                                         </div>
                                                     </td>
