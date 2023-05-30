@@ -123,8 +123,24 @@ const Offers = () => {
             setRedirect({'bool': true, 'id': id, 'route': "editShop"})
         }
     }
+    const sortName = () => {
 
+        const sortedOffers = [...offers].sort((a, b) => a.name.localeCompare(b.name))
+        setOffers(sortedOffers);
 
+    }
+    const sortDate = () => {
+        const sortedOffers = [...offers].sort((a, b) => new Date(b.creationDate) - new Date(a.creationDate))
+        setOffers(sortedOffers);
+    }
+    const sortType = () => {
+        const sortedOffers = [...offers].sort((a, b) => a.type.localeCompare(b.type))
+        setOffers(sortedOffers);
+    }
+    const sortGeneric = () => {
+        const sortedOffers = [...offers].sort((a, b) => a.generic_Type.localeCompare(b.generic_Type))
+        setOffers(sortedOffers);
+    }
     return redirect.bool ? <Navigate to={`/dashboard/${redirect.route}/${redirect.id}`}/> : (
         <React.Fragment>
             <main className="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
@@ -167,11 +183,28 @@ const Offers = () => {
                                         <table className="table align-items-center mb-0">
                                             <thead>
                                             <tr>
-                                                <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
+                                                <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Name
+                                                    &nbsp; <a style={{fontSize: "15px", color: "black"}}
+                                                              onClick={sortName}> <i
+                                                        className="bi bi-sort-down-alt"></i></a>
+
+                                                </th>
+                                                <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Offer
+                                                    &nbsp; <a style={{fontSize: "15px", color: "black"}}
+                                                              onClick={sortGeneric}> <i
+                                                        className="bi bi-sort-down-alt"></i></a>
+
+                                                </th>
                                                 <th className="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Creation
                                                     Date
+                                                    &nbsp; <a style={{fontSize: "15px", color: "black"}}
+                                                              onClick={sortDate}> <i
+                                                        className="bi bi-sort-down-alt"></i></a>
                                                 </th>
-                                                <th className="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Type</th>
+                                                <th className="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Type
+                                                    &nbsp; <a style={{fontSize: "15px", color: "black"}}
+                                                              onClick={sortType}> <i
+                                                        className="bi bi-sort-down-alt"></i></a></th>
                                                 <th className="text-secondary opacity-7"></th>
                                                 <th className="text-secondary opacity-7"></th>
                                             </tr>
@@ -188,6 +221,9 @@ const Offers = () => {
                                                                 </h6>
                                                             </div>
                                                         </div>
+                                                    </td>
+                                                    <td>
+                                                        <p className="text-xs font-weight-bold mb-0">{item.generic_Type}</p>
                                                     </td>
                                                     <td>
                                                         <p className="text-xs font-weight-bold mb-0">{formatDate(item.creationDate)}</p>
