@@ -113,17 +113,17 @@ const Dashboard = () => {
                                     <span className="nav-link-text ms-1">Reservations</span>
                                 </Link>
                             </li>
-                            <li className="nav-item">
-                                <Link
-                                    className={`nav-link text-white   ${page === "programs" && "bg-gradient-primary"}`}
-                                    to={"/dashboard/programs"} style={{color: "white"}}>
-                                    <div
-                                        className="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                                        <i className="material-icons opacity-10">view_in_ar</i>
-                                    </div>
-                                    <span className="nav-link-text ms-1"> Programs</span>
-                                </Link>
-                            </li>
+                            {/*<li className="nav-item">*/}
+                            {/*    <Link*/}
+                            {/*        className={`nav-link text-white   ${page === "programs" && "bg-gradient-primary"}`}*/}
+                            {/*        to={"/dashboard/programs"} style={{color: "white"}}>*/}
+                            {/*        <div*/}
+                            {/*            className="text-white text-center me-2 d-flex align-items-center justify-content-center">*/}
+                            {/*            <i className="material-icons opacity-10">view_in_ar</i>*/}
+                            {/*        </div>*/}
+                            {/*        <span className="nav-link-text ms-1"> Programs</span>*/}
+                            {/*    </Link>*/}
+                            {/*</li>*/}
                             <li className="nav-item">
                                 <Link
                                     className={`nav-link text-white   ${page === "profile" && "bg-gradient-primary"}`}

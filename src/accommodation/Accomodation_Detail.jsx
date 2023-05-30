@@ -19,7 +19,7 @@ const Acommodation_Detail = () => {
     const [comment, setComment] = useState("");
     const [position, setPosition] = useState(null);
     const [jwt, setJwt] = useLocalState("", "jwt");
-
+    const [errorMessage, setErrorMessage] = useState("");
     const [user, setUser] = useLocalState(null, "user");
     const renderDivs = (a) => {
         const divs = [];
@@ -67,7 +67,6 @@ const Acommodation_Detail = () => {
                             const latitude = parseFloat(match[1]);
                             const longitude = parseFloat(match[2]);
                             setPosition([latitude, longitude]);
-                            console.log("hoo", latitude, longitude);
                         } else {
                             console.log("Unable to extract latitude and longitude from link.");
                         }
@@ -141,7 +140,7 @@ const Acommodation_Detail = () => {
         const d = daysCount(date, count_d)
         const reqBody = {
             "date": date,
-            "count_people": count_pep,
+            "count_people": 0,
             "checkout": count_d,
             'price': offer.price * d
         };
@@ -163,7 +162,7 @@ const Acommodation_Detail = () => {
             } else {
 
                 return response.text().then(errorMessage => {
-                    console.log(errorMessage)
+                    setErrorMessage(errorMessage)
                 });
             }
         })
@@ -259,6 +258,9 @@ const Acommodation_Detail = () => {
                                                             <input type="submit" value="Book" onClick={handleReserve}
                                                                    className="wpcf7-form-control wpcf7-submit"/>
                                                         </p>
+                                                        <p style={{color: "#d34057"}}>
+                                                            {errorMessage}
+                                                        </p>
                                                     </div>
                                                     <div hidden={jwt !== "" && user !== null}>
                                                         <p>
@@ -332,6 +334,7 @@ const Acommodation_Detail = () => {
                                 <span>{offer.emplacement !== "" ? (
                                     <span>{offer.emplacement}, </span>) : null}</span> : null} {offer != null ? offer.destination : null}
                             </h5>
+
                             <div className="single_tour_attribute_wrapper themeborder ">
                                 <div className="one_fourth">
                                     <div className="tour_attribute_icon ti-home"></div>

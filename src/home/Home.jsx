@@ -41,29 +41,29 @@ const MyComponent = () => {
                                     <div className="row gy-4 mt-5 justify-content-center" data-aos="zoom-in"
                                         data-aos-delay="250">
                                         <div className="col-xl-2 col-md-4"
-                                            style={{ border: "2px solid", borderColor: "white", marginRight: "10px" }}>
+                                             style={{border: "2px solid", borderColor: "white", marginRight: "10px"}}>
                                             <Link to={"/accomodations"}>
-                                                <div className="icon-box" style={{ fontSize: "70px", color: "white" }}>
+                                                <div className="icon-box" style={{fontSize: "70px", color: "white"}}>
                                                     <i className="ri-home-4-line"></i>
-                                                    <h5 style={{ color: "white" }}>Accommodations</h5>
+                                                    <h5 style={{color: "white"}}>Accommodations</h5>
                                                 </div>
                                             </Link>
                                         </div>
                                         <div className="col-xl-2 col-md-4"
-                                            style={{ border: "2px solid", borderColor: "white", marginRight: "10px" }}>
-                                            <Link to={"/restaurants"}>
-                                                <div className="icon-box" style={{ fontSize: "70px", color: "white" }}>
-                                                    <i className="ri-restaurant-2-line"></i>
-                                                    <h4 style={{ color: "white" }}>Restaurants</h4>
-                                                </div>
-                                            </Link>
-                                        </div>
-                                        <div className="col-xl-2 col-md-4"
-                                            style={{ border: "2px solid", borderColor: "white", marginRight: "10px" }}>
+                                             style={{border: "2px solid", borderColor: "white", marginRight: "10px"}}>
                                             <Link to={"/events_activities"}>
-                                                <div className="icon-box" style={{ fontSize: "70px", color: "white" }}>
+                                                <div className="icon-box" style={{fontSize: "70px", color: "white"}}>
                                                     <i className="ri-calendar-event-line"></i>
-                                                    <h5 style={{ color: "white" }}>Events & Activities</h5>
+                                                    <h5 style={{color: "white"}}>Events & Activities</h5>
+                                                </div>
+                                            </Link>
+                                        </div>
+                                        <div className="col-xl-2 col-md-4"
+                                             style={{border: "2px solid", borderColor: "white", marginRight: "10px"}}>
+                                            <Link to={"/restaurants"}>
+                                                <div className="icon-box" style={{fontSize: "70px", color: "white"}}>
+                                                    <i className="ri-restaurant-2-line"></i>
+                                                    <h4 style={{color: "white"}}>Restaurants</h4>
                                                 </div>
                                             </Link>
                                         </div>

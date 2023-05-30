@@ -2,6 +2,7 @@ import React from 'react';
 import {Link} from "react-router-dom";
 import './Navbar.css';
 import NavCom from "./NavCom";
+import logo from "../logo_withoutbg.png"
 
 const MyComponent = () => {
     return (
@@ -21,11 +22,14 @@ const MyComponent = () => {
 
                                     <div id="logo_transparent" className="logo_container">
                                         <div className="logo_align">
-                                            <a id="custom_logo_transparent" className="logo_wrapper default" href="">
-                                                <img src={`${process.env.PUBLIC_URL}/assets/upload/logo@2x_white.png`}
-                                                     alt="" width="92"
-                                                     height="22"/>
-                                            </a>
+                                            <Link to={"/"}>
+                                                <a id="custom_logo_transparent" className="logo_wrapper default"
+                                                   href="">
+                                                    <img src={logo}
+                                                         alt="" width="250px"
+                                                         height="30px"/>
+                                                </a>
+                                            </Link>
                                         </div>
                                     </div>
                                     {/*End logo  */}

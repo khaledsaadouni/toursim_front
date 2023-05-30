@@ -25,12 +25,12 @@ const NavBarDash = (props) => {
                     <button className="btnn" onClick={handleClick}
                             style={{backgroundColor: "transparent", borderColor: "transparent"}}
                     ><i className="bi bi-list"></i></button>
-                    <a className="navbar-brand font-weight-bolder ms-lg-0 ms-3 "
+                    <span className="navbar-brand font-weight-bolder ms-lg-0 ms-3 "
 
-                       href="../pages/dashboard.html">
+                          href="">
                         &nbsp;
                         Dashboard
-                    </a>
+                    </span>
                     <button className="navbar-toggler shadow-none ms-2" type="button"
                             data-bs-toggle="collapse" data-bs-target="#navigation"
                             aria-controls="navigation" aria-expanded="false"

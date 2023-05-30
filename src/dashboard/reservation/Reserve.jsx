@@ -2,12 +2,15 @@ import React, {useEffect, useState} from 'react';
 import {countCanceleddReservations, countConfirmedReservations, countPendingReservations} from "../../utils/Count";
 import {useLocalState} from "../../utils/UseLocalStorage";
 import {Link, Navigate} from "react-router-dom";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const Reserve = () => {
     const [reservations, setReservations] = useState(null);
+    const [loading, setLoading] = useState(true);
     const [jwt, setJwt] = useLocalState("", "jwt");
     const [user, setUser] = useLocalState(null, "user");
     useEffect(() => {
+        setLoading(false)
         const asyncFn = async () => {
             try {
                 await fetch(`/api/v1/reservation/all/partner/${user.id}`, {
@@ -28,6 +31,7 @@ const Reserve = () => {
                     }
                 })
                     .then(([data, header]) => {
+                        setLoading(true)
                         setReservations(data)
                     }).catch((message) => {
                     });
@@ -116,7 +120,8 @@ const Reserve = () => {
 
         <React.Fragment>
 
-            <div className="container-fluid py-4">
+            <div className="container-fluid py-4" style={{width: "1000px"}}>
+
                 <div className="row">
                     <div className="col mt-4">
                         <div className="card">
@@ -131,6 +136,9 @@ const Reserve = () => {
                                 </h6>
                             </div>
                             <div className="card-body pt-4 p-3">
+                                <div hidden={loading} style={{width: '50px', margin: 'auto', display: 'block'}}>
+                                    <ClipLoader color="#bb3a41" size={100}/>
+                                </div>
                                 <ul className="list-group">
                                     {reservations != null ? reservations.map((item, index) => (
                                         <li className="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
@@ -150,7 +158,7 @@ const Reserve = () => {
                                                     <span className="mb-2 text-xs">Number of Persons: <span
                                                         className="text-dark font-weight-bold ms-sm-2">{item.count_people} </span></span>) : null}
                                                 {item.offer.generic_Type === "accomodation" ? (
-                                                    <span className="mb-2 text-xs">Days Number: <span
+                                                    <span className="mb-2 text-xs">Check Out date: <span
                                                         className="text-dark font-weight-bold ms-sm-2"> {item.checkout} </span></span>) : null}
                                                 <span className="mb-2 text-xs">Client Fullname: <span
                                                     className="text-dark font-weight-bold ms-sm-2">{item.user.firstname} &nbsp;{item.user.lastname} </span></span>
@@ -159,17 +167,29 @@ const Reserve = () => {
                                                 <span className="mb-2 text-xs">Client Phone: <span
                                                     className="text-dark font-weight-bold ms-sm-2">{item.user.phone} </span></span>
                                             </div>
-                                            {item.state === "Canceled" ? null : (
-                                                <div className="ms-auto text-end">
-                                                    {item.state === "Pending" ? (
+                                            {item.state === "Canceled" ?
+                                                (<div className="ms-auto text-end">
                                                         <button
-                                                            className="btn btn-link text-dark text-gradient px-3 mb-0"
-                                                            onClick={() => handleConfirm(item.id)}
+                                                            className="btn btn-link text-danger text-gradient px-3 mb-0"
+                                                            onClick={() => handleDelete(item.id)}
                                                         >
-                                                            <i className="bi bi-check-lg"></i> Confirm</button>) : null}
-                                                    <button className="btn btn-link text-danger text-gradient px-3 mb-0"
+                                                            <i className="bi bi-trash3"></i>Delete
+                                                        </button>
+                                                    </div>
+                                                )
+                                                : (
+                                                    <div className="ms-auto text-end">
+                                                        {item.state === "Pending" ? (
+                                                            <button
+                                                                className="btn btn-link text-dark text-gradient px-3 mb-0"
+                                                                onClick={() => handleConfirm(item.id)}
+                                                            >
+                                                                <i className="bi bi-check-lg"></i> Confirm
+                                                            </button>) : null}
+                                                        <button
+                                                            className="btn btn-link text-danger text-gradient px-3 mb-0"
                                                             onClick={() => handleCancel(item.id)}
-                                                    >
+                                                        >
                                                         <i className="bi bi-x"></i>Cancel
                                                     </button>
 

@@ -38,15 +38,15 @@ const NavCom = (props) => {
                                         </Link>
                                     </li>
                                     <li className="menu-item">
-                                        <Link to={"/restaurants"}>
-                                            Restaurants
-                                        </Link>
-                                    </li>
-                                    <li className="menu-item">
                                         <Link to={"/events_activities"}>
                                             Activities & Events
                                         </Link>
 
+                                    </li>
+                                    <li className="menu-item">
+                                        <Link to={"/restaurants"}>
+                                            Restaurants
+                                        </Link>
                                     </li>
                                     <li className="menu-item">
                                         <Link to={"/shops"}>

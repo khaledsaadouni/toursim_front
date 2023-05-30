@@ -1,6 +1,7 @@
 import React from 'react';
 import {Link} from "react-router-dom";
 import NavCom from "./NavCom";
+import logo from "../logo_withoutbg.png";
 
 const Nav = () => {
     return (
@@ -15,9 +16,12 @@ const Nav = () => {
                                     <div id="nav_wrapper">
                                         <div id="logo_normal" className="logo_container">
                                             <div className="logo_align">
-                                                <a id="custom_logo" className="logo_wrapper default" href="index.html">
-                                                    <img src="assets/upload/logo@2x.png" alt="" width="92" height="22"/>
-                                                </a>
+                                                <Link to={"/"}>
+                                                    <a id="custom_logo" className="logo_wrapper default" href="">
+                                                        <img src={logo}
+                                                             alt="" width="250px"
+                                                             height="30px"/>
+                                                    </a> </Link>
                                             </div>
                                         </div>
 
@@ -25,8 +29,7 @@ const Nav = () => {
                                             <div className="logo_align">
                                                 <a id="custom_logo_transparent" className="logo_wrapper hidden"
                                                    href="index.html">
-                                                    <img src="assets/upload/logo@2x_white.png" alt="" width="92"
-                                                         height="22"/>
+
                                                 </a>
                                             </div>
                                         </div>

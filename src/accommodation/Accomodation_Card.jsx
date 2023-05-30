@@ -1,6 +1,6 @@
 import React from 'react';
 import image from "../offer.png"
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 
 const Accomadation_Card = (props) => {
     const n = props.reviews;
@@ -26,8 +26,8 @@ const Accomadation_Card = (props) => {
                     <div className="portfolio_info_wrapper">
                         <Link to={`/accomodation/${props.id}`} className="tour_link"><h4>{props.name}</h4></Link>
                         <div className="tour_excerpt">
-                            <p>{props.emplacement !== "" ? (
-                                <span>{props.emplacement}, </span>) : null} {props.destination}</p>
+                             <p><i className="bi bi-geo-alt-fill"></i> {props.emplacement !== "" ? (
+                                 <span>{props.emplacement}, </span>) : null} {props.destination}</p>
                         </div>
                         <div className="tour_attribute_wrapper">
                             <div className="tour_attribute_rating">

@@ -21,7 +21,7 @@ const MyComponent = (props) => {
                 >
 
 
-                    {/*<div className="tour_label">Sale</div>*/}
+                  {new Date() - new Date(props.date) > 0 ? (<div className="tour_label">Expired </div>) : null}
 
                     <div className="portfolio_info_wrapper">
                         <div className="tour_price has_discount">
@@ -30,6 +30,11 @@ const MyComponent = (props) => {
                             {props.price} Dt
                         </div>
                         <Link to={`/event/${props.id}`}><h4>{props.name}</h4></Link>
+                        <h6 style={{color: "white"}}><i className="bi bi-calendar-date"></i> &nbsp; {props.date}</h6>
+
+                        <h6 style={{color: "white"}}><i
+                            className="bi bi-geo-alt-fill"></i> &nbsp; {props.emplacement !== "" ? (
+                            <span>{props.emplacement}, </span>) : null} {props.destination}</h6>
                         <div className="tour_attribute_wrapper">
                             <div className="tour_attribute_rating">
                                 <div className="br-theme-fontawesome-stars-o">

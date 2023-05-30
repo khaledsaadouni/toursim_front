@@ -8,6 +8,7 @@ const Shops = () => {
     const [filtre, setFilter] = useState(false);
     const [offers, setOffers] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [originaloffers, setOriginaloffers] = useState(null);
     useEffect(() => {
         setLoading(false)
         const asyncFn = async () => {
@@ -27,6 +28,7 @@ const Shops = () => {
                     .then(([data, header]) => {
                         setLoading(true)
                         setOffers(data)
+                        setOriginaloffers(data)
                     }).catch((message) => {
                     });
             } catch (error) {
@@ -36,7 +38,53 @@ const Shops = () => {
         asyncFn();
     }, []);
 
+    const sort = (event) => {
+        if (event.target.value === "price_low") {
+            const sortedOffers = [...offers].sort((a, b) => a.price - b.price);
+            setOffers(sortedOffers)
+        }
+        if (event.target.value === "price_high") {
+            const sortedOffers = [...offers].sort((a, b) => b.price - a.price);
+            setOffers(sortedOffers)
+        }
+        if (event.target.value === "date") {
+            const sortedOffers = [...offers].sort((a, b) => new Date(b.creationDate) - new Date(a.creationDate))
+            setOffers(sortedOffers);
+        }
+        if (event.target.value === "name") {
+            const sortedOffers = [...offers].sort((a, b) => a.name.localeCompare(b.name))
+            setOffers(sortedOffers);
+        }
+        if (event.target.value === "review") {
+            const sortedOffers = [...offers].sort((a, b) => b.reviews.length - a.reviews.length)
+            setOffers(sortedOffers);
+        }
+    }
+    const filterByState = (event) => {
+        if (event.target.value === "Destination") {
+            setOffers(originaloffers)
+        } else {
+            const filteredOffers = originaloffers.filter(offer => offer.destination.toUpperCase() === event.target.value.toUpperCase());
+            setOffers(filteredOffers)
+        }
+    }
+    const filterByName = (event) => {
+        if (event === "") {
+            setOffers(originaloffers)
+        } else {
+            const filteredOffers = originaloffers.filter(offer => offer.name.toUpperCase().startsWith(event.toUpperCase()));
+            setOffers(filteredOffers)
+        }
+    }
+    const filtrePrice = (event) => {
 
+        if (event.target.value === "") {
+            setOffers(originaloffers)
+        } else {
+            const filteredOffers = originaloffers.filter(offer => offer.price <= event.target.value);
+            setOffers(filteredOffers)
+        }
+    }
     return (
         <React.Fragment>
             <Nav/>
@@ -47,85 +95,77 @@ const Shops = () => {
                     <div className="tour_search_wrapper">
                         <div className="one_fourth themeborder">
                             <input id="keyword" name="keyword" type="text" autoComplete="off"
-                                   placeholder="Destination, city"/>
+                                   placeholder="Name" onChange={(event) => filterByName(event.target.value)}/>
                             <span className="ti-search"></span>
                             <div id="autocomplete" className="autocomplete" data-mousedown="false"></div>
                         </div>
                         <div className="one_fourth themeborder">
-                            <select id="month" name="month">
-                                <option value="">Any Month</option>
-                                <option value="january">January</option>
-                                <option value="february">February</option>
-                                <option value="march">March</option>
-                                <option value="april">April</option>
-                                <option value="may">May</option>
-                                <option value="june">June</option>
-                                <option value="july">July</option>
-                                <option value="august">August</option>
-                                <option value="september">September</option>
-                                <option value="october">October</option>
-                                <option value="november">November</option>
-                                <option value="december">December</option>
-                            </select>
-                            <span className="ti-calendar"></span>
+                            <select id="destination_id" name="destination_id" onChange={filterByState}>
+                                <option value="Destination">Destination</option>
+                                <option value="Ariana">Ariana</option>
+                                <option value="Beja">Beja</option>
+                                <option value="Ben Arous"> Ben Arous</option>
+                                <option value="Bizerte">Bizerte</option>
+                                <option value="Gabes"> Gabes</option>
+                                <option value="Gafsa">Gafsa</option>
+                                <option value="Jendouba">Jendouba</option>
+                                <option value="Kairouan">Kairouan</option>
+                                <option value="Kasserine">Kasserine</option>
+                                <option value="Kebili">Kebili</option>
+                                <option value="Kef">Kef</option>
+                                <option value="Mahdia">Mahdia</option>
+                                <option value="Manouba">Manouba</option>
+                                <option value="Medenine">Medenine</option>
+                                <option value="Monastir">Monastir</option>
+                                <option value="Nabeul">Nabeul</option>
+                                <option value="Sfax"> Sfax</option>
+                                <option value="Sidi Bouzid"> Sidi Bouzid</option>
+                                <option value="Siliana"> Siliana</option>
+                                <option value="Sousse">Sousse</option>
+                                <option value="Tataouine">Tataouine</option>
+                                <option value="Tozeur">Tozeur</option>
+                                <option value="Tunis">Tunis</option>
+                                <option value="Zaghouan">Zaghouan</option>
+                            </select><span className="ti-angle-down"></span>
                         </div>
                         <div className="one_fourth themeborder">
-                            <select id="sort_by" name="sort_by">
+                            <select id="sort_by" name="sort_by" onClick={sort}>
+                                <option value="">Sort By</option>
                                 <option value="date">Sort By Date</option>
                                 <option value="price_low">Price Low to High</option>
                                 <option value="price_high">Price High to Low</option>
                                 <option value="name">Sort By Name</option>
-                                <option value="popular">Sort By Popularity</option>
                                 <option value="review">Sort By Review Score</option>
                             </select>
                             <span className="ti-exchange-vertical"></span>
                         </div>
-                        <div className="one_fourth last themeborder">
-                            <input id="tour_search_btn" type="submit" className="button" value="Search"/>
-                        </div>
+                        <div className="one_fourth  themeborder" style={{marginRight: "0",}}>
+                            <input id="budget" name="budget" type="text" placeholder="Max budget ex. 500"
+                                   onChange={filtrePrice}/>
+                            <span>DT</span>
 
+                        </div>
                         <br className="clear"/>
-                        <div className={filtre === false ? "tour_advance_search_wrapper" : "tour_search_wrapper"}>
-                            <div className="one_fourth themeborder">
-                                <select id="tourcat" name="tourcat">
-                                    <option value="">All Categories</option>
-                                    <option value="mountain">Mountain</option>
-                                    <option value="rural">Rural</option>
-                                    <option value="snow-ice">Snow &amp; Ice</option>
-                                    <option value="wildlife">Wildlife</option>
-                                </select><span className="ti-angle-down"></span>
-                            </div>
+                        {/*<div className={filtre === false ? "tour_advance_search_wrapper" : "tour_search_wrapper"}>*/}
+                        {/*    <div className="one_fourth themeborder">*/}
+                        {/*        <select id="tourcat" name="tourcat">*/}
+                        {/*            <option value="">All Categories</option>*/}
+                        {/*            <option value="mountain">Mountain</option>*/}
+                        {/*            <option value="rural">Rural</option>*/}
+                        {/*            <option value="snow-ice">Snow &amp; Ice</option>*/}
+                        {/*            <option value="wildlife">Wildlife</option>*/}
+                        {/*        </select><span className="ti-angle-down"></span>*/}
+                        {/*    </div>*/}
 
-                            <div className="one_fourth themeborder">
-                                <select id="destination_id" name="destination_id">
-                                    <option value="">Any Destinations</option>
-                                    <option value="277">Tokyo</option>
-                                    <option value="278">Seoul</option>
-                                    <option value="279">Paris</option>
-                                    <option value="284">London</option>
-                                    <option value="285">Venice</option>
-                                    <option value="287">Miami</option>
-                                    <option value="289">Rome</option>
-                                    <option value="270">Prague</option>
-                                    <option value="291">California</option>
-                                    <option value="292">Kyoto</option>
-                                    <option value="293">Hong Kong</option>
-                                    <option value="294">Santorini</option>
-                                </select><span className="ti-angle-down"></span>
-                            </div>
 
-                            <div className="one_fourth themeborder">
-                                <input id="budget" name="budget" type="text" placeholder="Max budget ex. 500"/>
-                                <span>$</span>
-                            </div>
-                        </div>
+                        {/*</div>*/}
 
-                        <div className="tour_advance_search_wrapper_link">
-                            <a id="tour_advance_search_toggle" className="theme_link_color"
-                               onClick={() => setFilter(!filtre)}><span
-                                className={filtre === false ? "icon ti-angle-down" : "icon ti-angle-up"}></span>Advanced
-                                Search</a>
-                        </div>
+                        {/*<div className="tour_advance_search_wrapper_link">*/}
+                        {/*    <a id="tour_advance_search_toggle" className="theme_link_color"*/}
+                        {/*       onClick={() => setFilter(!filtre)}><span*/}
+                        {/*        className={filtre === false ? "icon ti-angle-down" : "icon ti-angle-up"}></span>Advanced*/}
+                        {/*        Search</a>*/}
+                        {/*</div>*/}
                     </div>
                 </form>
 

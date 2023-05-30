@@ -19,7 +19,7 @@ const EventDetail = () => {
     const [comment, setComment] = useState("");
     const [position, setPosition] = useState(null);
     const [jwt, setJwt] = useLocalState("", "jwt");
-
+    const [errorMessage, setErrorMessage] = useState("");
     const [user, setUser] = useLocalState(null, "user");
     const renderDivs = (a) => {
         const divs = [];
@@ -165,7 +165,10 @@ const EventDetail = () => {
                 localStorage.removeItem('user');
                 window.location.reload();
             } else {
-                return Promise.reject("")
+
+                return response.text().then(errorMessage => {
+                    setErrorMessage(errorMessage)
+                });
             }
         })
             .then(([data]) => {
@@ -246,6 +249,9 @@ const EventDetail = () => {
                                                     <p>
                                                         <input type="submit" value="Book" onClick={handleReserve}
                                                                className="wpcf7-form-control wpcf7-submit"/>
+                                                    </p>
+                                                    <p style={{color: "#d34057"}}>
+                                                        {errorMessage}
                                                     </p>
                                                 </div>
                                                 <div hidden={jwt !== "" && user !== null}>

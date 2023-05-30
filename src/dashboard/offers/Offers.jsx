@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useLocalState} from "../../utils/UseLocalStorage";
 import formatDate from "../../utils/DateFormat";
 import {Link, Navigate} from "react-router-dom";
+import ClipLoader from "react-spinners/ClipLoader";
 
 
 const Offers = () => {
@@ -10,7 +11,11 @@ const Offers = () => {
     const [user, setUser] = useLocalState(null, "user");
     const [offers, setOffers] = useState(null)
     const [shops, setShops] = useState(null)
+    const [loading, setLoading] = useState(true)
+    const [loading2, setLoading2] = useState(true)
     useEffect(() => {
+        setLoading(false)
+        setLoading2(false)
         const asyncFn = async () => {
             try {
                 await fetch(`/api/v1/offer/partner/${user.id}`, {
@@ -31,6 +36,7 @@ const Offers = () => {
                     }
                 })
                     .then(([data, header]) => {
+                        setLoading(true)
                         setOffers(data)
                     }).catch((message) => {
                     });
@@ -53,6 +59,7 @@ const Offers = () => {
                     }
                 })
                     .then(([data, header]) => {
+                        setLoading2(true)
                         setShops(data)
                     }).catch((message) => {
                     });
@@ -154,6 +161,9 @@ const Offers = () => {
                                 </div>
                                 <div className="card-body px-0 pb-2">
                                     <div className="table-responsive p-0">
+                                        <div hidden={loading} style={{width: '50px', margin: 'auto', display: 'block'}}>
+                                            <ClipLoader color="#bb3a41" size={75}/>
+                                        </div>
                                         <table className="table align-items-center mb-0">
                                             <thead>
                                             <tr>
@@ -238,6 +248,10 @@ const Offers = () => {
                                 </div>
                                 <div className="card-body px-0 pb-2">
                                     <div className="table-responsive p-0">
+                                        <div hidden={loading2}
+                                             style={{width: '50px', margin: 'auto', display: 'block'}}>
+                                            <ClipLoader color="#bb3a41" size={75}/>
+                                        </div>
                                         <table className="table align-items-center justify-content-center mb-0">
                                             <thead>
                                             <tr>
