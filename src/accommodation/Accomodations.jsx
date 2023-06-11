@@ -74,7 +74,7 @@ const MyComponent = () => {
         if (event === "") {
             setOffers(originaloffers)
         } else {
-            const filteredOffers = originaloffers.filter(offer => offer.name.toUpperCase().startsWith(event.toUpperCase()));
+            const filteredOffers = originaloffers.filter(offer => offer.name.toUpperCase().includes(event.toUpperCase()));
             setOffers(filteredOffers)
         }
     }

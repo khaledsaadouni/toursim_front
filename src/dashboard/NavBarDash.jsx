@@ -49,7 +49,7 @@ const NavBarDash = (props) => {
                                 </Link>
                             </li>
                             <li className="nav-item ">
-                                <Link className="nav-link d-flex align-items-center me-2 active" to={"/accomodations"}>
+                                <Link className="nav-link d-flex align-items-center me-2 active" to={"/accommodations"}>
                                     Accomodations
                                 </Link>
                             </li>

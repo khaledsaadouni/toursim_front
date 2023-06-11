@@ -9,6 +9,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 
 const MyReservation = () => {
     const [reservations, setReservations] = useState(null);
+    const [originalReservations, setOriginalReservations] = useState(null);
     const [loading, setLoading] = useState(true);
     const [jwt, setJwt] = useLocalState("", "jwt");
     const [user, setUser] = useLocalState(null, "user");
@@ -37,6 +38,7 @@ const MyReservation = () => {
                     .then(([data, header]) => {
                         setLoading(true)
                         setReservations(data)
+                        setOriginalReservations(data)
                     }).catch((message) => {
                     });
             } catch (error) {
@@ -118,6 +120,7 @@ const MyReservation = () => {
             }).catch((message) => {
             });
     }
+
     async function handleToken(token, id, prix) {
         console.log(token);
         console.log("jwt :", jwt)
@@ -132,14 +135,14 @@ const MyReservation = () => {
                 },
                 method: "POST",
             }).then((response) => {
-                if (response.status === 200) {
-                    window.location.reload();
-                } else if (response.status === 401) {
-                    alert("401")
-                } else {
-                    alert("error")
-                }
-            })
+            if (response.status === 200) {
+                window.location.reload();
+            } else if (response.status === 401) {
+                alert("401")
+            } else {
+                alert("error")
+            }
+        })
             .then((data) => {
                 window.location.reload();
             }).catch((message) => {
@@ -147,7 +150,29 @@ const MyReservation = () => {
             });
     }
 
+    const filterResservation = (event) => {
+        if (event.target.value === "confirmed") {
+            const filteredReservation = originalReservations.filter(offer => offer.state.toUpperCase() === "CONFIRMED");
+            setReservations(filteredReservation)
+        }
+        if (event.target.value === "pending") {
 
+            const filteredReservation = originalReservations.filter(offer => offer.state.toUpperCase() === "PENDING");
+            setReservations(filteredReservation)
+
+        }
+        if (event.target.value === "canceled") {
+
+            const filteredReservation = originalReservations.filter(offer => offer.state.toUpperCase() === "CANCELED");
+            setReservations(filteredReservation)
+        }
+        if (event.target.value === "all") {
+
+            setReservations(originalReservations)
+        }
+
+
+    }
     return jwt === "" && user === null ? <Navigate to={"/"}></Navigate> : (
         <React.Fragment>
             <Nav/>
@@ -159,12 +184,24 @@ const MyReservation = () => {
                             <div className="card-header pb-0 px-3">
                                 <h6 className="mb-0">Reservations Information &nbsp; &nbsp;
                                     <span
-                                        className={`badge bg-warning`}>{reservations != null ? countPendingReservations(reservations) : 0}</span> &nbsp;Pending&nbsp;
+                                        className={`badge bg-warning`}>{originalReservations != null ? countPendingReservations(originalReservations) : 0}</span> &nbsp;Pending&nbsp;
                                     <span
-                                        className={`badge bg-success`}>{reservations != null ? countConfirmedReservations(reservations) : 0}</span>&nbsp; Confirmed &nbsp;
+                                        className={`badge bg-success`}>{originalReservations != null ? countConfirmedReservations(originalReservations) : 0}</span>&nbsp; Confirmed &nbsp;
                                     <span
-                                        className={`badge bg-danger`}>{reservations != null ? countCanceleddReservations(reservations) : 0}</span>&nbsp; Canceled &nbsp;
+                                        className={`badge bg-danger`}>{originalReservations != null ? countCanceleddReservations(originalReservations) : 0}</span>&nbsp; Canceled &nbsp;
+                                    <span style={{paddingLeft: "100px"}}>
+                                    <select id="sort_by" name="sort_by" onChange={(event) => filterResservation(event)}>
+                                        <option value="all"> All reservations </option>
+                                        <option value="confirmed"> Confirmed </option>
+                                        <option value="pending"> Pending
+                                        </option>
+                                        <option value="canceled"> Canceled
+                                        </option>
+                                    </select></span>
+                                    &nbsp;
+                                    <span className="ti-exchange-vertical"></span>
                                 </h6>
+
                             </div>
                             <div className="card-body pt-4 p-3">
                                 <div hidden={loading} style={{width: '50px', margin: 'auto', display: 'block'}}>
@@ -183,10 +220,12 @@ const MyReservation = () => {
                                                 </h6>
                                                 {item.offer.generic_Type !== "accomodation" && item.count_people !== null ? (
                                                     <h6 className="mb-2 text-xs">Number of Persons: <span
-                                                        className="text-dark font-weight-bold ms-sm-2">{item.count_people} </span></h6>) : null}
+                                                        className="text-dark font-weight-bold ms-sm-2">{item.count_people} </span>
+                                                    </h6>) : null}
 
                                                 <h6 className="mb-2 text-xs">Date: <span
-                                                    className="text-dark font-weight-bold ms-sm-2">{item.date} </span></h6>
+                                                    className="text-dark font-weight-bold ms-sm-2">{item.date} </span>
+                                                </h6>
                                                 {item.offer.generic_Type === "accomodation" ? (
                                                     <h6 className="mb-2 text-xs">Check Out Date: <span
                                                         className="text-dark font-weight-bold ms-sm-2"> {item.checkout} </span>
@@ -209,7 +248,7 @@ const MyReservation = () => {
                                             </div>
                                             <div className="ms-auto text-end">
                                                 <button className="btn btn-link text-danger text-gradient px-3 mb-0"
-                                                    onClick={() => handleDelete(item.id)}
+                                                        onClick={() => handleDelete(item.id)}
                                                 >
                                                     <i className="bi bi-trash3"></i>Delete
                                                 </button>

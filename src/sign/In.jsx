@@ -3,6 +3,7 @@ import {useLocalState} from "../utils/UseLocalStorage";
 import {Link, Navigate} from "react-router-dom";
 import {Switch} from "@mui/material";
 import ClipLoader from "react-spinners/ClipLoader";
+import logo from "../logo_withoutbg.png";
 
 const REGISTER_URL = "/api/v1/auth/authenticate"
 const In = () => {
@@ -11,6 +12,7 @@ const In = () => {
     const [pwd, setPwd] = useState('');
     const [jwt, setJwt] = useLocalState("", "jwt");
     const [user, setUser] = useLocalState(null, "user");
+    const [expirationDate, SetExpirationDate] = useLocalState(null, "expirationDate");
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -63,15 +65,18 @@ const In = () => {
             if (response.status === 200) {
                 return Promise.all([response.json(), response.headers])
             } else {
-                return Promise.reject("")
+                return response.text().then(errorMessage => {
+                    setError(errorMessage)
+                });
             }
         })
             .then(([data, header]) => {
                 setLoading(true)
                 setJwt(data.token);
                 setUser(data.user);
+                const currentDate = new Date();
+                SetExpirationDate(new Date(currentDate.getTime() + 24 * 60 * 60 * 1000));
             }).catch((message) => {
-                setError("Email or password is incorrect. Please try again!")
                 setLoading(true)
             });
     }
@@ -79,6 +84,70 @@ const In = () => {
     return jwt !== "" && user !== null ?
         <Navigate to={(user.role === "Partner" || user.role === "Admin") ? "/dashboard/main" : "/"} /> : (
             <React.Fragment>
+
+                <div className="header_style_wrapper">
+
+
+                    <div className="top_bar hasbg">
+                        <div className="standard_wrapper">
+                            {/*Begin logo */}
+                            <div id="logo_wrapper">
+
+
+                                <div id="menu_wrapper">
+                                    <div id="nav_wrapper">
+
+                                        <div id="logo_transparent" className="logo_container">
+                                            <div className="logo_align">
+                                                <Link to={"/"}>
+                                                    <a id="custom_logo_transparent" className="logo_wrapper default"
+                                                       href="">
+                                                        <img src={logo}
+                                                             alt="" width="250px"
+                                                             height="30px"/>
+                                                    </a>
+                                                </Link>
+                                            </div>
+                                        </div>
+                                        {/*End logo  */}
+                                        <div className="nav_wrapper_inner">
+                                            <div id="menu_border_wrapper">
+                                                <div className="menu-main-menu-container">
+                                                    <ul id="main_menu" className="nav" style={{
+                                                        display: "flex",
+                                                        justifyContent: "center",
+                                                        alignItems: "center"
+                                                    }}>
+
+
+                                                        <li className="menu-item  " style={{
+                                                            display: "flex",
+                                                            justifyContent: "center",
+                                                            alignItems: "center"
+                                                        }}>
+                                                            <Link
+                                                                to={"/sign/up"}>
+                                                                <button className="  nav-secondary">
+
+                                                                    Sign up
+
+                                                                </button>
+                                                            </Link>
+                                                        </li>
+
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/*End main nav */}
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div className="container my-auto">
                     <div className="row">
                         <div className="col-lg-4 col-md-8 col-12 mx-auto">
@@ -88,12 +157,12 @@ const In = () => {
                                         <h4 className="text-white font-weight-bolder text-center mt-2 mb-0">Sign
                                             in</h4>
                                         <div className="row mt-3">
-                                            <div className="col-2 text-center ms-auto">
-                                                <a className="btn btn-link px-3" onClick={handleLoginFacebook}>
-                                                    <i className="fa fa-facebook text-white text-lg"></i>
-                                                </a>
-                                            </div>
-                                            <div className="col-2 text-center me-auto">
+                                            {/*<div className="col-2 text-center ms-auto">*/}
+                                            {/*    <a className="btn btn-link px-3" >*/}
+                                            {/*        <i className="fa fa-facebook text-white text-lg"></i>*/}
+                                            {/*    </a>*/}
+                                            {/*</div>*/}
+                                            <div className="col text-center  ">
                                                 <a className="btn btn-link px-3" onClick={handleLoginGoogle}>
                                                     <i className="fa fa-google text-white text-lg"></i>
                                                 </a>

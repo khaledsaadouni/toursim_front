@@ -5,6 +5,7 @@ import {Link, Navigate} from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
 
 const Reserve = () => {
+    const [originalReservations, setOriginalReservations] = useState(null);
     const [reservations, setReservations] = useState(null);
     const [loading, setLoading] = useState(true);
     const [jwt, setJwt] = useLocalState("", "jwt");
@@ -32,7 +33,8 @@ const Reserve = () => {
                 })
                     .then(([data, header]) => {
                         setLoading(true)
-                        setReservations(data)
+                        setReservations(data.sort((a, b) => new Date(b.creation_date) - new Date(a.creation_date)))
+                        setOriginalReservations(data.sort((a, b) => new Date(b.creation_date) - new Date(a.creation_date)))
                     }).catch((message) => {
                     });
             } catch (error) {
@@ -116,6 +118,28 @@ const Reserve = () => {
             }).catch((message) => {
             });
     }
+    const filterResservation = (event) => {
+        if (event.target.value === "confirmed") {
+            const filteredReservation = originalReservations.filter(offer => offer.state.toUpperCase() === "CONFIRMED");
+            setReservations(filteredReservation)
+        }
+        if (event.target.value === "pending") {
+
+            const filteredReservation = originalReservations.filter(offer => offer.state.toUpperCase() === "PENDING");
+            setReservations(filteredReservation)
+
+        }
+        if (event.target.value === "canceled") {
+
+            const filteredReservation = originalReservations.filter(offer => offer.state.toUpperCase() === "CANCELED");
+            setReservations(filteredReservation)
+        }
+        if (event.target.value === "all") {
+
+            setReservations(originalReservations)
+        }
+
+    }
     return jwt === "" && user === null ? <Navigate to={"/"}/> : (
 
         <React.Fragment>
@@ -128,12 +152,22 @@ const Reserve = () => {
                             <div className="card-header pb-0 px-3">
                                 <h6 className="mb-0">My Reservations  &nbsp; &nbsp;
                                     <span
-                                        className={`badge bg-warning`}>{reservations != null ? countPendingReservations(reservations) : 0}</span> &nbsp;Pending&nbsp;
+                                        className={`badge bg-warning`}>{originalReservations != null ? countPendingReservations(originalReservations) : 0}</span> &nbsp;Pending&nbsp;
                                     <span
-                                        className={`badge bg-success`}>{reservations != null ? countConfirmedReservations(reservations) : 0}</span>&nbsp; Confirmed &nbsp;
+                                        className={`badge bg-success`}>{originalReservations != null ? countConfirmedReservations(originalReservations) : 0}</span>&nbsp; Confirmed &nbsp;
                                     <span
-                                        className={`badge bg-danger`}>{reservations != null ? countCanceleddReservations(reservations) : 0}</span>&nbsp; Canceled &nbsp;
-                                </h6>
+                                        className={`badge bg-danger`}>{originalReservations != null ? countCanceleddReservations(originalReservations) : 0}</span>&nbsp; Canceled &nbsp;
+                                    <span style={{paddingLeft: "100px"}}>
+                                    <select id="sort_by" name="sort_by" onChange={(event) => filterResservation(event)}>
+                                        <option value="all"> All reservations </option>
+                                        <option value="confirmed"> Confirmed </option>
+                                        <option value="pending"> Pending
+                                        </option>
+                                        <option value="canceled"> Canceled
+                                        </option>
+                                    </select></span>
+                                    &nbsp;
+                                    <span className="ti-exchange-vertical"></span></h6>
                             </div>
                             <div className="card-body pt-4 p-3">
                                 <div hidden={loading} style={{width: '50px', margin: 'auto', display: 'block'}}>

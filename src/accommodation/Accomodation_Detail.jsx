@@ -11,7 +11,10 @@ import {useLocalState} from "../utils/UseLocalStorage";
 import calculateAverageRate from "../utils/ReviewStarsCounter";
 import daysCount from "../utils/DaysCount";
 import {MapContainer, Marker, Popup, TileLayer} from "react-leaflet";
-
+import "./Calendar.css";
+import FullCalendar from '@fullcalendar/react' // must go before plugins
+import dayGridPlugin from '@fullcalendar/daygrid'
+import {getBookedDates} from "./DateArray"; // a plugin!
 const Acommodation_Detail = () => {
     const {id} = useParams();
     const [offer, setOffer] = useState(null);
@@ -21,6 +24,7 @@ const Acommodation_Detail = () => {
     const [jwt, setJwt] = useLocalState("", "jwt");
     const [errorMessage, setErrorMessage] = useState("");
     const [user, setUser] = useLocalState(null, "user");
+
     const renderDivs = (a) => {
         const divs = [];
 
@@ -57,8 +61,8 @@ const Acommodation_Detail = () => {
             })
                 .then(([data]) => {
                     setOffer(data);
+                    console.log(getBookedDates(data.reservations))
                     if (data != null && data.google_map != null) {
-                        console.log("here")
                         const link = data.google_map;
                         const url = new URL(link);
                         const regex = /@(-?\d+\.\d+),(-?\d+\.\d+)/;
@@ -378,7 +382,26 @@ const Acommodation_Detail = () => {
 
 
                             </div>
-                            <h5>
+                            <div className="single_tour_content">
+                                <h4 className="p1">Availability</h4>
+
+
+                                <span>
+                                    {offer != null ? (
+                                        <FullCalendar
+                                            height="550px"
+
+                                            plugins={[dayGridPlugin]}
+                                            initialView="dayGridMonth"
+                                            events={
+                                                getBookedDates(offer.reservations)
+                                            }
+                                        />) : null}
+                                </span>
+
+
+                            </div>
+                            <h5 style={{paddingTop: "50px"}}>
 
                                 <span>
                                     <span>Location</span>

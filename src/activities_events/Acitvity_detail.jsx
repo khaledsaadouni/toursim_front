@@ -230,14 +230,18 @@ const EventDetail = () => {
 
                                             </div>
 
+
                                             <div action="#" method="post" className="wpcf7-form"
                                                  noValidate="novalidate">
-                                                <div hidden={jwt === "" && user === null}>
-                                                    <p>
-                                                        <p>
-                                                            <label> Number of Persons </label>
-                                                            <br/>
-                                                            <span className="wpcf7-form-control-wrap text-237">
+                                                {offer != null && new Date() - new Date(offer.eventDate) > 0 ? (
+                                                        <h2>Event expired</h2>) :
+                                                    (<div>
+                                                        <div hidden={jwt === "" && user === null}>
+                                                            <p>
+                                                                <p>
+                                                                    <label> Number of Persons </label>
+                                                                    <br/>
+                                                                    <span className="wpcf7-form-control-wrap text-237">
                                                             <input type="number"
                                                                    value={count_pep}
                                                                    onChange={(event) => setCount_pep(event.target.value)}
@@ -275,6 +279,9 @@ const EventDetail = () => {
                                                     </span>
                                                     </p>
                                                 </div>
+                                                    </div>)}
+
+
                                                 <div className="wpcf7-response-output wpcf7-display-none">
                                                     <div className="row">
                                                         <div className="col-3">
@@ -308,6 +315,7 @@ const EventDetail = () => {
                                                 </div>
 
                                             </div>
+
                                         </div>
                                     </div>
 
@@ -324,7 +332,8 @@ const EventDetail = () => {
                             <h1>{offer != null ? offer.name : null}</h1>
                             <h5><i
                                 className="bi bi-geo-alt-fill"></i> &nbsp; {offer != null && offer.emplacement !== null ?
-                                <span>{offer.emplacement},</span> : null} {offer != null ? offer.destination : null}
+                                <span>{offer.emplacement !== "" ? (
+                                    <span>{offer.emplacement}, </span>) : null}</span> : null} {offer != null ? offer.destination : null}
                             </h5>
                             <h6>
                                 <i className="bi bi-calendar-date"></i> &nbsp;
@@ -378,6 +387,7 @@ const EventDetail = () => {
 
 
                             </div>
+
                             <div className="single_tour_content">
                                 <h4 className="p1">Regulations</h4>
                                 {offer !== null ? (

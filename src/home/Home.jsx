@@ -42,7 +42,7 @@ const MyComponent = () => {
                                         data-aos-delay="250">
                                         <div className="col-xl-2 col-md-4"
                                              style={{border: "2px solid", borderColor: "white", marginRight: "10px"}}>
-                                            <Link to={"/accomodations"}>
+                                            <Link to={"/accommodations"}>
                                                 <div className="icon-box" style={{fontSize: "70px", color: "white"}}>
                                                     <i className="ri-home-4-line"></i>
                                                     <h5 style={{color: "white"}}>Accommodations</h5>

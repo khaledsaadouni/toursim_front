@@ -1,6 +1,6 @@
 import Home from "./home/Home";
 import React from "react";
-import { Route, Routes } from "react-router-dom";
+import {Route, Routes} from "react-router-dom";
 import Accomodations from "./accommodation/Accomodations";
 import Activities from "./activities_events/Activies";
 import Restaurants from "./restaurants/Restaurants";
@@ -17,58 +17,29 @@ import MyReservation from "./reservations/MyReservation";
 import ShopDetail from "./shops/Shop_Detail";
 
 function App() {
-    return ( <
-        React.Fragment >
-        <
-        Routes >
-        <
-        Route path = "/"
-        element = { < Home / > }
-        /> <
-        Route path = "/accomodations"
-        element = { < Accomodations / > }
-        /> <
-        Route path = "/accomodation/:id"
-        element = { < Accomodation_Detail / > }
-        /> <
-        Route path = "/event/:id"
-        element = { < EventDetail / > }
-        /> <
-        Route path = "/restoration/:id"
-        element = { < Restaurant_Detail / > }
-        /> <
-        Route path = "/shop/:id"
-        element = { < ShopDetail / > }
-        /> <
-        Route path = "/events_activities"
-        element = { < Activities / > }
-        /> <
-        Route path = "/restaurants"
-        element = { < Restaurants / > }
-        /> <
-        Route path = "/reservations"
-        element = { < MyReservation / > }
-        /> <
-        Route path = "/shops"
-        element = { < Shops / > }
-        /> <
-        Route path = "/destinations"
-        element = { < Destinations / > }
-        /> <
-        Route path = "/aboutUs"
-        element = { < AboutUs / > }
-        /> <
-        Route path = "/dashboard/:page/:id?"
-        element = { < Dashboard / > }
-        /> <
-        Route path = "/sign/:p/:token?"
-        element = { < Sign / > }
-        /> <
-        Route path = "/profile/:page"
-        element = { < Profile / > }
-        /> <
-        /Routes> <
-        /React.Fragment>
+
+    return (<
+            React.Fragment>
+            <
+                Routes>
+                <Route path="/" element={<Home/>}/>
+                <Route path="/accommodations" element={< Accomodations/>}/>
+                <Route path="/accommodation/:id" element={< Accomodation_Detail/>}/>
+                <Route path="/event/:id" element={< EventDetail/>}/>
+                <Route path="/restoration/:id" element={< Restaurant_Detail/>}/>
+                <Route path="/shop/:id" element={< ShopDetail/>}/>
+                <Route path="/events_activities" element={< Activities/>}/>
+                <Route path="/restaurants" element={< Restaurants/>}/>
+                <Route path="/reservations" element={< MyReservation/>}/>
+                <Route path="/shops" element={< Shops/>}/>
+                <Route path="/destinations" element={< Destinations/>}/>
+                <Route path="/aboutUs" element={< AboutUs/>}/>
+                <Route path="/dashboard/:page/:id?" element={< Dashboard/>}/>
+                <Route path="/sign/:p/:token?" element={< Sign/>}/>
+                <Route path="/profile/:page" element={< Profile/>}/>
+            < /Routes>
+
+        </React.Fragment>
     );
 }
 

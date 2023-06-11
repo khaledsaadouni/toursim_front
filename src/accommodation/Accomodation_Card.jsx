@@ -24,10 +24,10 @@ const Accomadation_Card = (props) => {
                     </a>
 
                     <div className="portfolio_info_wrapper">
-                        <Link to={`/accomodation/${props.id}`} className="tour_link"><h4>{props.name}</h4></Link>
+                        <Link to={`/accommodation/${props.id}`} className="tour_link"><h4>{props.name}</h4></Link>
                         <div className="tour_excerpt">
-                             <p><i className="bi bi-geo-alt-fill"></i> {props.emplacement !== "" ? (
-                                 <span>{props.emplacement}, </span>) : null} {props.destination}</p>
+                            <p><i className="bi bi-geo-alt-fill"></i> {props.emplacement !== "" ? (
+                                <span>{props.emplacement}, </span>) : null} {props.destination}</p>
                         </div>
                         <div className="tour_attribute_wrapper">
                             <div className="tour_attribute_rating">
