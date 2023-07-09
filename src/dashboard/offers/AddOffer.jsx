@@ -22,6 +22,7 @@ const AddOffer = () => {
         setAccom(false)
     }
     const [checkedValues, setCheckedValues] = useState([]);
+    const [allow, setAllow] = useState(false);
 
     const handleCheckboxChange = (event) => {
         const value = event.target.value;
@@ -72,6 +73,30 @@ const AddOffer = () => {
         setInputs1(newInputs);
     };
 
+    const [inputs3, setInputs3] = useState([]);
+
+    const handleInputNameChange3 = (index, event) => {
+        const newInputs = [...inputs3];
+        newInputs[index] = {...newInputs[index], "name": event.target.value};
+        console.log(newInputs);
+        setInputs3(newInputs);
+    };
+    const handleInputPriceChange3 = (index, event) => {
+        const newInputs = [...inputs3];
+        newInputs[index] = {...newInputs[index], "price": event.target.value};
+        console.log(newInputs);
+        setInputs3(newInputs);
+    };
+
+    const handleAddInput3 = () => {
+        setInputs3([...inputs3, ""]);
+    };
+    const handleDeleteInput3 = (index) => {
+        const newInputs = [...inputs3];
+        newInputs.splice(index, 1);
+        setInputs3(newInputs);
+    };
+
     const [jwt, setJwt] = useLocalState("", "jwt");
     const [user, setUser] = useLocalState(null, "user");
     const [redirect, setRedirect] = useState(false);
@@ -100,8 +125,9 @@ const AddOffer = () => {
             'regulations': inputs1,
             'socialMediaLink': inputs,
             'comodityList': checkedValues,
-            'google_map': googlemap
-
+            'google_map': googlemap,
+            'extras': inputs3,
+            'allow_many_reservation': allow
         };
         await fetch(`/api/v1/accomodation/add/${user.id}`, {
             headers: {
@@ -285,6 +311,13 @@ const AddOffer = () => {
                                                            className="form-control"/>
                                                 </div>
                                                 <div className="input-group input-group-outline my-3">
+                                                    <label> Allow many reservation per night &nbsp;&nbsp;
+                                                        <input type="checkbox"
+                                                               checked={allow}
+                                                               onChange={(event) => setAllow(!allow)}
+                                                        /> </label>
+                                                </div>
+                                                <div className="input-group input-group-outline my-3">
                                                     <label> Description </label>
                                                     <textarea
 
@@ -413,6 +446,49 @@ const AddOffer = () => {
                                                         />
                                                         &nbsp;Garden
                                                     </label>
+                                                </div>
+
+                                                <div className="input-group input-group-outline my-3">
+                                                    <label> Extras </label>
+
+                                                    {inputs3.map((value, index) => (
+                                                        <div className="input-group input-group-outline my-3"
+                                                             key={index}>
+                                                            <div className="row">
+                                                                <div className="col"> Extra:</div>
+                                                                <div className="col">
+                                                                    <input
+                                                                        style={{width: "250px"}}
+                                                                        className="form-control"
+                                                                        value={value.name}
+                                                                        onChange={(event) => handleInputNameChange3(index, event)}
+                                                                    />
+                                                                </div>
+                                                                <div className="col">Price:</div>
+                                                                <div className="col"><input
+                                                                    style={{width: "150px"}}
+                                                                    className="form-control"
+                                                                    value={value.price}
+                                                                    onChange={(event) => handleInputPriceChange3(index, event)}
+                                                                /></div>
+                                                                <div className="col">
+                                                                    <button style={{
+                                                                        backgroundColor: "white",
+                                                                        border: "0px solid",
+                                                                        color: "red"
+                                                                    }} onClick={() => handleDeleteInput3(index)}>X
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+
+
+                                                        </div>
+                                                    ))}
+                                                    <div className="row">
+                                                        <button className="btn btn-primary" onClick={handleAddInput3}>+
+                                                        </button>
+                                                    </div>
+
                                                 </div>
                                                 <div className="input-group input-group-outline my-3">
                                                     <label> Social Media Links </label>

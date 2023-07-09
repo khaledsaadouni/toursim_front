@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {useLocalState} from "../utils/UseLocalStorage";
-import {countCanceleddReservations, countConfirmedReservations, countPendingReservations} from "../utils/Count";
+import {countCanceleddReservations, countConfirmedReservations} from "../utils/Count";
 import Nav from "../navBar/Nav";
-import {Navigate} from "react-router-dom";
-import Stripe from "react-stripe-checkout";
+import {Link, Navigate} from "react-router-dom";
 import L from "leaflet";
 import ClipLoader from "react-spinners/ClipLoader";
+import formatDate from "../utils/DateFormat";
 
 const MyReservation = () => {
     const [reservations, setReservations] = useState(null);
@@ -37,7 +37,8 @@ const MyReservation = () => {
                 })
                     .then(([data, header]) => {
                         setLoading(true)
-                        setReservations(data)
+                        console.log(data)
+                        setReservations(data.sort((a, b) => new Date(b.creation_date) - new Date(a.creation_date)))
                         setOriginalReservations(data)
                     }).catch((message) => {
                     });
@@ -155,9 +156,10 @@ const MyReservation = () => {
             const filteredReservation = originalReservations.filter(offer => offer.state.toUpperCase() === "CONFIRMED");
             setReservations(filteredReservation)
         }
-        if (event.target.value === "pending") {
+        if (event.target.value === "latest") {
 
-            const filteredReservation = originalReservations.filter(offer => offer.state.toUpperCase() === "PENDING");
+            const filteredReservation = [...originalReservations].sort((a, b) => new Date(b.creation_date) - new Date(a.creation_date))
+
             setReservations(filteredReservation)
 
         }
@@ -184,8 +186,6 @@ const MyReservation = () => {
                             <div className="card-header pb-0 px-3">
                                 <h6 className="mb-0">Reservations Information &nbsp; &nbsp;
                                     <span
-                                        className={`badge bg-warning`}>{originalReservations != null ? countPendingReservations(originalReservations) : 0}</span> &nbsp;Pending&nbsp;
-                                    <span
                                         className={`badge bg-success`}>{originalReservations != null ? countConfirmedReservations(originalReservations) : 0}</span>&nbsp; Confirmed &nbsp;
                                     <span
                                         className={`badge bg-danger`}>{originalReservations != null ? countCanceleddReservations(originalReservations) : 0}</span>&nbsp; Canceled &nbsp;
@@ -193,8 +193,6 @@ const MyReservation = () => {
                                     <select id="sort_by" name="sort_by" onChange={(event) => filterResservation(event)}>
                                         <option value="all"> All reservations </option>
                                         <option value="confirmed"> Confirmed </option>
-                                        <option value="pending"> Pending
-                                        </option>
                                         <option value="canceled"> Canceled
                                         </option>
                                     </select></span>
@@ -212,39 +210,43 @@ const MyReservation = () => {
                                         <li className="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
 
                                             <div className="d-flex flex-column">
-                                                <h6 className="mb-3 ">{item.offer.name} &nbsp; &nbsp;
+                                                <h6 className="mb-3 ">
                                                     <span
                                                         className={`badge bg-${item.state === "Pending" ? "warning" : item.state === "Confirmed" ? "success" : "danger"}`}>{item.state}</span>
+                                                    &nbsp; &nbsp;   {item.offer.generic_Type == "accomodation" ? (
+                                                    <Link
+                                                        to={`/accommodation/${item.offer.id}`}>{item.offer.name} </Link>
+                                                ) : (
+                                                    <Link
+                                                        to={`/${item.offer.generic_Type}/${item.offer.id}`}>{item.offer.name} </Link>
+                                                )} &nbsp;
+                                                    <span style={{
+                                                        fontSize: "12px",
+                                                        color: "grey"
+                                                    }}> {formatDate(item.creation_date)}&nbsp; &nbsp; </span>
                                                 </h6>
                                                 <h6 className="mb-3 text-sm">Total Price:&nbsp; {item.price} &nbsp; DT
                                                 </h6>
-                                                {item.offer.generic_Type !== "accomodation" && item.count_people !== null ? (
-                                                    <h6 className="mb-2 text-xs">Number of Persons: <span
+                                                {item.count_people !== 0 ? (
+                                                    <span className="mb-2 text-xs">Number of Persons: <span
                                                         className="text-dark font-weight-bold ms-sm-2">{item.count_people} </span>
-                                                    </h6>) : null}
+                                                    </span>) : null}
 
-                                                <h6 className="mb-2 text-xs">Date: <span
+                                                <span className="mb-2 text-xs">Date: <span
                                                     className="text-dark font-weight-bold ms-sm-2">{item.date} </span>
-                                                </h6>
+                                                </span>
                                                 {item.offer.generic_Type === "accomodation" ? (
-                                                    <h6 className="mb-2 text-xs">Check Out Date: <span
+                                                    <span className="mb-2 text-xs">Check Out Date: <span
                                                         className="text-dark font-weight-bold ms-sm-2"> {item.checkout} </span>
-                                                    </h6>) : null}
-                                                {item.state == "Confirmed" ?
+                                                    </span>) : null}
+                                                {item.offer.generic_Type === "accomodation" && item.extras != null && item.extras.length != 0 ? (
+                                                    <span className="mb-2 text-xs">Extras:
+                                                        <ul> {item.extras !== null ? item.extras.map((extra, index) => (
 
-                                                    <div className="App">
-                                                        {item.payed == 0 ?
-                                                            < Stripe
-                                                                stripeKey="pk_test_51N44NmGazYrIprITtnTMjPY6OBzJorEUmjj0ULZNqWpLcolM98zYMWMRsZETEC0LnCgJMaLcjy9ny3LBuAb6nnCk00srw2JeR7"
-                                                                token={(token) => handleToken(token, item.id, item.price)}/> :
-                                                            <h5 style={{
-                                                                width: "100px",
-                                                                border: "1px solid black",
-                                                                borderRadius: "5px",
-                                                                textAlign: "center"
-                                                            }}>Payed <i className="bi bi-check-lg"></i></h5>
-                                                        }
-                                                    </div> : null}
+                                                            <li
+                                                                className="text-dark font-weight-bold ms-sm-2"> {extra.name} &nbsp;: &nbsp;{extra.price} &nbsp; DT </li>)) : null}</ul>
+                                                    </span>) : null}
+
                                             </div>
                                             <div className="ms-auto text-end">
                                                 <button className="btn btn-link text-danger text-gradient px-3 mb-0"

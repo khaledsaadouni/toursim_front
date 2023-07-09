@@ -61,7 +61,14 @@ const NavBarDash = (props) => {
                             <li className="nav-item">
                                 <Link className="nav-link d-flex align-items-center me-2 active"
                                       to={"/events_activities"}>
-                                    Activities & Events
+                                    Events
+                                </Link>
+
+                            </li>
+                            <li className="nav-item">
+                                <Link className="nav-link d-flex align-items-center me-2 active"
+                                      to={"/programs"}>
+                                    Programs
                                 </Link>
 
                             </li>

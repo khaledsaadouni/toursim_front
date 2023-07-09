@@ -15,6 +15,8 @@ import EventDetail from "./activities_events/Acitvity_detail";
 import Restaurant_Detail from "./restaurants/Restaurant_detail";
 import MyReservation from "./reservations/MyReservation";
 import ShopDetail from "./shops/Shop_Detail";
+import Programs from "./programs/programs";
+import Program_detail from "./programs/program_detail";
 
 function App() {
 
@@ -25,6 +27,8 @@ function App() {
                 <Route path="/" element={<Home/>}/>
                 <Route path="/accommodations" element={< Accomodations/>}/>
                 <Route path="/accommodation/:id" element={< Accomodation_Detail/>}/>
+                <Route path="/programs" element={< Programs/>}/>
+                <Route path="/program/:id" element={< Program_detail/>}/>
                 <Route path="/event/:id" element={< EventDetail/>}/>
                 <Route path="/restoration/:id" element={< Restaurant_Detail/>}/>
                 <Route path="/shop/:id" element={< ShopDetail/>}/>

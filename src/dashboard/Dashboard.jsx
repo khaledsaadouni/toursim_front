@@ -17,6 +17,8 @@ import EditEvent from "./offers/EditEvent";
 import AddShop from "./offers/AddShop";
 import EditShop from "./offers/EditShop";
 import Reserve from "./reservation/Reserve";
+import AddProgram from "./programs/AddProgram";
+import EditProgram from "./programs/EditProgram";
 
 const Dashboard = () => {
     const {page} = useParams();
@@ -40,6 +42,10 @@ const Dashboard = () => {
                 return <Settings/>;
             case "editAccom":
                 return <EditAccom/>;
+            case "addProgram":
+                return <AddProgram/>;
+            case "editProgram":
+                return <EditProgram/>;
             case "editResto":
                 return <EditResto/>;
             case "editEvent":
@@ -113,17 +119,17 @@ const Dashboard = () => {
                                     <span className="nav-link-text ms-1">Reservations</span>
                                 </Link>
                             </li>
-                            {/*<li className="nav-item">*/}
-                            {/*    <Link*/}
-                            {/*        className={`nav-link text-white   ${page === "programs" && "bg-gradient-primary"}`}*/}
-                            {/*        to={"/dashboard/programs"} style={{color: "white"}}>*/}
-                            {/*        <div*/}
-                            {/*            className="text-white text-center me-2 d-flex align-items-center justify-content-center">*/}
-                            {/*            <i className="material-icons opacity-10">view_in_ar</i>*/}
-                            {/*        </div>*/}
-                            {/*        <span className="nav-link-text ms-1"> Programs</span>*/}
-                            {/*    </Link>*/}
-                            {/*</li>*/}
+                            <li className="nav-item">
+                                <Link
+                                    className={`nav-link text-white   ${page === "programs" && "bg-gradient-primary"}`}
+                                    to={"/dashboard/programs"} style={{color: "white"}}>
+                                    <div
+                                        className="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                        <i className="material-icons opacity-10">view_in_ar</i>
+                                    </div>
+                                    <span className="nav-link-text ms-1"> Programs</span>
+                                </Link>
+                            </li>
                             <li className="nav-item">
                                 <Link
                                     className={`nav-link text-white   ${page === "profile" && "bg-gradient-primary"}`}

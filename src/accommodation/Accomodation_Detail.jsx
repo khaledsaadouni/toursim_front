@@ -24,6 +24,7 @@ const Acommodation_Detail = () => {
     const [jwt, setJwt] = useLocalState("", "jwt");
     const [errorMessage, setErrorMessage] = useState("");
     const [user, setUser] = useLocalState(null, "user");
+    const [price, setPrice] = useState(0);
 
     const renderDivs = (a) => {
         const divs = [];
@@ -61,7 +62,13 @@ const Acommodation_Detail = () => {
             })
                 .then(([data]) => {
                     setOffer(data);
-                    console.log(getBookedDates(data.reservations))
+                    setPrice(data.price);
+                    let i = 0;
+                    for (let extra of data.extras) {
+                        checkboxes[i] = false;
+                        i++
+                    }
+                    console.log(checkboxes)
                     if (data != null && data.google_map != null) {
                         const link = data.google_map;
                         const url = new URL(link);
@@ -137,16 +144,27 @@ const Acommodation_Detail = () => {
             });
     }
     const [date, setDate] = useState();
-    const [count_pep, setCount_pep] = useState();
     const [count_d, setCount_d] = useState();
+    const [count_p, setCount_p] = useState(0);
     const [redirect, setRedirect] = useState(false);
+    const [checkboxes, setCheckboxes] = useState([]);
+    const handleCheckboxChange = (index) => {
+        checkboxes[index] = !checkboxes[index];
+
+        if (checkboxes[index] == true) {
+            setPrice(price + offer.extras[index].price)
+        } else {
+            setPrice(price - offer.extras[index].price)
+        }
+    };
     const handleReserve = async () => {
-        const d = daysCount(date, count_d)
+        const d = daysCount(date, count_d) + 1
         const reqBody = {
             "date": date,
-            "count_people": 0,
+            "count_people": count_p,
             "checkout": count_d,
-            'price': offer.price * d
+            'price': price * d,
+            'extras': offer.extras
         };
         await fetch(`/api/v1/reservation/add/${user.id}/${offer !== null ? offer.id : -1}`, {
             headers: {
@@ -195,84 +213,113 @@ const Acommodation_Detail = () => {
 
                             <div className="sidebar_top"></div>
 
-                                <div className="sidebar">
+                            <div className="sidebar">
 
-                                    <div className="content"
-                                         style={{
-                                             boxShadow: '0px 0px 10px 5px rgba(0, 0, 0, 0.3)',
-                                             borderRadius: "5px"
-                                         }}>
+                                <div className="content"
+                                     style={{
+                                         boxShadow: '0px 0px 10px 5px rgba(0, 0, 0, 0.3)',
+                                         borderRadius: "5px"
+                                     }}>
 
-                                        <div style={{
-                                            minHeight: "50px",
-                                            background: "black",
-                                            color: "white",
-                                            lineHeight: "50px",
-                                            padding: " 0 15px 0 15px",
-                                            boxSizing: " border-box",
-                                            borderTopLeftRadius: " 5px",
-                                            borderTopRightRadius: " 5px"
-                                        }}>
-                                            <div className="single_tour_price">
-                                                {/*<span className="normal_price">*/}
-                                                {/*  $6,700*/}
-                                                {/* </span>*/}
-                                                {offer != null ? offer.price : null} DT
-                                            </div>
-                                            <div className="single_tour_per_person">
-                                                Per Night
-                                            </div>
+                                    <div style={{
+                                        minHeight: "50px",
+                                        background: "black",
+                                        color: "white",
+                                        lineHeight: "50px",
+                                        padding: " 0 15px 0 15px",
+                                        boxSizing: " border-box",
+                                        borderTopLeftRadius: " 5px",
+                                        borderTopRightRadius: " 5px"
+                                    }}>
+                                        <div className="single_tour_price">
+                                            {/*<span className="normal_price">*/}
+                                            {/*  $6,700*/}
+                                            {/* </span>*/}
+                                            {price} DT
                                         </div>
+                                        <div className="single_tour_per_person">
+                                            Per Night
+                                        </div>
+                                    </div>
 
-                                        <div className="single_tour_booking_wrapper themeborder contact_form7">
+                                    <div className="single_tour_booking_wrapper themeborder contact_form7">
 
-                                            <div role="form" className="wpcf7" id="wpcf7-f142-o1" lang="en-US"
-                                                 dir="ltr">
+                                        <div role="form" className="wpcf7" id="wpcf7-f142-o1" lang="en-US"
+                                             dir="ltr">
 
 
-                                                <div className="screen-reader-response">
+                                            <div className="screen-reader-response">
 
-                                                </div>
+                                            </div>
 
-                                                <div action="#" method="post" className="wpcf7-form"
-                                                     noValidate="novalidate">
-                                                    <div hidden={jwt === "" && user === null}>
-                                                        <p>
-                                                            <label> Reservation Date </label>
-                                                            <br/>
-                                                            <span className="wpcf7-form-control-wrap text-237">
+                                            <div action="#" method="post" className="wpcf7-form"
+                                                 noValidate="novalidate">
+                                                {offer != null && offer.extras !== null ? (
+                                                    <div hidden={offer.extras.length == 0}>
+                                                        <div className="row">
+                                                            <label style={{fontSize: "20px"}}> Extras </label>
+                                                        </div>
+                                                        {offer.extras !== null ? offer.extras.map((item, index) => (
+                                                            <div className="row">
+                                                                <div className="col"> {item.name}</div>
+                                                                <div className="col"> {item.price} DT</div>
+                                                                <div className="col"><input type="checkbox"
+                                                                                            onChange={() => handleCheckboxChange(index)}/>
+                                                                </div>
+                                                            </div>)) : null}
+
+                                                    </div>) : null}
+                                                <div hidden={jwt === "" && user === null}>
+                                                    <p>
+                                                        <label style={{fontSize: "20px"}}> Reservation Date </label>
+                                                        <br/>
+                                                        <span className="wpcf7-form-control-wrap text-237">
                                                         <input
                                                             value={date}
                                                             type="date"
                                                             onChange={(event) => setDate(event.target.value)}
                                                             className="form-control "/>
                                                     </span>
-                                                        </p>
-                                                        <p>
-                                                            <label> Check Out Date </label>
-                                                            <br/>
-                                                            <span className="wpcf7-form-control-wrap text-237">
+                                                    </p>
+                                                    <p>
+                                                        <label style={{fontSize: "20px"}}> Check Out Date </label>
+                                                        <br/>
+                                                        <span className="wpcf7-form-control-wrap text-237">
                                                         <input type="date"
                                                                value={count_d}
                                                                onChange={(event) => setCount_d(event.target.value)}
                                                                className="form-control "/>
                                                     </span>
-                                                        </p>
+                                                    </p>
+                                                    {offer != null && offer.allow_many_reservation == true ? (
                                                         <p>
-                                                            <input type="submit" value="Book" onClick={handleReserve}
-                                                                   className="wpcf7-form-control wpcf7-submit"/>
-                                                        </p>
-                                                        <p style={{color: "#d34057"}}>
-                                                            {errorMessage}
-                                                        </p>
-                                                    </div>
-                                                    <div hidden={jwt !== "" && user !== null}>
-                                                        <p>
-                                                            <label> Register or sign in to make a reservation </label>
+                                                            <label style={{fontSize: "20px"}}> Number of
+                                                                persons </label>
                                                             <br/>
+                                                            <span className="wpcf7-form-control-wrap text-237">
+                                                        <input type="number"
+                                                               value={count_p}
+                                                               onChange={(event) => setCount_p(event.target.value)}
+                                                               className="form-control "/>
+                                                    </span>
+                                                        </p>) : null}
+                                                    <p>
+                                                        <input type="submit" value="Book" onClick={handleReserve}
+                                                               className="wpcf7-form-control wpcf7-submit"/>
+                                                    </p>
+                                                    <p style={{color: "#d34057"}}>
+                                                        {errorMessage}
+                                                    </p>
+                                                </div>
 
-                                                            <span className="wpcf7-form-control-wrap text-237"><div
-                                                                className="text-center">
+
+                                                <div hidden={jwt !== "" && user !== null}>
+                                                    <p>
+                                                        <label> Register or sign in to make a reservation </label>
+                                                        <br/>
+
+                                                        <span className="wpcf7-form-control-wrap text-237"><div
+                                                            className="text-center">
                                                               <Link
                                                                   to={"/sign/in"}> <button
                                                                   className="btn bg-gradient-primary w-100 my-4 mb-2">Sign in
@@ -285,47 +332,47 @@ const Acommodation_Detail = () => {
                                                       >Sign up</Link>
                                                      </p>
                                                     </span>
-                                                        </p>
-                                                    </div>
-                                                    <div className="wpcf7-response-output wpcf7-display-none">
-                                                        <div className="row">
-                                                            <div className="col-3">
-                                                                <img
-                                                                    src={offer !== null && offer.partner.photo != null ? offer.partner.photo : image}
-                                                                    style={{borderRadius: "10%"}}/>
-                                                            </div>
-                                                            <div className="col">
-                                                                <div className="row">
+                                                    </p>
+                                                </div>
+                                                <div className="wpcf7-response-output wpcf7-display-none">
+                                                    <div className="row">
+                                                        <div className="col-3">
+                                                            <img
+                                                                src={offer !== null && offer.partner.photo != null ? offer.partner.photo : image}
+                                                                style={{borderRadius: "10%"}}/>
+                                                        </div>
+                                                        <div className="col">
+                                                            <div className="row">
                                                              <span>
                                                                  <i
                                                                      className="bi bi-person"></i>
                                                                  {offer !== null ? offer.partner.firstname : null} &nbsp; {offer !== null ? offer.partner.lastname : null}
                                                             </span>
-                                                                </div>
-                                                                <div className="row">
+                                                            </div>
+                                                            <div className="row">
                                                                <span>
                                                                    <i
                                                                        className="bi bi-envelope"></i> {offer !== null ? offer.partner.email : null}
                                                                </span>
-                                                                </div>
-                                                                {offer !== null && offer.partner.phone != 0 ? (
-                                                                    <div className="row">
+                                                            </div>
+                                                            {offer !== null && offer.partner.phone != 0 ? (
+                                                                <div className="row">
                                                               <span>
                                                                   <i
                                                                       className="bi bi-telephone"></i> {offer.partner.phone}
                                                             </span>
-                                                                    </div>) : null}
-                                                            </div>
+                                                                </div>) : null}
                                                         </div>
                                                     </div>
-
                                                 </div>
+
                                             </div>
                                         </div>
-
                                     </div>
 
                                 </div>
+
+                            </div>
                             <br className="clear"/>
 
                             <div className="sidebar_bottom"></div>

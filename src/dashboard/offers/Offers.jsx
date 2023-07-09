@@ -216,8 +216,16 @@ const Offers = () => {
                                                     <td>
                                                         <div className="d-flex px-2 py-1">
                                                             <div className="d-flex flex-column justify-content-center">
-                                                                <h6 className="mb-0 text-sm"><Link
-                                                                    to={`/${item.generic_Type}/${item.id}`}>{item.name} </Link>
+                                                                <h6 className="mb-0 text-sm">
+                                                                    {item.generic_Type == "accomodation" ? (
+                                                                        <Link
+                                                                            to={`/accommodation/${item.id}`}>{item.name} </Link>
+                                                                    ) : (
+                                                                        <Link
+                                                                            to={`/${item.generic_Type}/${item.id}`}>{item.name} </Link>
+                                                                    )}
+
+
                                                                 </h6>
                                                             </div>
                                                         </div>

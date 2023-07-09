@@ -45,7 +45,7 @@ const MyComponent = () => {
                                             <Link to={"/accommodations"}>
                                                 <div className="icon-box" style={{fontSize: "70px", color: "white"}}>
                                                     <i className="ri-home-4-line"></i>
-                                                    <h5 style={{color: "white"}}>Accommodations</h5>
+                                                    <h5 style={{color: "white"}}>Accommodation</h5>
                                                 </div>
                                             </Link>
                                         </div>

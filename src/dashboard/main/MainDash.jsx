@@ -8,6 +8,7 @@ import {
     getEventDates,
     getIncome,
     getNumber,
+    getProgDates,
     getReserNumver,
     getRestaDates
 } from "./functions";
@@ -40,11 +41,13 @@ const MainDash = (props) => {
     const [accom, setAccom] = useState(0);
     const [event, setEvent] = useState(0);
     const [restau, setRestau] = useState(0);
+    const [prog, setProg] = useState(0);
     const [dataSet, setDataSet] = useState([]);
     const [dataSet2, setDataSet2] = useState([]);
     const [acommDate, setAcommDate] = useState([]);
     const [restauDate, setRestauDate] = useState([]);
     const [eventDate, setEventDate] = useState([]);
+    const [progDate, setProgDate] = useState([]);
 
     useEffect(() => {
         setLoading(false)
@@ -160,6 +163,33 @@ const MainDash = (props) => {
             } catch (error) {
             }
         };
+        const asyncFn6 = async () => {
+            try {
+                await fetch(`/api/v1/program/partner/${user.id}`, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${jwt}`
+                    },
+                    method: "GET",
+                }).then((response) => {
+                    if (response.status === 200) {
+                        return Promise.all([response.json(), response.headers])
+                    } else if (response.status === 401) {
+                        localStorage.removeItem('jwt');
+                        localStorage.removeItem('user');
+                        window.location.reload();
+                    } else {
+                        return Promise.reject("")
+                    }
+                })
+                    .then(([data, header]) => {
+
+                        setProgDate(getProgDates(data))
+                    }).catch((message) => {
+                    });
+            } catch (error) {
+            }
+        };
         const asyncFn2 = async () => {
             try {
                 await fetch(`/api/v1/offer/partner/${user.id}`, {
@@ -187,6 +217,7 @@ const MainDash = (props) => {
                         setAccom(getCount(data, "accomodation"))
                         setRestau(getCount(data, "restoration"))
                         setEvent(getCount(data, "event"))
+                        setProg(getCount(data, "program"))
 
                     }).catch((message) => {
                     });
@@ -198,6 +229,7 @@ const MainDash = (props) => {
         asyncFn3();
         asyncFn4();
         asyncFn5();
+        asyncFn6();
     }, []);
 
     ChartJS.register(
@@ -225,14 +257,14 @@ const MainDash = (props) => {
         },
     };
 
-    const labels = ['Accommodations', 'Restaurants', 'Events'];
+    const labels = ['Accommodations', 'Restaurants', 'Events', 'Programs'];
 
     const data = {
         labels,
         datasets: [
             {
                 label: 'Total number',
-                data: [accom, restau, event],
+                data: [accom, restau, event, prog],
                 backgroundColor: 'rgba(239,204,203,0.96)',
             }
         ],
@@ -269,7 +301,7 @@ const MainDash = (props) => {
         // Other chart options...
     };
     const data3 = {
-        labels: ['Accommodation', 'Restaurant', 'Event'],
+        labels: ['Accommodation', 'Restaurant', 'Event', 'Programs'],
         datasets: [
             {
                 label: '# of Votes',
@@ -277,12 +309,14 @@ const MainDash = (props) => {
                 backgroundColor: [
                     'rgba(211,64,87,0.93)',
                     'rgba(239,204,203,0.96)',
-                    'rgba(163,129,130,0.93)'
+                    'rgba(163,129,130,0.93)',
+                    '#cecbda'
                 ],
                 borderColor: [
                     'rgba(211,64,87,0.93)',
                     'rgba(239,204,203,0.96)',
-                    'rgba(163,129,130,0.93)'
+                    'rgba(163,129,130,0.93)',
+                    '#cecbda'
                 ],
                 borderWidth: 1,
             },
@@ -450,7 +484,7 @@ const MainDash = (props) => {
                                     plugins={[dayGridPlugin]}
                                     initialView="dayGridMonth"
                                     events={
-                                        [...acommDate, ...restauDate, ...eventDate]
+                                        [...acommDate, ...restauDate, ...eventDate, ...progDate]
                                     }
                                 />
                             </div>

@@ -1,9 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {useLocalState} from "../../utils/UseLocalStorage";
 import {Navigate, useParams} from "react-router-dom";
-import ClipLoader from 'react-spinners/ClipLoader';
 
-const EditAccom = () => {
+const AddProgram = () => {
 
     const {id} = useParams();
     const [jwt, setJwt] = useLocalState("", "jwt");
@@ -27,6 +26,8 @@ const EditAccom = () => {
     const [checkedValues, setCheckedValues] = useState([]);
     const [googlemap, setGooglemap] = useState("");
     const [allow, setAllow] = useState(false);
+    const [start, setStart] = useState("");
+    const [end, setEnd] = useState("");
     const handleCheckboxChange = (event) => {
         const value = event.target.value;
         const isChecked = event.target.checked;
@@ -87,9 +88,17 @@ const EditAccom = () => {
         console.log(newInputs);
         setInputs3(newInputs);
     };
-    const handleInputPriceChange3 = (index, event) => {
+    const handleInputStartChange3 = (index, event) => {
         const newInputs = [...inputs3];
-        newInputs[index] = {...newInputs[index], "price": event.target.value};
+        const date = event.target.value + ":00"
+        newInputs[index] = {...newInputs[index], "start": date};
+        console.log(newInputs);
+        setInputs3(newInputs);
+    };
+    const handleInputEndChange3 = (index, event) => {
+        const newInputs = [...inputs3];
+        const date = event.target.value + ":00"
+        newInputs[index] = {...newInputs[index], "end": date};
         console.log(newInputs);
         setInputs3(newInputs);
     };
@@ -102,68 +111,22 @@ const EditAccom = () => {
         newInputs.splice(index, 1);
         setInputs3(newInputs);
     };
-    useEffect(() => {
-        const asyncfn = async () => {
-            await fetch(`/api/v1/accomodation/${id}`, {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${jwt}`
-                },
-                method: "GET",
-            }).then((response) => {
-                if (response.status === 200) {
-                    return Promise.all([response.json(), response.headers])
-                } else if (response.status === 401) {
-                    localStorage.removeItem('jwt');
-                    localStorage.removeItem('user');
-                    window.location.reload();
-                } else {
-                    return Promise.reject("")
-                }
-            })
-                .then(([data]) => {
-                    setIdAccom(data.id)
-                    setName(data.name)
-                    setType(data.type)
-                    setPrice(data.price)
-                    setCapacity(data.capacity)
-                    setDescription(data.description)
-                    setLocation(data.emplacement)
-                    setState(data.destination)
-                    setInputs1(data.regulations)
-                    setCheckedValues(data.comodityList)
-                    setInputs(data.socialMediaLink)
-                    setInputs2(data.photo)
-                    setGooglemap(data.google_map)
-                    setInputs3(data.extras)
-                    setAllow(data.allow_many_reservation)
-                }).catch(() => {
-                });
-
-        };
-        asyncfn()
-    }, [id, jwt]);
 
     const handleAddAccom = async () => {
         const reqBody = {
-            'id': idAccom,
             'name': name,
-            'type': type,
             'price': price,
             'capacity': capacity,
             'description': description,
             'emplacement': location,
             'destination': state,
-            'regulations': inputs1,
-            'socialMediaLink': inputs,
-            'comodityList': checkedValues,
-            'photo': inputs2,
             'google_map': googlemap,
-            'extras': inputs3,
-            'allow_many_reservation': allow
+            'startDate': start,
+            'endDate': end,
+            'activities': inputs3
 
         };
-        await fetch(`/api/v1/accomodation/update`, {
+        await fetch(`/api/v1/program/add/${user.id}`, {
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${jwt}`
@@ -207,10 +170,10 @@ const EditAccom = () => {
                 if (response.status === 200) {
                     return Promise.all([response.json(), response.headers])
                 } else if (response.status === 401) {
-                localStorage.removeItem('jwt');
-                localStorage.removeItem('user');
-                window.location.reload();
-            } else {
+                    localStorage.removeItem('jwt');
+                    localStorage.removeItem('user');
+                    window.location.reload();
+                } else {
                     return Promise.reject("")
                 }
             })
@@ -227,7 +190,7 @@ const EditAccom = () => {
         }
     };
 
-    return redirect ? <Navigate to={"/dashboard/offers"}/> : (
+    return redirect ? <Navigate to={"/dashboard/programs"}/> : (
         <React.Fragment>
 
 
@@ -247,71 +210,11 @@ const EditAccom = () => {
                                 <div className="card-body p-3">
                                     <div className="horizontal gray-light my-4">
                                         <div className="col-md-8 d-flex align-items-center">
-                                            <h3 className="mb-0">Edit Accommodation </h3>
+                                            <h3 className="mb-0">Add Program </h3>
                                         </div>
                                         <div className="card-body">
 
                                             <div>
-                                                <div className="input-group input-group-outline my-3">
-                                                    <div className="h-100">
-                                                        <div className="row">
-                                                            <div className="col">
-                                                                <input type="file" className="form-control"
-                                                                       style={{
-                                                                           backgroundColor: "#eeeeee",
-                                                                           color: "black"
-                                                                       }}
-                                                                       onChange={handleFileChange}/>
-                                                            </div>
-                                                            <div className="col">
-                                                                <button type="submit" className="form-control"
-                                                                        style={{
-                                                                            backgroundColor: "#eeeeee",
-                                                                            color: "black"
-                                                                        }}
-                                                                        onClick={handleUpload}>Upload
-                                                                </button>
-                                                            </div>
-                                                            <div className="col">
-                                                                <div hidden={loading} style={{
-                                                                    width: '50px',
-                                                                    margin: 'auto',
-                                                                    display: 'block'
-                                                                }}>
-                                                                    <ClipLoader color="#bb3a41" size={30}/>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="h-100" style={{color: "darkred"}}
-                                                             hidden={error === ""}>
-                                                            {error}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="input-group input-group-outline my-3">
-                                                    <label> Photos </label>
-                                                    <div className="row">
-
-                                                        {inputs2.map((value, index) => (
-                                                            <div className="col">
-                                                                <div className="input-group input-group-outline my-3"
-                                                                     key={index}>
-                                                                    <img src={value} style={{
-                                                                        height: "150px",
-                                                                        width: "75px",
-                                                                        objectFit: "contain"
-                                                                    }} alt="accom"/>
-                                                                    <button style={{
-                                                                        backgroundColor: "white",
-                                                                        border: "0px solid",
-                                                                        color: "red"
-                                                                    }} onClick={() => handleDeleteInput2(index)}>X
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                </div>
                                                 <div className="input-group input-group-outline my-3">
                                                     <label> Name </label>
                                                     <input type="text"
@@ -320,11 +223,17 @@ const EditAccom = () => {
                                                            className="form-control"/>
                                                 </div>
                                                 <div className="input-group input-group-outline my-3">
-                                                    <label> Type </label>
-                                                    <input type="text"
-
-                                                           value={type}
-                                                           onChange={(event) => setType(event.target.value)}
+                                                    <label> Start Date </label>
+                                                    <input type="date"
+                                                           value={start}
+                                                           onChange={(event) => setStart(event.target.value)}
+                                                           className="form-control"/>
+                                                </div>
+                                                <div className="input-group input-group-outline my-3">
+                                                    <label> End Date </label>
+                                                    <input type="date"
+                                                           value={end}
+                                                           onChange={(event) => setEnd(event.target.value)}
                                                            className="form-control"/>
                                                 </div>
                                                 <div className="input-group input-group-outline my-3">
@@ -341,13 +250,6 @@ const EditAccom = () => {
                                                            value={capacity}
                                                            onChange={(event) => setCapacity(event.target.value)}
                                                            className="form-control"/>
-                                                </div>
-                                                <div className="input-group input-group-outline my-3">
-                                                    <label> Allow many reservation per night &nbsp;&nbsp;
-                                                        <input type="checkbox"
-                                                               checked={allow}
-                                                               onChange={(event) => setAllow(!allow)}
-                                                        /> </label>
                                                 </div>
                                                 <div className="input-group input-group-outline my-3">
                                                     <label> Description </label>
@@ -407,100 +309,36 @@ const EditAccom = () => {
                                                     </select>
                                                 </div>
                                                 <div className="input-group input-group-outline my-3">
-                                                    <label> Regulations</label>
-
-                                                    {inputs1.map((value, index) => (
-                                                        <div className="input-group input-group-outline my-3"
-                                                             key={index}>
-                                                            <input
-                                                                className="form-control"
-                                                                value={value}
-                                                                onChange={(event) => handleInputChange1(index, event.target.value)}
-                                                            />
-                                                            <button style={{
-                                                                backgroundColor: "white",
-                                                                border: "0px solid",
-                                                                color: "red"
-                                                            }} onClick={() => handleDeleteInput1(index)}>X
-                                                            </button>
-                                                        </div>
-                                                    ))}
-                                                    <div className="row">
-                                                        <button className="btn btn-primary"
-                                                                onClick={handleAddInput1}>+
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                                <div className="input-group input-group-outline my-3">
-                                                    <label> Commodity </label>
-                                                    <label>
-                                                        <input
-                                                            type="checkbox"
-                                                            value="Pool"
-                                                            checked={checkedValues.includes("Pool")}
-                                                            onChange={handleCheckboxChange}
-                                                        />
-                                                        &nbsp; Pool
-                                                    </label>
-                                                    <label>
-                                                        <input
-                                                            type="checkbox"
-                                                            value="Parking"
-                                                            checked={checkedValues.includes("Parking")}
-                                                            onChange={handleCheckboxChange}
-                                                        />
-                                                        &nbsp; Parking
-                                                    </label>
-                                                    <label>
-                                                        <input
-                                                            type="checkbox"
-                                                            value="Tv"
-                                                            checked={checkedValues.includes("Tv")}
-                                                            onChange={handleCheckboxChange}
-                                                        />
-                                                        &nbsp; Tv
-                                                    </label>
-                                                    <label>
-                                                        <input
-                                                            type="checkbox"
-                                                            value="AC"
-                                                            checked={checkedValues.includes("AC")}
-                                                            onChange={handleCheckboxChange}
-                                                        />
-                                                        &nbsp; AC
-                                                    </label>
-                                                    <label>
-                                                        <input
-                                                            type="checkbox"
-                                                            value="Garden"
-                                                            checked={checkedValues.includes("Garden")}
-                                                            onChange={handleCheckboxChange}
-                                                        />
-                                                        &nbsp;Garden
-                                                    </label>
-                                                </div>
-                                                <div className="input-group input-group-outline my-3">
-                                                    <label> Extras </label>
+                                                    <label> Activities </label>
 
                                                     {inputs3.map((value, index) => (
                                                         <div className="input-group input-group-outline my-3"
                                                              key={index}>
                                                             <div className="row">
-                                                                <div className="col"> Extra:</div>
+                                                                <div className="col"> Activity:</div>
                                                                 <div className="col">
                                                                     <input
-                                                                        style={{width: "250px"}}
+                                                                        style={{width: "150px"}}
                                                                         className="form-control"
                                                                         value={value.name}
                                                                         onChange={(event) => handleInputNameChange3(index, event)}
                                                                     />
                                                                 </div>
-                                                                <div className="col">Price:</div>
+                                                                <div className="col">Start:</div>
                                                                 <div className="col"><input
-                                                                    style={{width: "150px"}}
+                                                                    type="time"
+
                                                                     className="form-control"
                                                                     value={value.price}
-                                                                    onChange={(event) => handleInputPriceChange3(index, event)}
+                                                                    onChange={(event) => handleInputStartChange3(index, event)}
+                                                                /></div>
+                                                                <div className="col">End:</div>
+                                                                <div className="col"><input
+                                                                    type="time"
+
+                                                                    className="form-control"
+                                                                    value={value.price}
+                                                                    onChange={(event) => handleInputEndChange3(index, event)}
                                                                 /></div>
                                                                 <div className="col">
                                                                     <button style={{
@@ -519,31 +357,6 @@ const EditAccom = () => {
                                                         <button className="btn btn-primary" onClick={handleAddInput3}>+
                                                         </button>
                                                     </div>
-                                                </div>
-                                                <div className="input-group input-group-outline my-3">
-                                                    <label> Social Media Links </label>
-
-                                                    {inputs.map((value, index) => (
-                                                        <div className="input-group input-group-outline my-3"
-                                                             key={index}>
-                                                            <input
-                                                                className="form-control"
-                                                                value={value}
-                                                                onChange={(event) => handleInputChange(index, event)}
-                                                            />
-                                                            <button style={{
-                                                                backgroundColor: "white",
-                                                                border: "0px solid",
-                                                                color: "red"
-                                                            }} onClick={() => handleDeleteInput(index)}>X
-                                                            </button>
-                                                        </div>
-                                                    ))}
-                                                    <div className="row">
-                                                        <button className="btn btn-primary" onClick={handleAddInput}>+
-                                                        </button>
-                                                    </div>
-
                                                 </div>
                                                 <div className="input-group input-group-outline my-3">
                                                     <div className="row">
@@ -566,4 +379,4 @@ const EditAccom = () => {
     );
 };
 
-export default EditAccom;
+export default AddProgram;

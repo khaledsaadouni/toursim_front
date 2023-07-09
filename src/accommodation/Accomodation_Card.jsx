@@ -16,7 +16,7 @@ const Accomadation_Card = (props) => {
                     data-id="post-2">
 
                     <a className="tour_image">
-                        <img src={props.photos.length === 0 ? image : props.photos[0]} alt="French Autumn" />
+                        <img src={props.photos.length === 0 ? image : props.photos[0]} alt="French Autumn"/>
 
                         <div className="tour_price ">
                             {props.price} Dt

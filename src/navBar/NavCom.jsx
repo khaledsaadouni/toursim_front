@@ -30,7 +30,7 @@ const NavCom = (props) => {
                                 </Link>
                             </li>
                             <li className="menu-item menu-item-has-children arrow">
-                                <a href="  ">Services</a>
+                                <a>Services</a>
                                 <ul className="sub-menu">
                                     <li className="menu-item">
                                         <Link to={"/accommodations"}>
@@ -55,11 +55,13 @@ const NavCom = (props) => {
                                     </li>
                                 </ul>
                             </li>
-                            {/*<li className="menu-item   ">*/}
-                            {/*    <a href="">*/}
-                            {/*        Programs*/}
-                            {/*    </a>*/}
-                            {/*</li>*/}
+                            <li className="menu-item   ">
+
+                                <Link to={"/programs"}>
+                                    Programs
+                                </Link>
+
+                            </li>
                             {jwt && user !== null ? (
                                 <li className="menu-item   ">
                                     <Link to={"/reservations"}>

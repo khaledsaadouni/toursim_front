@@ -13,7 +13,7 @@ export function getIncome(reservations) {
 
 export function getReserNumver(reservations) {
 
-    let income = [0, 0, 0];
+    let income = [0, 0, 0, 0];
     for (let i = 0; i < reservations.length; i++) {
         if (reservations[i].offer.generic_Type === "accomodation") {
             income[0]++;
@@ -23,6 +23,9 @@ export function getReserNumver(reservations) {
         }
         if (reservations[i].offer.generic_Type === "event") {
             income[2]++;
+        }
+        if (reservations[i].offer.generic_Type === "program") {
+            income[3]++;
         }
 
     }
@@ -144,6 +147,20 @@ export function getEventDates(accommodation) {
         const date = {}
         date["title"] = accommodation[j].name;
         date["date"] = accommodation[j].eventDate;
+
+        dates.push(date)
+
+    }
+    return dates;
+}
+
+export function getProgDates(accommodation) {
+
+    const dates = [];
+    for (let j = 0; j < accommodation.length; j++) {
+        const date = {}
+        date["title"] = accommodation[j].name;
+        date["date"] = accommodation[j].startDate;
 
         dates.push(date)
 

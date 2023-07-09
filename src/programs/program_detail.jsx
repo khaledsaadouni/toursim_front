@@ -5,18 +5,21 @@ import calculateAverageRate from "../utils/ReviewStarsCounter";
 import formatDate from "../utils/DateFormat";
 import {Link, Navigate, useParams} from "react-router-dom";
 import {useLocalState} from "../utils/UseLocalStorage";
-import daysCount from "../utils/DaysCount";
 import Nav from "../navBar/Nav";
-import {MapContainer, Marker, Popup, TileLayer} from "react-leaflet";
+import {MapContainer, Marker, Popup, TileLayer} from 'react-leaflet';
+import "../index.css"
 
-const Restaurant_Detail = () => {
+const Program_detail = () => {
     const {id} = useParams();
     const [offer, setOffer] = useState(null);
+    const [n, setN] = useState(-1);
+    const [elements, setElements] = useState([]);
+    const [n1, setN1] = useState(-1);
     const [rate, setRate] = useState(-1);
     const [comment, setComment] = useState("");
     const [position, setPosition] = useState(null);
     const [jwt, setJwt] = useLocalState("", "jwt");
-
+    const [errorMessage, setErrorMessage] = useState("");
     const [user, setUser] = useLocalState(null, "user");
     const renderDivs = (a) => {
         const divs = [];
@@ -29,14 +32,16 @@ const Restaurant_Detail = () => {
     };
     const renderDivs2 = (a) => {
         const divs = [];
+
         for (let i = 0; i < a; i++) {
             divs.push(<a href="javascript:;"></a>);
         }
+
         return divs;
     };
     useEffect(() => {
         const asyncFn = async () => {
-            await fetch(`/api/v1/restoration/${id}`, {
+            await fetch(`/api/v1/program/${id}`, {
                 headers: {
                     "Content-Type": "application/json"
                 },
@@ -49,11 +54,13 @@ const Restaurant_Detail = () => {
                     localStorage.removeItem('user');
                     window.location.reload();
                 } else {
+
                     return Promise.reject("")
                 }
             })
                 .then(([data]) => {
                     setOffer(data);
+                    // extarction of the postion
                     if (data != null && data.google_map != null) {
                         console.log("here")
                         const link = data.google_map;
@@ -74,6 +81,7 @@ const Restaurant_Detail = () => {
         };
         asyncFn();
     }, []);
+
     const handlePostReview = async () => {
         const reqBody = {
             'rate': rate,
@@ -135,10 +143,11 @@ const Restaurant_Detail = () => {
     const [count_d, setCount_d] = useState();
     const [redirect, setRedirect] = useState(false);
     const handleReserve = async () => {
-        const d = daysCount(date, count_d)
+
         const reqBody = {
-            "date": date,
-            "count_people": count_pep
+            "date": offer.startDate,
+            "count_people": count_pep,
+            'price': count_pep * offer.price
         };
         await fetch(`/api/v1/reservation/add/${user.id}/${offer !== null ? offer.id : -1}`, {
             headers: {
@@ -156,7 +165,10 @@ const Restaurant_Detail = () => {
                 localStorage.removeItem('user');
                 window.location.reload();
             } else {
-                return Promise.reject("")
+
+                return response.text().then(errorMessage => {
+                    setErrorMessage(errorMessage)
+                });
             }
         })
             .then(([data]) => {
@@ -171,9 +183,11 @@ const Restaurant_Detail = () => {
         slidesToShow: 1,
         slidesToScroll: 1
     };
+    const positionn = [51.505, -0.09]
+
     return redirect === true ? <Navigate to={"/reservations"}/> : (
         <React.Fragment>
-            <Nav></Nav>
+            <Nav/>
             <div id="page_content_wrapper" className="hasbg " style={{paddingTop: "100px"}}>
                 <div className="inner">
                     <div className="inner_wrapper">
@@ -184,57 +198,76 @@ const Restaurant_Detail = () => {
                             <div className="sidebar">
 
                                 <div className="content"
-                                     style={{
-                                         boxShadow: '0px 0px 10px 5px rgba(0, 0, 0, 0.3)',
-                                         borderRadius: "5px"
-                                     }}>
+                                     style={{boxShadow: '0px 0px 10px 5px rgba(0, 0, 0, 0.3)', borderRadius: "5px"}}>
+
+                                    <div style={{
+                                        minHeight: "50px",
+                                        background: "black",
+                                        color: "white",
+                                        lineHeight: "50px",
+                                        padding: " 0 15px 0 15px",
+                                        boxSizing: " border-box",
+                                        borderTopLeftRadius: " 5px",
+                                        borderTopRightRadius: " 5px"
+                                    }}>
+                                        <div className="single_tour_price">
+                                            {/*<span className="normal_price">*/}
+                                            {/*  $6,700*/}
+                                            {/* </span>*/}
+                                            {offer != null ? offer.price : null} DT
+                                        </div>
+                                        <div className="single_tour_per_person">
+                                            Per Person
+                                        </div>
+                                    </div>
 
                                     <div className="single_tour_booking_wrapper themeborder contact_form7">
 
-                                        <div role="form" className="wpcf7" id="wpcf7-f142-o1" lang="en-US"
-                                             dir="ltr">
+                                        <div role="form" className="wpcf7" id="wpcf7-f142-o1" lang="en-US" dir="ltr">
 
 
                                             <div className="screen-reader-response">
 
                                             </div>
 
+
                                             <div action="#" method="post" className="wpcf7-form"
                                                  noValidate="novalidate">
-                                                <div hidden={jwt === "" && user === null}>
-                                                    <p>
-                                                        <label style={{fontSize: "20px"}}> Reservation Date </label>
-                                                        <br/>
-                                                        <span className="wpcf7-form-control-wrap text-237">
-                                                        <input
-                                                            value={date}
-                                                            type="date"
-                                                            onChange={(event) => setDate(event.target.value)}
-                                                            className="form-control "/>
-                                                    </span>
-                                                    </p>
-                                                    <p>
-                                                        <label> Number of Persons </label>
-                                                        <br/>
-                                                        <span className="wpcf7-form-control-wrap text-237">
-                                                        <input type="number"
-                                                               value={count_pep}
-                                                               onChange={(event) => setCount_pep(event.target.value)}
-                                                               className="form-control "/>
-                                                    </span>
-                                                    </p>
-                                                    <p>
-                                                        <input type="submit" value="Book"
-                                                               onClick={handleReserve}
-                                                               className="wpcf7-form-control wpcf7-submit"/>
-                                                    </p></div>
-                                                <div hidden={jwt !== "" && user !== null}>
-                                                    <p>
-                                                        <label> Register or sign in to make a reservation </label>
-                                                        <br/>
+                                                {offer != null && new Date() - new Date(offer.eventDate) > 0 ? (
+                                                        <h2>Event expired</h2>) :
+                                                    (<div>
+                                                        <div hidden={jwt === "" && user === null}>
+                                                            <p>
+                                                                <p>
+                                                                    <label style={{fontSize: "20px"}}> Number of
+                                                                        Persons </label>
+                                                                    <br/>
+                                                                    <span className="wpcf7-form-control-wrap text-237">
+                                                            <input type="number"
+                                                                   value={count_pep}
+                                                                   onChange={(event) => setCount_pep(event.target.value)}
+                                                                   className="form-control "
+                                                                   placeholder="Persons"/>
+                                                        </span>
+                                                                </p>
+                                                            </p>
+                                                            <p>
+                                                                <input type="submit" value="Book"
+                                                                       onClick={handleReserve}
+                                                                       className="wpcf7-form-control wpcf7-submit"/>
+                                                            </p>
+                                                            <p style={{color: "#d34057"}}>
+                                                                {errorMessage}
+                                                            </p>
+                                                        </div>
+                                                        <div hidden={jwt !== "" && user !== null}>
+                                                            <p>
+                                                                <label> Register or sign in to make a
+                                                                    reservation </label>
+                                                                <br/>
 
-                                                        <span className="wpcf7-form-control-wrap text-237"><div
-                                                            className="text-center">
+                                                                <span className="wpcf7-form-control-wrap text-237"><div
+                                                                    className="text-center">
                                                               <Link
                                                                   to={"/sign/in"}> <button
                                                                   className="btn bg-gradient-primary w-100 my-4 mb-2">Sign in
@@ -247,16 +280,17 @@ const Restaurant_Detail = () => {
                                                       >Sign up</Link>
                                                      </p>
                                                     </span>
-                                                    </p>
-                                                </div>
+                                                            </p>
+                                                        </div>
+                                                    </div>)}
+
+
                                                 <div className="wpcf7-response-output wpcf7-display-none">
                                                     <div className="row">
                                                         <div className="col-3">
                                                             <img
                                                                 src={offer !== null && offer.partner.photo != null ? offer.partner.photo : image}
                                                                 style={{borderRadius: "10%"}}/>
-
-
                                                         </div>
                                                         <div className="col">
                                                             <div className="row">
@@ -284,6 +318,7 @@ const Restaurant_Detail = () => {
                                                 </div>
 
                                             </div>
+
                                         </div>
                                     </div>
 
@@ -298,30 +333,22 @@ const Restaurant_Detail = () => {
                         <div className="sidebar_content ">
 
                             <h1>{offer != null ? offer.name : null}</h1>
-                            <h5><i className="bi bi-geo-alt-fill"></i> {offer != null && offer.emplacement !== null ?
+                            <h5><i
+                                className="bi bi-geo-alt-fill"></i> &nbsp; {offer != null && offer.emplacement !== null ?
                                 <span>{offer.emplacement !== "" ? (
                                     <span>{offer.emplacement}, </span>) : null}</span> : null} {offer != null ? offer.destination : null}
                             </h5>
+                            <h6>
+                                <i className="bi bi-calendar-date"></i> &nbsp;
+                                {offer != null ? (<span>{offer.startDate} {offer.startDate === offer.endDate ? null : (
+                                    <span> &nbsp;/&nbsp; {offer.endDate}</span>)}</span>) : null}</h6>
                             <div className="single_tour_attribute_wrapper themeborder ">
-                                <div className="one_fourth" style={{fontSize: "30px"}}>
-                                    <i className="ri-restaurant-2-line"></i>
-                                    <div className="tour_attribute_content">
-                                        {offer != null ? offer.type : null}
-                                    </div>
-                                </div>
+
 
                                 <div className="one_fourth" style={{fontSize: "30px"}}>
                                     <i className="bi bi-people-fill"></i>
                                     <div className="tour_attribute_content">
-                                        {offer != null ? offer.capacity : null}
-                                    </div>
-                                </div>
-
-
-                                <div className="one_fourth" style={{fontSize: "30px"}}>
-                                    <i className="bi bi-clock-fill"></i>
-                                    <div className="tour_attribute_content">
-                                        {offer != null ? offer.opening : null}-{offer != null ? offer.closing : null}
+                                        &nbsp; {offer != null ? offer.capacity : null}
                                     </div>
                                 </div>
 
@@ -353,33 +380,48 @@ const Restaurant_Detail = () => {
 
 
                             </div>
-                            {offer !== null && offer.menu !== null ? (
-                                <div className="single_tour_content">
-                                    <h4 className="p1">Menu</h4>
 
+                            {offer !== null ? (<div className="single_tour_content">
+                                    <h4 className="p1">Activities</h4>
+                                    <table className="table table-borderless">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">Activity</th>
+                                            <th scope="col">Start Time</th>
+                                            <th scope="col">End Time</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {offer.activities != null ? offer.activities.map((item, index) => (<tr>
+                                            <td>{item.name}</td>
+                                            <td>{item.start.substring(0, 5)}</td>
+                                            <td>{item.end.substring(0, 5)}</td>
+                                        </tr>)) : null}
 
-                                    <p className="p1">{offer != null ? offer.menu : null}</p>
+                                        </tbody>
+                                    </table>
 
-                                </div>) : null}
+                                </div>
+                            ) : null}
                             <h5>
 
-                                <span>
-                                    <span>Location</span>
-                                    {offer != null && offer.google_map != null ? <div>
-                                        <MapContainer center={position} zoom={13} scrollWheelZoom={false}>
-                                            <TileLayer
-                                                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                            />
-                                            <Marker position={position}>
-                                                <Popup>
-                                                    A pretty CSS3 popup. <br/> Easily customizable.
-                                                </Popup>
-                                            </Marker>
-                                        </MapContainer>
-                                    </div> : null}
-                            </span>
-
+                    <span>
+                        <span>Location</span>
+                        {offer != null && offer.google_map != null ?
+                            <div>
+                                <MapContainer center={position} zoom={13} scrollWheelZoom={false}>
+                                    <TileLayer
+                                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                    />
+                                    <Marker position={position}>
+                                        <Popup>
+                                            A pretty CSS3 popup. <br/> Easily customizable.
+                                        </Popup>
+                                    </Marker>
+                                </MapContainer>
+                            </div> : null}
+                    </span>
                             </h5>
                             <div className="fullwidth_comment_wrapper sidebar">
 
@@ -400,6 +442,7 @@ const Restaurant_Detail = () => {
                                     </div>
                                 </div>
                             </div>
+
                             {offer !== null ? (
                                 <div>
                                     {offer.reviews != null ? offer.reviews.map((item, index) => (
@@ -410,12 +453,9 @@ const Restaurant_Detail = () => {
                                                          width="150" height="150"
                                                          alt="Marie Argeris"
                                                          className="avatar avatar-60 wp-user-avatar wp-user-avatar-60 alignnone photo"/>
-
                                                 </div>
-
-
                                                 <div className="right ">
-                                                    <h7>{item.user.firstname} {item.user.lastname} </h7>
+                                                    <h7>{item.user.firstname} {item.user.lastname}</h7>
                                                     {item.rate !== -1 ? (<span>{item.rate}/10</span>) : null}
                                                     {user !== null && item.user.id === user.id ? (
                                                         <a rel='nofollow' className='comment-reply-link btn-danger'
@@ -434,15 +474,10 @@ const Restaurant_Detail = () => {
                                     )) : null}
                                 </div>) : null}
                         </div>
-
-
                         <br className="clear"/>
-
-
                     </div>
                     <br className="clear"/>
                 </div>
-
 
                 <div style={{height: "10px"}}></div>
                 {jwt !== "" && user !== null ? (
@@ -453,21 +488,21 @@ const Restaurant_Detail = () => {
                             <p className="comment-form-rating">
                                 <label htmlFor="accommodation_rating">Rate</label>
                                 <span className="commentratingbox">
-                        <select id="accomodation_rating" name="accomodation_rating"
-                                onChange={(event) => setRate(event.target.value)}>
-                            <option value="-1"></option>
-                            <option value="0">0</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                        </select>
+                                    <select id="accomodation_rating" name="accomodation_rating"
+                                            onChange={(event) => setRate(event.target.value)}>
+                                        <option value="-1"></option>
+                                        <option value="0">0</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                    </select>
                                     &nbsp; /10 </span>
                             </p>
 
@@ -488,9 +523,8 @@ const Restaurant_Detail = () => {
                 ) : null}
             </div>
 
-
         </React.Fragment>
     );
 };
 
-export default Restaurant_Detail;
+export default Program_detail;

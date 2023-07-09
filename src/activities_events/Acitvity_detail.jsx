@@ -239,7 +239,8 @@ const EventDetail = () => {
                                                         <div hidden={jwt === "" && user === null}>
                                                             <p>
                                                                 <p>
-                                                                    <label> Number of Persons </label>
+                                                                    <label style={{fontSize: "20px"}}> Number of
+                                                                        Persons </label>
                                                                     <br/>
                                                                     <span className="wpcf7-form-control-wrap text-237">
                                                             <input type="number"

@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import {countCanceleddReservations, countConfirmedReservations, countPendingReservations} from "../../utils/Count";
+import {countCanceleddReservations, countConfirmedReservations} from "../../utils/Count";
 import {useLocalState} from "../../utils/UseLocalStorage";
 import {Link, Navigate} from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
+import formatDate from "../../utils/DateFormat";
 
 const Reserve = () => {
     const [originalReservations, setOriginalReservations] = useState(null);
@@ -33,6 +34,7 @@ const Reserve = () => {
                 })
                     .then(([data, header]) => {
                         setLoading(true)
+                        console.log(data)
                         setReservations(data.sort((a, b) => new Date(b.creation_date) - new Date(a.creation_date)))
                         setOriginalReservations(data.sort((a, b) => new Date(b.creation_date) - new Date(a.creation_date)))
                     }).catch((message) => {
@@ -123,9 +125,10 @@ const Reserve = () => {
             const filteredReservation = originalReservations.filter(offer => offer.state.toUpperCase() === "CONFIRMED");
             setReservations(filteredReservation)
         }
-        if (event.target.value === "pending") {
+        if (event.target.value === "latest") {
 
-            const filteredReservation = originalReservations.filter(offer => offer.state.toUpperCase() === "PENDING");
+            const filteredReservation = [...originalReservations].sort((a, b) => new Date(b.creation_date) - new Date(a.creation_date))
+
             setReservations(filteredReservation)
 
         }
@@ -152,8 +155,6 @@ const Reserve = () => {
                             <div className="card-header pb-0 px-3">
                                 <h6 className="mb-0">My Reservations  &nbsp; &nbsp;
                                     <span
-                                        className={`badge bg-warning`}>{originalReservations != null ? countPendingReservations(originalReservations) : 0}</span> &nbsp;Pending&nbsp;
-                                    <span
                                         className={`badge bg-success`}>{originalReservations != null ? countConfirmedReservations(originalReservations) : 0}</span>&nbsp; Confirmed &nbsp;
                                     <span
                                         className={`badge bg-danger`}>{originalReservations != null ? countCanceleddReservations(originalReservations) : 0}</span>&nbsp; Canceled &nbsp;
@@ -161,10 +162,8 @@ const Reserve = () => {
                                     <select id="sort_by" name="sort_by" onChange={(event) => filterResservation(event)}>
                                         <option value="all"> All reservations </option>
                                         <option value="confirmed"> Confirmed </option>
-                                        <option value="pending"> Pending
-                                        </option>
-                                        <option value="canceled"> Canceled
-                                        </option>
+                                        <option value="canceled"> Canceled </option>
+
                                     </select></span>
                                     &nbsp;
                                     <span className="ti-exchange-vertical"></span></h6>
@@ -177,23 +176,39 @@ const Reserve = () => {
                                     {reservations != null ? reservations.map((item, index) => (
                                         <li className="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
                                             <div className="d-flex flex-column">
-                                                <h6 className="mb-3 text-sm">
-                                                    <Link to={`/${item.offer.generic_Type}/${item.offer.id}`}>
-                                                        <span>{item.offer.name}</span> </Link>  &nbsp; &nbsp;
+                                                <h6 className="mb-3 ">
                                                     <span
                                                         className={`badge bg-${item.state === "Pending" ? "warning" : item.state === "Confirmed" ? "success" : "danger"}`}>{item.state}</span>
+                                                    &nbsp; &nbsp;    {item.offer.generic_Type == "accomodation" ? (
+                                                    <Link
+                                                        to={`/accommodation/${item.offer.id}`}>{item.offer.name} </Link>
+                                                ) : (
+                                                    <Link
+                                                        to={`/${item.offer.generic_Type}/${item.offer.id}`}>{item.offer.name} </Link>
+                                                )} &nbsp;
+                                                    <span style={{
+                                                        fontSize: "12px",
+                                                        color: "grey"
+                                                    }}> {formatDate(item.creation_date)}&nbsp; &nbsp; </span>
                                                 </h6>
 
                                                 <h6 className="mb-3 text-sm">Total Price:&nbsp; {item.price} &nbsp; DT
                                                 </h6>
                                                 <span className="mb-2 text-xs">Date: <span
                                                     className="text-dark font-weight-bold ms-sm-2">{item.date} </span></span>
-                                                {item.offer.generic_Type !== "accomodation" && item.count_people !== null ? (
+                                                {item.count_people !== 0 ? (
                                                     <span className="mb-2 text-xs">Number of Persons: <span
                                                         className="text-dark font-weight-bold ms-sm-2">{item.count_people} </span></span>) : null}
                                                 {item.offer.generic_Type === "accomodation" ? (
                                                     <span className="mb-2 text-xs">Check Out date: <span
                                                         className="text-dark font-weight-bold ms-sm-2"> {item.checkout} </span></span>) : null}
+                                                {item.offer.generic_Type === "accomodation" && item.extras != null && item.extras.length != 0 ? (
+                                                    <span className="mb-2 text-xs">Extras:
+                                                        <ul> {item.extras !== null ? item.extras.map((extra, index) => (
+
+                                                            <li
+                                                                className="text-dark font-weight-bold ms-sm-2"> {extra.name} &nbsp;: &nbsp;{extra.price} &nbsp; DT </li>)) : null}</ul>
+                                                    </span>) : null}
                                                 <span className="mb-2 text-xs">Client Fullname: <span
                                                     className="text-dark font-weight-bold ms-sm-2">{item.user.firstname} &nbsp;{item.user.lastname} </span></span>
                                                 <span className="mb-2 text-xs">Client Email: <span
@@ -203,6 +218,12 @@ const Reserve = () => {
                                             </div>
                                             {item.state === "Canceled" ?
                                                 (<div className="ms-auto text-end">
+                                                        <button
+                                                            className="btn btn-link text-dark text-gradient px-3 mb-0"
+                                                            onClick={() => handleConfirm(item.id)}
+                                                        >
+                                                            <i className="bi bi-check-lg"></i> Confirm
+                                                        </button>
                                                         <button
                                                             className="btn btn-link text-danger text-gradient px-3 mb-0"
                                                             onClick={() => handleDelete(item.id)}
